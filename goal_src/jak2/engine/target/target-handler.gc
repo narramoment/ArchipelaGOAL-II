@@ -1229,7 +1229,7 @@
                    (go target-indax-start (process->handle (the-as process (-> arg3 param 1))))
                    )
                   ((= v1-45 'gun)
-                    (if (ap-any-gun-received?)
+                   (if (logtest? (-> self game features) (game-feature gun))
                        (target-gun-init (the-as pickup-type (-> arg3 param 2)))
                        )
                    )

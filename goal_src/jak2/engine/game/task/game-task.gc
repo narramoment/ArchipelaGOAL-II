@@ -4085,8 +4085,7 @@
                 :scene #f
                 )
               )
-            ;; <ap:preserve-this> removed auto-close flag.
-            :flags (game-task-node-flag save-on-life)
+            :flags (game-task-node-flag auto-close save-on-life)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-power-post-win)
               (game-task-node none)

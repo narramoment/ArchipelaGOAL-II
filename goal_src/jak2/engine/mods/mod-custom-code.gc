@@ -108,7 +108,7 @@
       (let ((cty-cable-door (entity-by-name "com-airlock-outer-15")))
         (when cty-cable-door
           (set! (cdr (res-lump-struct cty-cable-door 'on-activate pair))   '(((focus-test? *target* pilot) #f) ((and (task-closed? "palace-cable-introduction") (not (task-complete? 28))) (want-load 'ctygenb 'ctywide 'palshaft)) ((task-closed? "palace-boss-resolution") #f) ((task-closed? "nest-boss-resolution") (want-load 'ctygenb 'ctywide 'palshaft))))
-          (set! (cdr (res-lump-struct cty-cable-door 'on-notice pair))     '(((focus-test? *target* pilot) #f) ((and (task-closed? "palace-cable-introduction") (not (task-complete? 28))) (want-load 'ctygenb 'ctywide 'palshaft)) ((task-closed? "palace-boss-resolution") #f) ((task-closed? "nest-boss-resolution") (want-load 'ctygenb 'ctywide 'palshaft))))
+          (set! (cdr (res-lump-struct cty-cable-door 'on-notice pair))     '(((focus-test? *target* pilot) #f) ((and (task-closed? "palace-cable-introduction") (not (task-complete? 28))) '(palshaft)) ((task-closed? "palace-boss-resolution") #f) ((task-closed? "nest-boss-resolution") '(palshaft))))
           )
         )
 
@@ -160,9 +160,17 @@
        )
 
       ;; hiphog (affects gungame, under)
-      (let ((cty-hh-out-door (entity-by-name "hip-door-a-6")))
+      (let ((cty-hh-out-door (entity-by-name "hip-door-a-6"))
+            (cty-gg-out-door (entity-by-name "hip-door-a-10"))
+            (cty-gg-in-door (entity-by-name "hip-door-a-9")))
         (when cty-hh-out-door
           (set! (cdr (res-lump-struct cty-hh-out-door 'on-notice pair)) '((#t '(hiphog))))
+        )
+        (when cty-gg-out-door
+          (set! (cdr (res-lump-struct cty-gg-out-door 'on-notice pair)) '(((task-open? "city-port-run-resolution") #f) (else '(gungame))))
+        )
+        (when cty-gg-in-door
+          (set! (cdr (res-lump-struct cty-gg-in-door 'on-notice pair)) '(#t '(ctyport ctywide)))
         )
       )
 

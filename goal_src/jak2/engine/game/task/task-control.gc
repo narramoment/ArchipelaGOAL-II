@@ -120,7 +120,10 @@
     (borrow-eval (-> *game-info* sub-task-list (game-task-node fortress-escape-start) borrow))
     ;; <ap:preserve-this> ensure earlier task-manager is active over later ones.
     ;; (let ((game-nodes (-> *game-info* sub-task-list))
-    (let ((game-nodes (-> *game-info* sub-task-list)) (found-earliest-task-man? #f))
+    (let ((game-nodes (-> *game-info* sub-task-list)) 
+          (found-earliest-task-man? #f)
+          (earliest-node-with-task-man (the-as game-task-node-info #f))
+          (activated-all-mans-in-task? #f))
       (dotimes (i (-> game-nodes length))
         (when (nonzero? i)
           (let ((node (-> game-nodes i)))
@@ -133,6 +136,15 @@
                     )
                 )
               )
+            ;; <ap:preserve-this> ensure the earliest open task-managers are active over later ones.
+            ;; only activate more than one task manager if they belong to the same task. do that check before 
+            ;; setting earliest node. otherwise it will compare tasks with itself, which will succeed prematurely.
+            (when (and found-earliest-task-man?
+                       (!= (-> earliest-node-with-task-man task) (-> node task)))
+                  (true! activated-all-mans-in-task?))
+            ;; this skip will ensure later task managers, even if they are open, will not activate.
+            (if (and found-earliest-task-man? activated-all-mans-in-task?)
+                (goto skip-mission-tree-utm))
             (let ((node-open? (open? node)))
               ;; <ap:preserve-this> ensure earlier task-manager is active over later ones.
               ;;   (if (and (logtest? (-> node flags) (game-task-node-flag task-manager))
@@ -146,7 +158,9 @@
                               )
                          )
                     (script-eval '(task-manager) :key node)
-                    (true! found-earliest-task-man?)
+                    (when (not found-earliest-task-man?)
+                          (set! earliest-node-with-task-man node)
+                          (true! found-earliest-task-man?))
                     )
               (when node-open?
                 (if (-> node on-open)
@@ -172,15 +186,11 @@
                   )
                 (borrow-eval (-> node borrow))
                 )
-              ;; <ap:preserve-this> ensure earlier task-manager is active over later ones.
-              (if found-earliest-task-man?
-                  (goto skip-mission-tree-utm)
-                  )
               )
             )
           )
         )
-        (label skip-mission-tree-utm) ;; <ap:preserve-this> ensure earlier task-manager is active over later ones.
+      (label skip-mission-tree-utm) ;; <ap:preserve-this> ensure earlier task-manager is active over later ones.
       )
     (logior! (-> *game-info* features) (-> *game-info* debug-features))
     (borrow-eval (-> *setting-control* user-current borrow))

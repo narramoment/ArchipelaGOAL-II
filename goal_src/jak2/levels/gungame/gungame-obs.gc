@@ -975,7 +975,9 @@
       (suspend)
       )
     (let ((gp-2 (-> *game-info* gun-type)))
-      (until (!= gp-2 (-> *game-info* gun-type))
+      ;; <ap:preserve-this> cannot progress if player only has one gun, change the loop condition.
+      ;; (until (!= gp-2 (-> *game-info* gun-type))
+      (until (time-elapsed? (-> self start-time) (seconds 3))
         (render-text self (text-id gungame-tutorial-switch-to-yellow))
         (suspend)
         )

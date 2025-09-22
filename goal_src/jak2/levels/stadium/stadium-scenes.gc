@@ -2688,7 +2688,7 @@
     :parts 2
     :command-list '((0 (task-close! "stadium-board1-done") (fadein (frame-time (new 'static 'bfloat :data 10.0))))
       (10000
-        (game-feature! board #f)
+        ;; (game-feature! board #f) ;; <ap:preserve-this> don't take away the board.
         (apply ,(lambda () (let ((gp-0 (process-spawn
                                          manipy
                                          :init manipy-init

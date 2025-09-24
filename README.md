@@ -68,6 +68,14 @@ The mod can receive and process the following items:
 - Precursor Stone
 - Life Seed
 
+**Filler Items:**
+- Dark Eco
+- Health Pack
+- Red Ammo
+- Yellow Ammo
+- Blue Ammo
+- Dark Amo
+
 ### 3. **City Area Access Control**
 
 Routes between city areas are controlled by received items:

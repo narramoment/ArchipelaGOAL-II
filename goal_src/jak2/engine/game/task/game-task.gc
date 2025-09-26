@@ -9125,7 +9125,8 @@
             :task-mask (task-mask task0)
             :on-open #f
             :info #f
-            :borrow '((ctywide 1 lwideb special) (hiphog 0 lwhack special))
+            ;; <ap:preserve-this> disable the metal head invasion (lwideb).
+            :borrow '((hiphog 0 lwhack special))
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (and (ap-route-slums-to-port?)
@@ -9163,7 +9164,8 @@
             :task-mask (task-mask task1)
             :on-open #f
             :info #f
-            :borrow '((ctywide 1 lwideb special) (hiphog 0 lwhack special))
+            ;; <ap:preserve-this> disable the metal head invasion (lwideb).
+            :borrow '((hiphog 0 lwhack special))
             :open? #f
             :on-close #f
             :description (text-id progress-missions-under-find-sig)
@@ -9188,7 +9190,8 @@
               )
             :on-open #f
             :info #f
-            :borrow '((ctywide 1 lwideb special))
+            ;; <ap:preserve-this> disable the metal head invasion (lwideb).
+            :borrow '()
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (and (ap-route-slums-to-port?)
@@ -9217,7 +9220,8 @@
               )
             :on-open #f
             :info #f
-            :borrow '((ctywide 1 lwideb special))
+            ;; <ap:preserve-this> disable the metal head invasion (lwideb).
+            :borrow '()
             :open? #f
             :on-close #f
             :description (text-id progress-missions-under-escort-sig)
@@ -9242,7 +9246,8 @@
               )
             :on-open #f
             :info #f
-            :borrow '((ctywide 1 lwideb special))
+            ;; <ap:preserve-this> disable the metal head invasion (lwideb).
+            :borrow '()
             :open? #f
             :on-close #f
             :description (text-id progress-missions-under-escort-sig)
@@ -9267,7 +9272,8 @@
               )
             :on-open #f
             :info #f
-            :borrow '((ctywide 1 lwideb special))
+            ;; <ap:preserve-this> disable the metal head invasion (lwideb).
+            :borrow '()
             :open? #f
             :on-close #f
             :description (text-id progress-missions-under-escort-sig)
@@ -9294,7 +9300,8 @@
             :task-mask (task-mask done)
             :on-open #f
             :info #f
-            :borrow '((ctywide 1 lwideb special))
+            ;; <ap:preserve-this> disable the metal head invasion (lwideb).
+            :borrow '()
             :open? #f
             :on-close #f
             :description (text-id progress-missions-under-escort-sig)
@@ -9469,7 +9476,8 @@
               :on-complete #f
               :on-fail #f
               )
-            :borrow '((ctywide 1 lwideb special))
+            ;; <ap:preserve-this> disable the metal head invasion (lwideb).
+            :borrow '()
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-port?))
@@ -9504,7 +9512,8 @@
               )
             :on-open #f
             :info #f
-            :borrow '((ctywide 1 lwideb special))
+            ;; <ap:preserve-this> disable the metal head invasion (lwideb).
+            :borrow '()
             :open? #f
             :on-close #f
             :description (text-id progress-missions-check-consite)

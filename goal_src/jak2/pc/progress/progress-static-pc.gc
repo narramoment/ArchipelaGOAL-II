@@ -470,7 +470,7 @@ This gives us more freedom to write code how we want.
 (defmacro archipelagoal-ii-item-tracker ()
   ;; TODO: Review and reorder items to match the typical acquisition order in base Jak 2 gameplay for better user experience
   `(progress-new-generic-scrolling-page (text-id progress-menu-item-tracker)
-     ;; Weapons
+     ;; Weapons/Upgrades
      (new 'static 'menu-generic-boolean-option
        :name (text-id progress-ks-source-gun-red)
        :truthy-text (text-id progress-unlocked)
@@ -495,6 +495,61 @@ This gives us more freedom to write code how we want.
        :falsey-text (text-id progress-locked)
        :get-value-fn (lambda () (logtest? (-> *game-info* features) (game-feature gun-dark)))
        :should-disable? (lambda () #t))
+     (new 'static 'menu-generic-boolean-option
+      :name (text-id progress-ks-source-gun-upgrade-speed)
+      :truthy-text (text-id progress-unlocked)
+      :falsey-text (text-id progress-locked)
+      :get-value-fn (lambda() (logtest? (-> *game-info* features) (game-feature gun-upgrade-speed)))
+      :should-disable? (lambda () #t))
+     (new 'static 'menu-generic-boolean-option
+      :name (text-id progress-ks-source-gun-upgrade-ammo)
+      :truthy-text (text-id progress-unlocked)
+      :falsey-text (text-id progress-locked)
+      :get-value-fn (lambda() (logtest? (-> *game-info* features) (game-feature gun-upgrade-ammo)))
+      :should-disable? (lambda () #t))
+     (new 'static 'menu-generic-boolean-option
+      :name (text-id progress-ks-source-gun-upgrade-damage)
+      :truthy-text (text-id progress-unlocked)
+      :falsey-text (text-id progress-locked)
+      :get-value-fn (lambda() (logtest? (-> *game-info* features) (game-feature gun-upgrade-damage)))
+      :should-disable? (lambda () #t))
+     ;; Security passes
+     (new 'static 'menu-generic-boolean-option
+      :name (text-id progress-ks-source-pass-red)
+      :truthy-text (text-id progress-unlocked)
+      :falsey-text (text-id progress-locked)
+      :get-value-fn (lambda() (logtest? (-> *game-info* features) (game-feature pass-red)))
+      :should-disable? (lambda () #t))
+     (new 'static 'menu-generic-boolean-option
+      :name (text-id progress-ks-source-pass-yellow)
+      :truthy-text (text-id progress-unlocked)
+      :falsey-text (text-id progress-locked)
+      :get-value-fn (lambda() (logtest? (-> *game-info* features) (game-feature pass-yellow)))
+      :should-disable? (lambda () #t))
+     (new 'static 'menu-generic-boolean-option
+      :name (text-id progress-ks-source-pass-green)
+      :truthy-text (text-id progress-unlocked)
+      :falsey-text (text-id progress-locked)
+      :get-value-fn (lambda() (logtest? (-> *game-info* features) (game-feature pass-green)))
+      :should-disable? (lambda () #t))
+    (new 'static 'menu-generic-boolean-option
+      :name (text-id progress-ks-source-pass-purple)
+      :truthy-text (text-id progress-unlocked)
+      :falsey-text (text-id progress-locked)
+      :get-value-fn (lambda() (logtest? (-> *game-info* features) (game-feature pass-purple)))
+      :should-disable? (lambda () #t))
+    (new 'static 'menu-generic-boolean-option
+      :name (text-id progress-ks-source-pass-black)
+      :truthy-text (text-id progress-unlocked)
+      :falsey-text (text-id progress-locked)
+      :get-value-fn (lambda() (logtest? (-> *game-info* features) (game-feature pass-black)))
+      :should-disable? (lambda () #t))
+    (new 'static 'menu-generic-boolean-option
+      :name (text-id progress-ks-source-pass-air-train)
+      :truthy-text (text-id progress-unlocked)
+      :falsey-text (text-id progress-locked)
+      :get-value-fn (lambda() (logtest? (-> *game-info* features) (game-feature pass-air-train)))
+      :should-disable? (lambda () #t))
      ;; Equipment
      (new 'static 'menu-generic-boolean-option
        :name (text-id progress-ks-source-board)
@@ -508,6 +563,12 @@ This gives us more freedom to write code how we want.
        :falsey-text (text-id progress-locked)
        :get-value-fn (lambda () (logtest? (-> *game-info* features) (game-feature titan-suit)))
        :should-disable? (lambda () #t))
+      (new 'static 'menu-generic-boolean-option
+      :name (text-id progress-ks-source-gun-turret)
+      :truthy-text (text-id progress-unlocked)
+      :falsey-text (text-id progress-locked)
+      :get-value-fn (lambda() (logtest? (-> *game-info* features) (game-feature gun-turret)))
+      :should-disable? (lambda () #t))
      ;; Dark Jak Powers
      (new 'static 'menu-generic-boolean-option
        :name (text-id progress-ks-source-dark-jak)
@@ -541,6 +602,24 @@ This gives us more freedom to write code how we want.
        :should-disable? (lambda () #t))
      ;; Key Items
      (new 'static 'menu-generic-boolean-option
+      :name (text-id progress-ks-source-lens)
+      :truthy-text (text-id progress-unlocked)
+      :falsey-text (text-id progress-locked)
+      :get-value-fn (lambda() (logtest? (-> *game-info* features) (game-feature lens)))
+      :should-disable? (lambda () #t))
+     (new 'static 'menu-generic-boolean-option
+      :name (text-id progress-ks-source-gear)
+      :truthy-text (text-id progress-unlocked)
+      :falsey-text (text-id progress-locked)
+      :get-value-fn (lambda() (logtest? (-> *game-info* features) (game-feature gear)))
+      :should-disable? (lambda () #t))
+    (new 'static 'menu-generic-boolean-option
+      :name (text-id progress-ks-source-shard)
+      :truthy-text (text-id progress-unlocked)
+      :falsey-text (text-id progress-locked)
+      :get-value-fn (lambda() (logtest? (-> *game-info* features) (game-feature shard)))
+      :should-disable? (lambda () #t))
+     (new 'static 'menu-generic-boolean-option
        :name (text-id progress-ks-source-ruby-key)
        :truthy-text (text-id progress-unlocked)
        :falsey-text (text-id progress-locked)
@@ -569,12 +648,6 @@ This gives us more freedom to write code how we want.
        :truthy-text (text-id progress-unlocked)
        :falsey-text (text-id progress-locked)
        :get-value-fn (lambda () (logtest? (-> *game-info* features) (game-feature life-seed)))
-       :should-disable? (lambda () #t))
-     (new 'static 'menu-generic-boolean-option
-       :name (text-id progress-ks-source-air-train-pass)
-       :truthy-text (text-id progress-unlocked)
-       :falsey-text (text-id progress-locked)
-       :get-value-fn (lambda () (logtest? (-> *game-info* features) (game-feature pass-air-train)))
        :should-disable? (lambda () #t))
      (new 'static 'menu-generic-boolean-option
        :name (text-id progress-ks-source-seal-piece-1)

@@ -928,6 +928,7 @@
     (inprogress-task-info game-task-node-info)
     (completed-task-info game-task-node-info)
     (found-closed-task? symbol)
+    (prev-task game-task) ;; <ap:preserve-this> store the task from the previous node.
     (hud-bounds hud-box)
     (font-y-pos float)
     (font-scale float)
@@ -944,6 +945,7 @@
   (set! inprogress-task-info (new 'stack 'game-task-node-info))
   (set! completed-task-info (new 'stack 'game-task-node-info))
   (set! found-closed-task? #t)
+  (set! prev-task (game-task none)) ;; <ap:preserve-this> store the task from the previous node.
   (set! hud-bounds (new 'stack-no-clear 'hud-box))
   (set! font-y-pos (-> font-ctx origin y))
   (set! font-scale (-> font-ctx scale))
@@ -977,6 +979,12 @@
           )
         (set! (-> game-task-info-array task-info-idx) task-info)
         (set! task-info-idx (+ task-info-idx 1))
+        ;; <ap:preserve-this> duplicate each open node.
+        ;; the first will show the full task name. the second will show the node description.
+        (when (not (logtest? (-> task-info flags) (game-task-node-flag closed)))
+          (set! (-> game-task-info-array task-info-idx) task-info)
+          (set! task-info-idx (+ task-info-idx 1))
+          )
         )
       )
     (set! game-task-idx (+ game-task-idx 1))
@@ -1040,8 +1048,9 @@
                           (task-complete? *game-info* (-> game-task-info-2 task))
                           )
                      (-> *game-info* play-list (-> game-task-info-2 task) text-name)
-                     ;; <ap:preserve-this> if not a dummy node, display the full mission name.
-                     (if (= (-> game-task-info-2 task) (game-task none))
+                     ;; <ap:preserve-this> identify duplicate or dummy nodes.
+                     (if (or (= (-> game-task-info-2 task) prev-task)
+                             (= (-> game-task-info-2 task) (game-task none)))
                          (-> game-task-info-2 description)
                          (-> *game-info* play-list (-> game-task-info-2 task) text-name)
                          )
@@ -1058,6 +1067,7 @@
                    (-> *progress-state* missions-total-spacing)
                    )
                 )
+          (set! prev-task (-> game-task-info-2 task)) ;; <ap:preserve-this> 
           )
         )
       )
@@ -1069,8 +1079,9 @@
                                        (task-complete? *game-info* (-> game-task-info-3 task))
                                        )
                                   (-> *game-info* play-list (-> game-task-info-3 task) text-name)
-                                  ;; <ap:preserve-this> if not a dummy node, display the full mission name.
-                                  (if (= (-> game-task-info-3 task) (game-task none))
+                                  ;; <ap:preserve-this> identify duplicate or dummy nodes.
+                                  (if (or (= (-> game-task-info-3 task) prev-task)
+                                          (= (-> game-task-info-3 task) (game-task none)))
                                       (-> game-task-info-3 description)
                                       (-> *game-info* play-list (-> game-task-info-3 task) text-name)
                                       )
@@ -1087,6 +1098,7 @@
              (set! line-height (* (-> progress sliding-height) f0-36))
              )
            )
+         (set! prev-task (-> game-task-info-3 task)) ;; <ap:preserve-this> 
          )
        )
       (else
@@ -1094,8 +1106,9 @@
                (a1-27
                  (if (and (logtest? (-> s4-4 flags) (game-task-node-flag closed)) (task-complete? *game-info* (-> s4-4 task)))
                      (-> *game-info* play-list (-> s4-4 task) text-name)
-                     ;; <ap:preserve-this> if not a dummy node, display the full mission name.
-                     (if (= (-> s4-4 task) (game-task none))
+                     ;; <ap:preserve-this> identify duplicate or dummy nodes.
+                     (if (or (= (-> s4-4 task) prev-task)
+                             (= (-> s4-4 task) (game-task none)))
                          (-> s4-4 description)
                          (-> *game-info* play-list (-> s4-4 task) text-name)
                          )
@@ -1112,6 +1125,7 @@
               (set! line-height (* (-> progress sliding-height) f0-40))
               )
             )
+          (set! prev-task (-> s4-4 task)) ;; <ap:preserve-this> 
           )
         )
       )
@@ -1121,8 +1135,9 @@
              (s3-5
                (if (and (logtest? (-> s4-6 flags) (game-task-node-flag closed)) (task-complete? *game-info* (-> s4-6 task)))
                    (-> *game-info* play-list (-> s4-6 task) text-name)
-                   ;; <ap:preserve-this> if not a dummy node, display the full mission name.
-                   (if (= (-> s4-6 task) (game-task none))
+                   ;; <ap:preserve-this> identify duplicate or dummy nodes.
+                   (if (or (= (-> s4-6 task) prev-task)
+                           (= (-> s4-6 task) (game-task none)))
                        (-> s4-6 description)
                        (-> *game-info* play-list (-> s4-6 task) text-name)
                        )
@@ -1134,7 +1149,8 @@
         (set! f0-50
               (cond
                 ((>= task-info-idx (+ game-task-idx -1))
-                 (when (and (!= s3-5 381) (!= s3-5 380))
+                 ;; <ap:preserve-this> don't show icon for duplicate nodes.
+                 (when (and (!= s3-5 381) (!= s3-5 380) (!= (-> s4-6 task) prev-task))
                    (let ((s3-6 print-game-text))
                      (format (clear *temp-string*) "~S" (lookup-text!
                                                           *common-text*
@@ -1172,6 +1188,7 @@
                   )
                 )
               )
+        (set! prev-task (-> s4-6 task)) ;; <ap:preserve-this> 
         )
       (let ((v1-142 (+ default-y-origin-4x3 (the int f0-50))))
         (set! default-y-origin-4x3 v1-142)

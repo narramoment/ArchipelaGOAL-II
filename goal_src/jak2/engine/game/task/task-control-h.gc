@@ -823,6 +823,58 @@
     (((game-task-node-command add-sidekick))
      "add-sidekick"
      )
+    ;; <ap:preserve-this> - new items for debug menu
+    (((game-task-node-command add-gun-turret))
+     "add-gun-turret"
+     )
+    (((game-task-node-command add-heart-of-mar))
+     "add-heart-of-mar"
+     )
+    (((game-task-node-command add-lens))
+     "add-lens"
+     )
+    (((game-task-node-command add-life-seed))
+     "add-life-seed"
+     )
+    (((game-task-node-command add-pass-air-train))
+     "add-pass-air-train"
+     )
+    (((game-task-node-command add-pass-black))
+     "add-pass-black"
+     )
+    (((game-task-node-command add-pass-purple))
+     "add-pass-purple"
+     )
+    (((game-task-node-command add-precursor-stone))
+     "add-precusor-stone"
+     )
+    (((game-task-node-command add-rift-rider))
+     "add-rift-rider"
+     )
+    (((game-task-node-command add-ruby-key))
+     "add-ruby-key"
+     )
+    (((game-task-node-command add-seal-piece-1))
+     "add-seal-piece-1"
+     )
+    (((game-task-node-command add-seal-piece-2))
+     "add-seal-piece-2"
+     )
+    (((game-task-node-command add-seal-piece-3))
+     "add-seal-piece-3"
+     )
+    (((game-task-node-command add-time-map))
+     "add-time-map"
+     )
+    (((game-task-node-command add-titan-suit))
+     "add-titan-suit"
+     )
+    (((game-task-node-command add-gear))
+     "add-gear"
+     )
+    (((game-task-node-command add-shard))
+     "add-shard"
+     )
     (else
       "*unknown*"
       )

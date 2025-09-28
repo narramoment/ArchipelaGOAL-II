@@ -2895,6 +2895,32 @@
   (none)
   )
 
+;; <ap:note> added new function to get the text description of a task node
+;; that has an active task manager. these managers preempt us from starting
+;; side missions via burning-bush. so when approaching a burning-bush, it
+;; should tell us which mission is blocking it from working.
+(defun get-active-task-mgr-description ()
+  (let ((conn (-> *task-manager-engine* alive-list next0)))
+    (when conn
+      (let ((task-mgr (-> (the-as connection conn) param1)))
+        (when task-mgr
+          (let ((node-str (-> (the-as process task-mgr) name)))
+            (when node-str
+              (let ((node-id (string->enum game-task-node node-str 0)))
+                (when (nonzero? node-id)
+                  (let ((desc-id (-> *game-info* sub-task-list node-id description)))
+                    desc-id
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+
 (deftype burning-bush (process-focusable)
   ((task        game-task-control)
    (part-off    sparticle-launch-control)
@@ -2928,6 +2954,7 @@
   :trans (behavior ()
     (let ((gp-0 (get-current-task-event (-> self task)))
           (s5-0 #f)
+          (candy #f) ;; <ap:note> youtube/E4Eim2gNczY
           )
       (let ((s4-0 (new 'stack-no-clear 'matrix)))
         (let* ((a2-0 (-> self node-list data 3 bone transform))
@@ -2961,6 +2988,11 @@
            (spawn-with-matrix (-> self part-alert) s4-0)
            (set! s5-0 #t)
            )
+          ;; <ap:preserve-this> if an active task manager exists, show the alert particle effect.
+          ((get-active-task-mgr-description)
+           (spawn-with-matrix (-> self part-alert) s4-0)
+           (set! candy #t)
+           )
           ((= (-> gp-0 action) (game-task-action show))
            (spawn-with-matrix (-> self part) s4-0)
            )
@@ -2975,7 +3007,34 @@
             )
           )
         )
-      (when (and (not s5-0)
+      ;; <ap:preserve-this> use the active task manager's task node description 
+      ;; to tell the player why they can't play the side mission right now.
+      (when (and candy
+                 (or (= (-> gp-0 action) (game-task-action show)) (= (-> gp-0 action) (game-task-action menu)))
+                 (and (burning-bush-method-32 self) (can-display-query? self (the-as string #f) -99.0))
+                 )
+        (let ((s5-1
+                (new 'stack 'font-context *font-default-matrix* 32 280 0.0 (font-color default) (font-flags shadow kerning))
+                )
+              )
+          (set! (-> s5-1 flags) (font-flags shadow kerning large))
+          (let ((v1-37 s5-1))
+            (set! (-> v1-37 width) (the float 340))
+            )
+          (let ((v1-38 s5-1))
+            (set! (-> v1-38 height) (the float 80))
+            )
+          (let ((v1-39 s5-1))
+            (set! (-> v1-39 scale) 0.9)
+            )
+          (let ((s4-1 print-game-text))
+            (format (clear *temp-string*) (lookup-text! *common-text* (get-active-task-mgr-description) #f))
+            (s4-1 *temp-string* s5-1 #f 44 (bucket-id progress))
+            )
+          )
+        )
+      (when (and (not candy)
+                 (not s5-0)
                  (or (= (-> gp-0 action) (game-task-action show)) (= (-> gp-0 action) (game-task-action menu)))
                  (and (burning-bush-method-32 self) (can-display-query? self (the-as string #f) -99.0))
                  )

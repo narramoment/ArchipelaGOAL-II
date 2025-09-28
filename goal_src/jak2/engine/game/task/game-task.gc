@@ -730,6 +730,7 @@
             )
           (new 'static 'game-task-info
             :name "city-oracle"
+            :text-name (text-id progress-missions-go-to-oracle) ;; <ap:preserve-this> give oracle task a proper name.
             :pre-play-node (game-task-node city-oracle-introduction)
             :kiosk-play-node (game-task-node city-oracle-level0)
             :pre-play-continue #f

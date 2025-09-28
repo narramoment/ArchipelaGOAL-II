@@ -959,6 +959,10 @@
       )
   (set! (-> font-ctx alpha) font-alpha)
   (set! (-> *game-info* mission-list 0) inprogress-task-info)
+  ;; <ap:preserve-this> these dummy nodes serve as the menu's in progress/completed headers.
+  ;; give them game-task none so it's easier to figure out which nodes are real and which ones are dummies.
+  (set! (-> inprogress-task-info task) (game-task none))
+  (set! (-> completed-task-info task) (game-task none))
   (set! (-> inprogress-task-info description) (text-id progress-missions-in-progress))
   (set! (-> completed-task-info description) (text-id progress-missions-completed))
   (while (< game-task-idx (length (-> *game-info* sub-task-list)))
@@ -1036,7 +1040,11 @@
                           (task-complete? *game-info* (-> game-task-info-2 task))
                           )
                      (-> *game-info* play-list (-> game-task-info-2 task) text-name)
-                     (-> game-task-info-2 description)
+                     ;; <ap:preserve-this> if not a dummy node, display the full mission name.
+                     (if (= (-> game-task-info-2 task) (game-task none))
+                         (-> game-task-info-2 description)
+                         (-> *game-info* play-list (-> game-task-info-2 task) text-name)
+                         )
                      )
                  )
                (line-text (lookup-text! *common-text* task-text-id #f))
@@ -1061,7 +1069,11 @@
                                        (task-complete? *game-info* (-> game-task-info-3 task))
                                        )
                                   (-> *game-info* play-list (-> game-task-info-3 task) text-name)
-                                  (-> game-task-info-3 description)
+                                  ;; <ap:preserve-this> if not a dummy node, display the full mission name.
+                                  (if (= (-> game-task-info-3 task) (game-task none))
+                                      (-> game-task-info-3 description)
+                                      (-> *game-info* play-list (-> game-task-info-3 task) text-name)
+                                      )
                                   )
                               )
               (line-text-2 (lookup-text! *common-text* task-text-id-2 #f))
@@ -1082,7 +1094,11 @@
                (a1-27
                  (if (and (logtest? (-> s4-4 flags) (game-task-node-flag closed)) (task-complete? *game-info* (-> s4-4 task)))
                      (-> *game-info* play-list (-> s4-4 task) text-name)
-                     (-> s4-4 description)
+                     ;; <ap:preserve-this> if not a dummy node, display the full mission name.
+                     (if (= (-> s4-4 task) (game-task none))
+                         (-> s4-4 description)
+                         (-> *game-info* play-list (-> s4-4 task) text-name)
+                         )
                      )
                  )
                (s4-5 (lookup-text! *common-text* a1-27 #f))
@@ -1105,7 +1121,11 @@
              (s3-5
                (if (and (logtest? (-> s4-6 flags) (game-task-node-flag closed)) (task-complete? *game-info* (-> s4-6 task)))
                    (-> *game-info* play-list (-> s4-6 task) text-name)
-                   (-> s4-6 description)
+                   ;; <ap:preserve-this> if not a dummy node, display the full mission name.
+                   (if (= (-> s4-6 task) (game-task none))
+                       (-> s4-6 description)
+                       (-> *game-info* play-list (-> s4-6 task) text-name)
+                       )
                    )
                )
              (s5-1 (lookup-text! *common-text* s3-5 #f))

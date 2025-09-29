@@ -2899,24 +2899,43 @@
 ;; that has an active task manager. these managers preempt us from starting
 ;; side missions via burning-bush. so when approaching a burning-bush, it
 ;; should tell us which mission is blocking it from working.
+
+;; hat kid's get-taskman macro.
+(defmacro get-task-mgr (&key (as task-manager) &key (proc (the process #f)))
+  `(the ,as (command-get-process '*task-manager* ,proc)))
+
 (defun get-active-task-mgr-description ()
-  (let ((conn (-> *task-manager-engine* alive-list next0)))
-    (when conn
-      (let ((task-mgr (-> (the-as connection conn) param1)))
-        (when task-mgr
-          (let ((node-str (-> (the-as process task-mgr) name)))
-            (when node-str
-              (let ((node-id (string->enum game-task-node node-str 0)))
-                (when (nonzero? node-id)
-                  (let ((desc-id (-> *game-info* sub-task-list node-id description)))
-                    desc-id
-                    )
-                  )
-                )
-              )
-            )
-          )
-        )
+  (let ((task-mgr (get-task-mgr)))
+    (when task-mgr
+      (let ((node-str (-> task-mgr name)))
+        (when node-str
+          (let ((node-id (string->enum game-task-node node-str 0)))
+            (when (nonzero? node-id)
+              (let ((desc-id (-> *game-info* sub-task-list node-id description)))
+                desc-id))))))))
+
+(defun get-active-borrow-lvl-description ()
+  (let ((city-lvl (level-get *level* 'ctywide))
+        (borrow-node (the-as game-task-node-info #f)))
+    (when city-lvl
+      (let ((city-borrow-0 (-> city-lvl borrow-level 0)))
+        (when city-borrow-0
+          (let ((game-nodes (-> *game-info* sub-task-list)))
+            (dotimes (i (-> game-nodes length))
+              (when (nonzero? i)
+                (let ((node (-> game-nodes i)))
+                  (when (nonzero? (length (-> node borrow)))
+                    (let ((b-list (-> node borrow))
+                          (b-item (car (-> node borrow))))
+                      (while (not (null? b-list))
+                        (when (and (not borrow-node)
+                                   (= (car b-item) 'ctywide)
+                                   (= (caddr b-item) (-> city-borrow-0 name)))
+                            (set! borrow-node node))
+                        (set! b-list (cdr b-list))
+                        (set! b-item (car b-list))))))))))))
+    (if borrow-node
+      (-> borrow-node description)
       )
     )
   )
@@ -2989,7 +3008,8 @@
            (set! s5-0 #t)
            )
           ;; <ap:preserve-this> if an active task manager exists, show the alert particle effect.
-          ((get-active-task-mgr-description)
+          ((or (get-active-task-mgr-description)
+               (get-active-borrow-lvl-description))
            (spawn-with-matrix (-> self part-alert) s4-0)
            (set! candy #t)
            )
@@ -3027,8 +3047,10 @@
           (let ((v1-39 s5-1))
             (set! (-> v1-39 scale) 0.9)
             )
-          (let ((s4-1 print-game-text))
-            (format (clear *temp-string*) (lookup-text! *common-text* (get-active-task-mgr-description) #f))
+          (let ((s4-1 print-game-text)
+                (tm-desc (get-active-task-mgr-description))
+                (bl-desc (get-active-borrow-lvl-description)))
+            (format (clear *temp-string*) (lookup-text! *common-text* (if tm-desc tm-desc bl-desc) #f))
             (s4-1 *temp-string* s5-1 #f 44 (bucket-id progress))
             )
           )

@@ -3050,7 +3050,7 @@
           (let ((s4-1 print-game-text)
                 (tm-desc (get-active-task-mgr-description))
                 (bl-desc (get-active-borrow-lvl-description)))
-            (format (clear *temp-string*) (lookup-text! *common-text* (if tm-desc tm-desc bl-desc) #f))
+            (format (clear *temp-string*) "~S" (lookup-text! *common-text* (if tm-desc tm-desc bl-desc) #f))
             (s4-1 *temp-string* s5-1 #f 44 (bucket-id progress))
             )
           )

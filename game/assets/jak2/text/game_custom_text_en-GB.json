@@ -207,6 +207,7 @@
   "1314": "Warning!",
   "1315": "This setting is highly experimental. When not played at 60 frames per second, visual and gameplay issues may arise as a result.",
   "1316": "Local Score",
+  "1317": "Analog Sensitivity",
   "1320": "None",
   "1321": "Spin",
   "1322": "Boost",
@@ -249,6 +250,7 @@
   "1347": "Čeština",
   "1348": "Hrvatski",
   "1349": "Galego",
+<<<<<<< HEAD
 
   "323": "ArchipelaGOAL: Connecting...",
   "324": "ArchipelaGOAL: Waiting for Items...",
@@ -257,4 +259,9 @@
   "135e": "Item Tracker",
   "136b": "Unlocked",
   "136c": "Locked"
+=======
+  "134a": "Pressure Sensitivity",
+  "134b": "Swap R1 and R2",
+  "134c": "Trigger Effects"
+>>>>>>> remotes/modbase/main
 }

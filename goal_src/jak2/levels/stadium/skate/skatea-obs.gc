@@ -811,7 +811,7 @@
     (when (or (-> this training?) (task-node-open? (the-as game-task-node (-> this task-bronze))))
       (when (>= (-> *game-info* score) (-> s5-0 2))
         (task-node-close! (the-as game-task-node (-> this task-bronze)))
-        (logior! (-> *game-info* features) (game-feature board))
+        ;; (logior! (-> *game-info* features) (game-feature board))
         (+! (-> this egg-count) 1)
         (set! (-> this medal) 2)
         )
@@ -819,7 +819,7 @@
     (when (task-node-open? (the-as game-task-node (-> this task-silver)))
       (when (>= (-> *game-info* score) (-> s5-0 1))
         (task-node-close! (the-as game-task-node (-> this task-silver)))
-        (logior! (-> *game-info* features) (game-feature board))
+        ;; (logior! (-> *game-info* features) (game-feature board))
         (+! (-> this egg-count) 1)
         (set! (-> this medal) 1)
         )
@@ -827,7 +827,7 @@
     (when (task-node-open? (the-as game-task-node (-> this task-gold)))
       (when (>= (-> *game-info* score) (-> s5-0 0))
         (task-node-close! (the-as game-task-node (-> this task-gold)))
-        (logior! (-> *game-info* features) (game-feature board))
+        ;; (logior! (-> *game-info* features) (game-feature board))
         (+! (-> this egg-count) 1)
         (set! (-> this medal) 0)
         0
@@ -898,7 +898,7 @@
         )
       )
     (cond
-      ((not (logtest? (-> *game-info* features) (game-feature board)))
+      ((not (logtest? (-> *game-info* features) (game-feature board board-training)))
        (if (!= (-> self hud-score) #f)
            (send-event (handle->process (-> self hud-score)) 'force-hide)
            )
@@ -1004,7 +1004,7 @@
         (set! (-> self challenge-done) #f)
         (set! (-> self combo-done?) #f)
         (set-time! (-> self hint-time))
-        (while (and (not (-> self challenge-done)) (logtest? (-> *game-info* features) (game-feature board)))
+        (while (and (not (-> self challenge-done)) (logtest? (-> *game-info* features) (game-feature board board-training)))
           (suspend)
           )
         (send-event (handle->process gp-1) 'die)
@@ -1161,7 +1161,7 @@
         )
       )
     (cond
-      ((not (logtest? (-> *game-info* features) (game-feature board)))
+      ((not (logtest? (-> *game-info* features) (game-feature board board-training)))
        (if (!= (-> self hud-score) #f)
            (send-event (handle->process (-> self hud-score)) 'force-hide)
            )
@@ -1271,7 +1271,7 @@
     #f
     )
   :post (behavior ()
-    (if (not (logtest? (-> *game-info* features) (game-feature board)))
+    (if (not (logtest? (-> *game-info* features) (game-feature board board-training)))
         (go-virtual wait-for-pickup-training)
         )
     )
@@ -1537,9 +1537,12 @@
     #f
     )
   :post (behavior ()
-    (if (logtest? (-> *game-info* features) (game-feature board))
+    (if (logtest? (-> *game-info* features) (game-feature board-training))
         (send-event self 'close)
         (send-event self 'open)
+        )
+    (if (logtest? (-> *game-info* features) (game-feature board))
+        (go (method-of-object self open))
         )
     (transform-post)
     )
@@ -1547,7 +1550,20 @@
 
 (defstate open (skate-gate)
   :virtual #t
-  :code sleep-code
+  :enter (behavior ()
+    (remove-setting! 'minimap)
+    (set! (-> self onoff) #t)
+    )
+  :code (behavior ()
+    (until #f
+      (ja :num! (seek! max 0.05))   
+      (suspend)
+      )
+    #f
+    )
+  :post (behavior ()
+    (transform-post)
+    )
   )
 
 (defmethod skate-gate-method-29 ((this skate-gate))
@@ -1598,11 +1614,9 @@
   (send-event *target* 'reset-pickup 'trick-point)
   (ja-channel-push! 1 0)
   (cond
-    ;; <ap:preserve-this> always keep this door open. no jet board purgatory.
-    ;; ((and (not (task-node-open? (game-task-node stadium-board1-training-judge)))
-    ;;       (logtest? (-> *game-info* features) (game-feature board))
-    ;;       )
-    (#t
+    ((and (not (task-node-open? (game-task-node stadium-board1-training-judge)))
+          (logtest? (-> *game-info* features) (game-feature board board-training))
+          )
      (let ((a0-15 (-> this skel root-channel 0)))
        (set! (-> a0-15 frame-group) (the-as art-joint-anim (-> this draw art-group data 2)))
        (set! (-> a0-15 frame-num) 1.0)

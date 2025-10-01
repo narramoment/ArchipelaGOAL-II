@@ -1455,8 +1455,8 @@
                             (case (-> arg0 param 1)
                               (('board)
                                (if (-> arg0 param 2)
-                                   (logior! (-> *game-info* features) (game-feature board))
-                                   (logclear! (-> *game-info* features) (game-feature board))
+                                   (logior! (-> *game-info* features) (game-feature board-training))
+                                   (logclear! (-> *game-info* features) (game-feature board-training))
                                    )
                                )
                               (else
@@ -1476,7 +1476,7 @@
   (set! (-> v1-79 func)
         (lambda ((arg0 script-context)) (case (-> arg0 param 1)
                                           (('board)
-                                           (logtest? (-> *game-info* features) (game-feature board))
+                                           (logtest? (-> *game-info* features) (game-feature board-training))
                                            )
                                           (else
                                             (format 0 "ERROR: SCRIPT: unknown feature type ~A~%" (-> arg0 param 1))

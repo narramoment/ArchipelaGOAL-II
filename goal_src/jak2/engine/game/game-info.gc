@@ -728,13 +728,13 @@
       (('board)
        (cond
          ((< 0.0 arg1)
-          (logior! (-> this features) (game-feature board))
+          (logior! (-> this features) (game-feature board-training))
           )
          ((< arg1 0.0)
-          (logclear! (-> this features) (game-feature board))
+          (logclear! (-> this features) (game-feature board-training))
           )
          )
-       (if (logtest? (-> this features) (game-feature board))
+       (if (logtest? (-> this features) (game-feature board-training))
            1.0
            0.0
            )

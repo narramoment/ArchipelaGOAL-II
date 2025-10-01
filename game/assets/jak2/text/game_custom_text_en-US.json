@@ -260,7 +260,6 @@
   "2002": "<PAD_X>",
   "2003": "<PAD_SQUARE>",
 
-<<<<<<< HEAD
   "2100": "Ruby Key Acquired",
   "2101": "Heart of Mar Acquired",
   "2102": "Time Map Acquired",
@@ -323,9 +322,8 @@
   "2155": "Scatter Gun Ammo Received",
   "2156": "Blaster Ammo Received",
   "2157": "Vulcan Fury Ammo Received",
-  "2158": "Peacemaker Ammo Received"
-}
-=======
+  "2158": "Peacemaker Ammo Received",
+
   "10000": "Landing Pad",
   "10001": "Metal Head Nest",
   "10002": "Haven City Port",
@@ -341,4 +339,3 @@
   "100002": "Next Page",
   "100003": "Previous Page"
 }
->>>>>>> remotes/modbase/main

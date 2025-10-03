@@ -53,6 +53,31 @@
       :forbid-when (lambda () (task-node-closed? (game-task-node ruins-tower-resolution)))
       )
     (static-taskable-menu-entry 
+      :task-node (game-task-node atoll-water-introduction)
+      :event-idx 0
+      :text-id (text-id progress-missions-atoll-water)
+      :allow-when (lambda () 
+        (or (task-node-open? (game-task-node atoll-water-introduction))
+            (task-node-open? (game-task-node atoll-water-find))
+            (task-node-open? (game-task-node atoll-water-valve))
+            (task-node-open? (game-task-node atoll-water-resolution))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node atoll-water-resolution)))
+      )
+    (static-taskable-menu-entry 
+      :task-node (game-task-node fortress-dump-introduction)
+      :event-idx 0
+      :text-id (text-id progress-missions-fortress-dump)
+      :allow-when (lambda () 
+        (or (task-node-open? (game-task-node fortress-dump-introduction))
+            (task-node-open? (game-task-node fortress-dump-deal))
+            (task-node-open? (game-task-node fortress-dump-missile))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node fortress-dump-resolution)))
+      )
+    (static-taskable-menu-entry 
       :task-node (game-task-node city-krew-delivery-introduction)
       :event-idx 0
       :text-id (text-id progress-missions-city-krew-delivery)

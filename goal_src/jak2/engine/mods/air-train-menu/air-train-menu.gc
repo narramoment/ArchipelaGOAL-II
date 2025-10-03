@@ -11,9 +11,12 @@
           (available-count 0) ;; stores the amount of options that are available for selection 
           )
     (dotimes (i list-length)
-      (let ((allowed? (-> menu i allow-when)))
-        ;; include the option if the `allow-when` callback returns true.
-        (when (allowed?)
+      (let* ((allowed? (-> menu i allow-when))
+             (forbidden? (-> menu i forbid-when)))
+        ;; include the option if `allowed?` is set and returns true,
+        ;; and `forbidden?` is either not set (not forbidden?) or does not return true (not (forbidden?)).
+        (when (and (or (not allowed?) (allowed?)) 
+                   (or (not forbidden?) (not (forbidden?))))
           (set! (-> available-idxs available-count) i) ;; store the available option indexes in `available-idxs` array  
           (+! available-count 1)
           )
@@ -199,8 +202,12 @@
           (list-length (-> menu length))
           )
     (dotimes (i list-length)
-      (let ((allowed? (-> menu i allow-when)))
-        (when (allowed?)
+      (let* ((allowed? (-> menu i allow-when))
+             (forbidden? (-> menu i forbid-when)))
+        ;; include the option if `allowed?` is set and returns true,
+        ;; and `forbidden?` is either not set (not forbidden?) or does not return true (not (forbidden?)).
+        (when (and (or (not allowed?) (allowed?)) 
+                   (or (not forbidden?) (not (forbidden?))))
           (return #t)
           )
         )

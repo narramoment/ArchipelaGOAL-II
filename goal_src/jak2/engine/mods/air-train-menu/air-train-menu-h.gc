@@ -15,7 +15,7 @@
    (continue-name string) ;; name of the checkpoint Jak will be teleported to
    (text-id       text-id) ;; text ID that defines the name displayed for this destination in the menu 
    (allow-when    (function symbol)) ;; optional: function that must return true for this entry to become available
-   (forbid-when   string) ;; optional: if the specified task node is completed, this entry will be hidden regardless of `allow-when`
+   (forbid-when   (function symbol)) ;; optional: function that hides this entry if it returns true, regardless of `allow-when`
    (on-activate   pair) ;; optional: actions executed when the destination is selected (e.g., play scenes, load levels, close tasks)
    )  
   )
@@ -24,7 +24,7 @@
                                  &key continue-name
                                  &key text-id
                                  &key (allow-when (lambda () #f))
-                                 &key (forbid-when #f)
+                                 &key (forbid-when (lambda () #f))
                                  &key (on-activate #f))
   `(new 'static 'air-train-menu-entry
      :level-name ,level-name

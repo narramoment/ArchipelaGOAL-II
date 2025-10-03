@@ -133,7 +133,7 @@
   "collide-edge-grab-h.o"
   "process-drawable-h.o"
   "process-focusable.o"
-  "process-taskable-h.o"
+  ;; "process-taskable-h.o" ;; original process-taskable logic - be sure to comment this out if using the menu system logic below
   "focus.o"
   "effect-control-h.o"
   "collide-frag-h.o"
@@ -456,7 +456,11 @@
   "joint-exploder.o"
   "simple-focus.o"
   "simple-nav-sphere.o"
-  "process-taskable.o"
+  ;; "process-taskable.o" ;; original process-taskable logic - be sure to comment this out if using the menu system logic below
+  "process-taskable-menu-h.o" ;; added - (commented out by default)
+  "process-taskable-menu-data-h.o" ;; added - (commented out by default)
+  "process-taskable-menu.o" ;; added - (commented out by default)
+  "process-taskable-menu-data.o" ;; added - (commented out by default)
   "scene-actor.o"
   "scene-looper.o"
   ;; "warp-gate.o" ;; original warp-gate logic - be sure to comment this out if using the menu system logic below

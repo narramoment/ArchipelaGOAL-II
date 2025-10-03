@@ -1,0 +1,63 @@
+;;-*-Lisp-*-
+(in-package goal)
+
+#| This file defines a process-taskable menu structure and its related lists.
+   Each menu list corresponds to a specific cutscene, game-task-node, actor, etc,
+   based on mission/task progress.
+
+   Also, check the method `setup-fields` of the `warp-gate` type in `warp-gate-menu-data.gc`, 
+   which is responsible for assigning a menu entry list to a specific entity. Do this if you
+   want to add custom warp-gate menus in your own custom levels.  
+ |#
+
+(deftype taskable-menu-entry (structure)
+  ((task-node     game-task-node)    ;; the game-task-node containing the introductory data for a mission (cutscenes, actors, etc).
+   (event-idx     int)               ;; the index under `when-open` related to this menu item.
+   (text-id       text-id)           ;; the text-id that defines the phrase to be displayed for this menu item.
+   (allow-when    (function symbol)) ;; optional: function that must return true for this entry to become available
+   (forbid-when   (function symbol)) ;; optional: function that hides this entry if it returns true, regardless of `allow-when`
+   )  
+  )
+
+(defmacro static-taskable-menu-entry 
+  (&key task-node
+    &key event-idx
+    &key text-id
+    &key (allow-when (lambda () #f))
+    &key (forbid-when (lambda () #f))
+    )
+  `(new 'static 'taskable-menu-entry
+     :task-node ,task-node
+     :event-idx ,event-idx
+     :text-id ,text-id
+     :allow-when ,allow-when
+     :forbid-when ,forbid-when
+     )
+  )
+
+;; just an empty array. leave it at is.
+;; used as a fallback when an entity doesn't have a defined menu.
+(define *empty-taskable-menu-list* (new 'static 'boxed-array :type taskable-menu-entry))
+
+(define *torn-menu-list* 
+  (new 'static 'boxed-array :type taskable-menu-entry
+    (static-taskable-menu-entry 
+      :task-node (game-task-node ruins-tower-introduction)
+      :event-idx 0
+      :text-id (text-id progress-missions-ruins-tower)
+      :allow-when (lambda () 
+        (or (task-node-open? (game-task-node ruins-tower-introduction))
+            (task-node-open? (game-task-node ruins-tower-resolution))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node ruins-tower-resolution)))
+      )
+    (static-taskable-menu-entry 
+      :task-node (game-task-node city-krew-delivery-introduction)
+      :event-idx 0
+      :text-id (text-id progress-missions-city-krew-delivery)
+      :allow-when (lambda () (task-node-open? (game-task-node city-krew-delivery-introduction)))
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-krew-delivery-resolution)))
+      )
+    )
+  )

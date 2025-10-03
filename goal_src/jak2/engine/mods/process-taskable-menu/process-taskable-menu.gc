@@ -1,0 +1,286 @@
+;;-*-Lisp-*-
+(in-package goal)
+
+(define *tm-selected* -1)
+(define *tm-items-per-page* 6)
+
+(defmethod task-select-menu ((this process-taskable))
+  (let* ((menu (-> this menu-list))
+          (list-length (-> menu length))
+          (available-idxs (new 'static 'boxed-array :type int32)) ;; array to store the indexes of the options that are available for selection
+          (available-count 0) ;; stores the amount of options that are available for selection 
+          )
+    (dotimes (i list-length)
+      (let* ((allowed? (-> menu i allow-when))
+             (forbidden? (-> menu i forbid-when)))
+        ;; include the option if `allowed?` is set and returns true,
+        ;; and `forbidden?` is either not set (not forbidden?) or does not return true (not (forbidden?)).
+        (when (and (or (not allowed?) (allowed?)) 
+                   (or (not forbidden?) (not (forbidden?))))
+          (set! (-> available-idxs available-count) i) ;; store the available option indexes in `available-idxs` array  
+          (+! available-count 1)
+          )
+        )
+      )
+    (let* ((page (-> this page)) ;; current page
+            (start-idx (* page *tm-items-per-page*)) ;; start index of the current page
+            (end-idx (+ start-idx *tm-items-per-page*)) ;; exclusive end index for the current page, used to check if there's a next page
+            (have-next-page? (< end-idx available-count)) ;; is there a next page?
+            (have-prev-page? (> page 0)) ;; is there a previous page?
+            (items-this-page (min *tm-items-per-page* (- available-count start-idx))) ;; amount of items in this page (only destination options is counted)
+            (extra-options (cond ((and have-prev-page? have-next-page?) 2) ;; add 2 if have next and previous pages
+                                  (have-prev-page? 1) ;; add 1 if only have previous page 
+                                  (have-next-page? 1) ;; add 1 if only have next page
+                                  (else 0))) ;; no extra option
+            (total-items (+ items-this-page extra-options)) ;; total entries displayed on screen
+            )
+      (when (not (paused?))
+        (cond
+          ((and (cpad-pressed? 0 up l-analog-up) (> (-> this selected) 0))
+            (seekl! (-> this selected) 0 1)
+            (sound-play "dmenu-move")
+            )
+          ((and (cpad-pressed? 0 down l-analog-down) (< (-> this selected) (+ total-items -1)))
+            (seekl! (-> this selected) (+ total-items -1) 1)
+            (sound-play "dmenu-move")
+            )
+          ((and (cpad-pressed? 0 confirm) (nonzero? available-count))
+            (sound-play "menu-pick")
+            (cond
+              ((and have-prev-page? (= (-> this selected) items-this-page)) ;; go to the previous page
+                (+! (-> this page) -1)
+                (set! (-> this selected) 0)
+                )
+              ((and have-next-page? (or (and have-prev-page? (= (-> this selected) (+ items-this-page 1))) ;; go to the next page
+                                       (and (not have-prev-page?) (= (-> this selected) items-this-page))))
+                (+! (-> this page) 1)
+                (set! (-> this selected) 0)
+                )
+              (else ;; warp to the selected destination
+                (set! *tm-selected* (-> available-idxs (+ start-idx (-> this selected))))
+                (set-task! this *tm-selected*)
+                (go execute-task)
+                )
+              )
+            )
+          )
+        (let* ((font-height 40)
+                (font-x 36)
+                (font-y (- 228 (* total-items (/ font-height 2))))
+                (font-ctxt (new
+                          'stack
+                          'font-context
+                          *font-default-matrix*
+                          font-x
+                          font-y
+                          0.0
+                          (font-color default)
+                          (font-flags shadow kerning)
+                          )
+                        )
+                )
+            (set! (-> font-ctxt flags) (font-flags shadow kerning middle middle-vert large))
+            (set! (-> font-ctxt width) (the float 440))
+            (set! (-> font-ctxt height) (the float 50))
+            (set! (-> font-ctxt scale) 1.0)
+            (let ((a0-59 40))
+              (set! (-> font-ctxt origin x) (the float font-x))
+              (set! (-> font-ctxt origin y) (the float a0-59))
+              )
+            ;; print menu header
+            (set! (-> font-ctxt color) (font-color progress-old-yellow))
+            (let ((select-text (lookup-text! *common-text* (text-id select-destination) #f)))
+              (format (clear *temp-string*) select-text)
+              )
+            (print-game-text *temp-string* font-ctxt #f 44 (bucket-id progress))
+            (set! (-> font-ctxt height) (the float font-height))
+            ;; print menu options
+            (cond
+              ((nonzero? available-count) ;; menu have data, print the options on the screen. 
+                (dotimes (i items-this-page)
+                  (let ((valid-idx (-> available-idxs (+ start-idx i))))
+                    (set! (-> font-ctxt origin x) (the float font-x))
+                    (set! (-> font-ctxt origin y) (the float font-y))
+                    (set! (-> font-ctxt scale) (if (= (-> this selected) i)
+                                                  0.8
+                                                  0.6
+                                                  )
+                          )
+                    (set! (-> font-ctxt color) (if (= (-> this selected) i)
+                                                  (font-color progress-old-selected)
+                                                  (font-color default)
+                                                  )
+                          )
+                    (print-game-text (lookup-text! *common-text* (-> menu valid-idx text-id) #f) font-ctxt #f 44 (the-as bucket-id 320))
+                    (+! font-y font-height)
+                    )
+                  )
+                (when have-prev-page? ;; print `Previous Page` if there is a previous page indeed
+                  (set! (-> font-ctxt origin x) (the float font-x))
+                  (set! (-> font-ctxt origin y) (the float font-y))
+                  (set! (-> font-ctxt scale) (if (= (-> this selected) items-this-page)
+                                                  0.8
+                                                  0.6
+                                                  )
+                          )
+                  (set! (-> font-ctxt color) (if (= (-> this selected) items-this-page)
+                                                  (font-color progress-old-selected)
+                                                  (font-color default)
+                                                  )
+                          )
+                  (print-game-text (lookup-text! *common-text* (text-id previous-page) #f) font-ctxt #f 44 (the-as bucket-id 320))
+                  (+! font-y font-height)
+                  )
+                (when have-next-page? ;; print `Next Page` if there is a next page indeed
+                  (set! (-> font-ctxt origin x) (the float font-x))
+                  (set! (-> font-ctxt origin y) (the float font-y))
+                  (set! (-> font-ctxt scale) (if (= (-> this selected) (- total-items 1))
+                                                  0.8
+                                                  0.6
+                                                  )
+                          )
+                  (set! (-> font-ctxt color) (if (= (-> this selected) (- total-items 1))
+                                                  (font-color progress-old-selected)
+                                                  (font-color default)
+                                                  )
+                          )
+                  (print-game-text (lookup-text! *common-text* (text-id next-page) #f) font-ctxt #f 44 (the-as bucket-id 320))
+                  (+! font-y font-height)
+                  )
+                )
+              (else ;; no menu data, print an error message on the screen.
+                (set! (-> font-ctxt origin x) (the float font-x))
+                (set! (-> font-ctxt origin y) (the float font-y))
+                (set! (-> font-ctxt scale) 0.8)
+                (set! (-> font-ctxt color) (font-color default))
+                (print-game-text (lookup-text! *common-text* (text-id no-menu-data) #f) font-ctxt #f 44 (bucket-id progress))
+                )
+              )
+            )
+          )
+      )
+    )
+  (none)
+  )
+
+(defmethod set-task! ((this process-taskable) (idx int))
+  (with-pp
+    (let ((gp-0 (new 'static 'game-task-event :scene #f)))
+      (let ((s5-0 #f)
+            (task (-> this task)))
+        (when (!= (-> task counter) (-> *game-info* task-counter))
+          (set! (-> task counter) (-> *game-info* task-counter))
+          (set! (-> task current-node) (game-task-node none))
+          (set! (-> task current-event) #f)
+          (set! s5-0 #t)
+          (let* ((menu (-> (-> this menu-list) idx))
+                (node (-> menu task-node))
+                (eidx (-> menu event-idx))
+                (game-nodes (-> *game-info* sub-task-list))
+                (node-info (-> game-nodes node)))
+            (when (and (task-node-open? node)
+                      (-> node-info when-open)
+                      (= (-> task actor) (-> node-info when-open eidx actor)))
+              (set! (-> task current-node) node)
+              (set! (-> task current-event) (-> node-info when-open eidx))
+              )
+            )
+          )
+        (cond
+          ((= (-> task current-node) (game-task-node none))
+           (set! (-> gp-0 actor) (-> task actor))
+           )
+          (else
+            (set! gp-0 (-> task current-event))
+            (cond
+              ((and (logtest? (-> gp-0 flags) (game-task-flags gatflag-00))
+                    (let ((a1-2 (new 'stack-no-clear 'event-message-block)))
+                      (set! (-> a1-2 from) (process->ppointer pp))
+                      (set! (-> a1-2 num-params) 0)
+                      (set! (-> a1-2 message) 'get-alert-level)
+                      (let ((a0-11 (send-event-function *traffic-manager* a1-2)))
+                        (and a0-11 (nonzero? a0-11))
+                        )
+                      )
+                    )
+               (set! (-> gp-0 action) (game-task-action hide))
+               0
+               )
+              (else
+                (set! (-> gp-0 action) (the-as game-task-action (-> gp-0 tex)))
+                )
+              )
+            )
+          )
+        (if s5-0
+            (logior! (-> gp-0 flags) (game-task-flags gatflag-01))
+            (logclear! (-> gp-0 flags) (game-task-flags gatflag-01))
+            )
+        )
+      )
+    )
+  (none)
+  )
+
+(defmethod available-to-use? ((this process-taskable))
+  (let* ((menu (-> this menu-list))
+          (list-length (-> menu length))
+          )
+    (dotimes (i list-length)
+      (let* ((allowed? (-> menu i allow-when))
+             (forbidden? (-> menu i forbid-when)))
+        ;; include the option if `allowed?` is set and returns true,
+        ;; and `forbidden?` is either not set (not forbidden?) or does not return true (not (forbidden?)).
+        (when (and (or (not allowed?) (allowed?)) 
+                   (or (not forbidden?) (not (forbidden?))))
+          (return #t)
+          )
+        )
+      )
+    (when (zero? list-length)
+      (return #t) ;; treat empty lists as available so that it can be displayed the "No Menu Data" error message instead of disabling interaction
+      )
+    )
+  #f
+  )
+
+(defstate task-menu (process-taskable)
+  :enter (behavior ()
+    (set-setting! 'minimap 'clear 0.0 (minimap-flag minimap))
+    (set-time! (-> self state-time))
+    )
+  :exit (behavior ()
+    (remove-setting! 'minimap)
+    (send-event *camera* 'change-target *target*)
+    (remove-setting! 'interp-time)
+    (remove-setting! 'mode-name)
+    )
+  :trans (behavior ()
+    ;(format *stdcon* "selected: ~D~%" *tm-selected*)
+    ;(format *stdcon* "page: ~D~%" (-> self page))
+    (when (time-elapsed? (-> self state-time) (seconds 0.5))
+      (task-select-menu self)
+      (when (cpad-pressed? 0 triangle)
+        (when (and (not (process-grab? *target* #f)) (not (real-movie?)))
+          (process-release? *target*)
+          )
+        (go-virtual idle)
+        )
+      )
+    )
+  :code (behavior ()
+    (set-setting! 'mode-name 'cam-really-fixed 0.0 0)
+    (suspend)
+    (until (process-grab? *target* #f)
+      (suspend)
+      )
+    (sleep-code)
+    )
+  )
+
+(defstate execute-task (process-taskable)
+  :code (behavior ()
+    (go-virtual active (-> self task current-event))
+    )
+  )
+  

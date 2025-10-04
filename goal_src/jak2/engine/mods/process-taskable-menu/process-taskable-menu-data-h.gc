@@ -40,10 +40,10 @@
     (get-art-elem (_type_) art-element)
     (process-taskable-method-36 (_type_) none)
     (process-taskable-method-37 (_type_) none)
-    (task-select-menu (_type_) none)              ;; handles the menu logic for selecting tasks/cutscenes
-    (set-task! (_type_ int) none)                 ;; sets the task based on the selected menu index
-    (start-cutscene (_type_) none)                ;; executes the cutscene based on the chosen menu item (TODO What does this actually do?)
-    (available-to-use? (_type_) symbol)           ;; checks if there's at least one valid task available for use
+    (task-select-menu (_type_) none)                     ;; handles the menu logic for selecting tasks/cutscenes
+    (get-exact-task-event (_type_ int) game-task-event)  ;; gets a task event based on the selected menu index
+    (start-cutscene (_type_) none)                       ;; executes the cutscene based on the chosen menu item (TODO What does this actually do?)
+    (available-to-use? (_type_) symbol)                  ;; checks if there's at least one valid task available for use
     )
   (:states ;; added
     task-menu

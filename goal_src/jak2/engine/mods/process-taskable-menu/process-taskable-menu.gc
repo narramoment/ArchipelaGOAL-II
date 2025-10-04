@@ -58,7 +58,6 @@
                 )
               (else ;; warp to the selected destination
                 (set! *tm-selected* (-> available-idxs (+ start-idx (-> this selected))))
-                (set-task! this *tm-selected*)
                 (go execute-task)
                 )
               )
@@ -163,7 +162,9 @@
   (none)
   )
 
-(defmethod set-task! ((this process-taskable) (idx int))
+(defmethod get-exact-task-event ((this process-taskable) (idx int))
+  "Like get-current-task-event, but without looping over the entire game-task-node lists.
+  Uses the menu-list index chosen by player to determine which game-task-event to run."
   (with-pp
     (let ((gp-0 (new 'static 'game-task-event :scene #f)))
       (let ((s5-0 #f)
@@ -178,9 +179,7 @@
                 (eidx (-> menu event-idx))
                 (game-nodes (-> *game-info* sub-task-list))
                 (node-info (-> game-nodes node)))
-            (when (and (task-node-open? node)
-                      (-> node-info when-open)
-                      (= (-> task actor) (-> node-info when-open eidx actor)))
+            (when (-> node-info when-open)
               (set! (-> task current-node) node)
               (set! (-> task current-event) (-> node-info when-open eidx))
               )
@@ -217,9 +216,9 @@
             (logclear! (-> gp-0 flags) (game-task-flags gatflag-01))
             )
         )
+      gp-0
       )
     )
-  (none)
   )
 
 (defmethod available-to-use? ((this process-taskable))
@@ -280,7 +279,6 @@
 
 (defstate execute-task (process-taskable)
   :code (behavior ()
-    (go-virtual active (-> self task current-event))
+    (go-virtual active (get-exact-task-event self *tm-selected*))
     )
   )
-  

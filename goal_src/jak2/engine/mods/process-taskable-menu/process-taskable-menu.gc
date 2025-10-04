@@ -63,7 +63,9 @@
               )
             )
           )
-        (let* ((font-height 40)
+        (let* ((font-height 30)
+                (scale-sel 0.6)
+                (scale-unsel 0.4)
                 (font-x 36)
                 (font-y (- 228 (* total-items (/ font-height 2))))
                 (font-ctxt (new
@@ -101,8 +103,8 @@
                     (set! (-> font-ctxt origin x) (the float font-x))
                     (set! (-> font-ctxt origin y) (the float font-y))
                     (set! (-> font-ctxt scale) (if (= (-> this selected) i)
-                                                  0.8
-                                                  0.6
+                                                  scale-sel
+                                                  scale-unsel
                                                   )
                           )
                     (set! (-> font-ctxt color) (if (= (-> this selected) i)
@@ -118,8 +120,8 @@
                   (set! (-> font-ctxt origin x) (the float font-x))
                   (set! (-> font-ctxt origin y) (the float font-y))
                   (set! (-> font-ctxt scale) (if (= (-> this selected) items-this-page)
-                                                  0.8
-                                                  0.6
+                                                  scale-sel
+                                                  scale-unsel
                                                   )
                           )
                   (set! (-> font-ctxt color) (if (= (-> this selected) items-this-page)
@@ -134,8 +136,8 @@
                   (set! (-> font-ctxt origin x) (the float font-x))
                   (set! (-> font-ctxt origin y) (the float font-y))
                   (set! (-> font-ctxt scale) (if (= (-> this selected) (- total-items 1))
-                                                  0.8
-                                                  0.6
+                                                  scale-sel
+                                                  scale-unsel
                                                   )
                           )
                   (set! (-> font-ctxt color) (if (= (-> this selected) (- total-items 1))

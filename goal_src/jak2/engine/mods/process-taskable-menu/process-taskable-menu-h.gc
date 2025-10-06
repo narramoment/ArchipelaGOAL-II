@@ -93,3 +93,32 @@
       )
     )
   )
+
+(define *krew-menu-list* 
+  (new 'static 'boxed-array :type taskable-menu-entry
+    (static-taskable-menu-entry 
+      :task-node (game-task-node atoll-sig-introduction)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-atoll-sig)
+      :allow-when (lambda () 
+        (or (task-node-open? (game-task-node atoll-sig-introduction))
+            (task-node-open? (game-task-node atoll-sig-sig-introduction))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node atoll-sig-resolution)))
+      )
+    (static-taskable-menu-entry 
+      :task-node (game-task-node city-krew-collection-introduction)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-city-krew-collection)
+      :allow-when (lambda () 
+        (or (task-node-open? (game-task-node city-krew-collection-introduction))
+            (task-node-open? (game-task-node city-krew-collection-collection))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-krew-collection-resolution)))
+      )
+    )
+  )

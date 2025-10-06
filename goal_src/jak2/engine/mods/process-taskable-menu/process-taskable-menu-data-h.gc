@@ -42,7 +42,6 @@
     (process-taskable-method-37 (_type_) none)
     (task-select-menu (_type_) none)                     ;; handles the menu logic for selecting tasks/cutscenes
     (get-exact-task-event (_type_ int) game-task-event)  ;; gets a task event based on the selected menu index
-    (start-cutscene (_type_) none)                       ;; executes the cutscene based on the chosen menu item (TODO What does this actually do?)
     (available-to-use? (_type_) symbol)                  ;; checks if there's at least one valid task available for use
     )
   (:states ;; added

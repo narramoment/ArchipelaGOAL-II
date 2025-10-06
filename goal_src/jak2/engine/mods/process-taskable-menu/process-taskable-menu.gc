@@ -281,6 +281,16 @@
 
 (defstate execute-task (process-taskable)
   :code (behavior ()
-    (go-virtual active (get-exact-task-event self *tm-selected*))
+    (let ((event (get-exact-task-event self *tm-selected*))
+          (cname (-> self menu-list *tm-selected* continue)))
+      (when cname
+        (let ((continue (get-continue-by-name *game-info* cname)))
+          (set-continue! *game-info* continue #f)
+          (send-event *target* 'continue continue)
+          (suspend)
+          )
+        )
+      (go-virtual active event)
+      )
     )
   )

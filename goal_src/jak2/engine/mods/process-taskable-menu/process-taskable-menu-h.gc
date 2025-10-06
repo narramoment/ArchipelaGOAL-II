@@ -13,6 +13,7 @@
 (deftype taskable-menu-entry (structure)
   ((task-node     game-task-node)    ;; the game-task-node containing the introductory data for a mission (cutscenes, actors, etc).
    (event-idx     int)               ;; the index under `when-open` related to this menu item.
+   (continue      string)            ;; the name of the continue point needed to load the cutscene from the event object.
    (text-id       text-id)           ;; the text-id that defines the phrase to be displayed for this menu item.
    (allow-when    (function symbol)) ;; optional: function that must return true for this entry to become available
    (forbid-when   (function symbol)) ;; optional: function that hides this entry if it returns true, regardless of `allow-when`
@@ -22,6 +23,7 @@
 (defmacro static-taskable-menu-entry 
   (&key task-node
     &key event-idx
+    &key continue
     &key text-id
     &key (allow-when (lambda () #f))
     &key (forbid-when (lambda () #f))
@@ -29,6 +31,7 @@
   `(new 'static 'taskable-menu-entry
      :task-node ,task-node
      :event-idx ,event-idx
+     :continue ,continue
      :text-id ,text-id
      :allow-when ,allow-when
      :forbid-when ,forbid-when
@@ -44,6 +47,7 @@
     (static-taskable-menu-entry 
       :task-node (game-task-node ruins-tower-introduction)
       :event-idx 0
+      :continue "ctysluma-tower-intro"
       :text-id (text-id progress-missions-ruins-tower)
       :allow-when (lambda () 
         (or (task-node-open? (game-task-node ruins-tower-introduction))
@@ -55,6 +59,7 @@
     (static-taskable-menu-entry 
       :task-node (game-task-node atoll-water-introduction)
       :event-idx 0
+      :continue "hideout-start"
       :text-id (text-id progress-missions-atoll-water)
       :allow-when (lambda () 
         (or (task-node-open? (game-task-node atoll-water-introduction))
@@ -68,6 +73,7 @@
     (static-taskable-menu-entry 
       :task-node (game-task-node fortress-dump-introduction)
       :event-idx 0
+      :continue "hideout-start"
       :text-id (text-id progress-missions-fortress-dump)
       :allow-when (lambda () 
         (or (task-node-open? (game-task-node fortress-dump-introduction))
@@ -80,6 +86,7 @@
     (static-taskable-menu-entry 
       :task-node (game-task-node city-krew-delivery-introduction)
       :event-idx 0
+      :continue "hideout-start"
       :text-id (text-id progress-missions-city-krew-delivery)
       :allow-when (lambda () (task-node-open? (game-task-node city-krew-delivery-introduction)))
       :forbid-when (lambda () (task-node-closed? (game-task-node city-krew-delivery-resolution)))

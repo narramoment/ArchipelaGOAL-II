@@ -114,6 +114,13 @@
           )
         )
 
+      ;; hideout
+      (let ((cty-ho-out-door (entity-by-name "hide-door-a-3")))
+        (when cty-ho-out-door
+          (set! (cdr (res-lump-struct cty-ho-out-door 'on-notice pair)) '(#t '(hideout)))
+          )
+        )
+
       ;; oracle
       (let ((cty-ora-out-door (entity-by-name "oracle-door-3"))
             (cty-ora-in-door (entity-by-name "oracle-door-1")))

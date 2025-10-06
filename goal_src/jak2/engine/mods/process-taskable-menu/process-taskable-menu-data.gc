@@ -319,6 +319,7 @@
           (suspend)
           )
         )
+      (suspend-for (seconds 0.1))
       )
     (go-virtual hide)
     )

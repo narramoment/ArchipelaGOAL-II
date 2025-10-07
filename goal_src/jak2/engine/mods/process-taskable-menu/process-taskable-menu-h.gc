@@ -91,11 +91,80 @@
       :allow-when (lambda () (task-node-open? (game-task-node city-krew-delivery-introduction)))
       :forbid-when (lambda () (task-node-closed? (game-task-node city-krew-delivery-resolution)))
       )
-    )
+    (static-taskable-menu-entry
+      :task-node (game-task-node strip-rescue-introduction)
+      :event-idx 0
+      :continue "hideout-start"
+      :text-id (text-id progress-missions-strip-rescue)
+      :allow-when (lambda ()
+      (or (task-node-open? (game-task-node strip-rescue-introduction))
+          (task-node-open? (game-task-node strip-rescue-battle))
+          )
+      )
+      :forbid-when (lambda () (game-task-node strip-rescue-resolution))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node atoll-battle-introduction)
+      :event-idx 0
+      :continue "hideout-start"
+      :text-id (text-id progress-missions-atoll-battle)
+      :allow-when (lambda ()
+      (or (task-node-open? (game-task-node atoll-battle-introduction))
+          (task-node-open? (game-task-node atoll-battle-rescue))
+          (task-node-open? (game-task-node atoll-battle-battle))
+          )
+      )
+      :forbid-when (lambda () (game-task-node atoll-battle-resolution))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-shuttle-introduction)
+      :event-idx 0
+      :continue "hideout-start"
+      :text-id (text-id progress-missions-city-shuttle)
+      :allow-when (lambda ()
+      (or (task-node-open? (game-task-node city-shuttle-introduction))
+          (task-node-open? (game-task-node city-shuttle-shuttle))
+          )
+      )
+      :forbid-when (lambda () (game-task-node city-shuttle-resolution))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node ruins-enemy-introduction)
+      :event-idx 0
+      :continue "hideout-start"
+      :text-id (text-id progress-missions-ruins-enemy)
+      :allow-when (lambda () (game-task-node ruins-enemy-introduction))
+      :forbid-when (lambda () (game-task-node ruins-enemy-resolution))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-destroy-guard-vehicles-introduction)
+      :event-idx 0
+      :continue "hideout-start"
+      :text-id (text-id progress-missions-city-destroy-guard-vehicles)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node city-destroy-guard-vehicles-introduction))
+            (task-node-open? (game-task-node city-destroy-guard-vehicles-destroy))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-destroy-guard-vehicles-resolution)))
+      )
   )
+)
 
 (define *krew-menu-list* 
   (new 'static 'boxed-array :type taskable-menu-entry
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-red-gun-training-introduction)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-city-red-gun-training)
+      :allow-when (lambda () 
+      (or (task-node-open? (game-task-node city-red-gun-training-introduction))
+          (task-node-open? (game-task-node city-red-gun-training-try-once))
+          )
+      )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-red-gun-training-resolution)))
+      )
     (static-taskable-menu-entry 
       :task-node (game-task-node atoll-sig-introduction)
       :event-idx 0
@@ -108,6 +177,26 @@
         )
       :forbid-when (lambda () (task-node-closed? (game-task-node atoll-sig-resolution)))
       )
+    (static-taskable-menu-entry
+      :task-node (game-task-node sewer-enemy-blow-up-turrets)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-sewer-enemy)
+      :allow-when (lambda () 
+        (or (task-node-open? (game-task-node sewer-enemy-introduction))
+            (task-node-open? (game-task-node sewer-enemy-talk-to-krew))
+            (task-node-open? (game-task-node sewer-enemy-blow-up-turrets))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node sewer-enemy-resolution)))
+      )
+      ;; <ap:note> menu node for blaster/gun course, leave alone for now
+    ;;(static-taskable-menu-entry
+    ;;  :task-node (game-task-node city-yellow-gun-training-introduction)
+    ;;  :event-idx 0
+    ;;  :continue "hiphog-start"
+    ;;
+    ;;  )  
     (static-taskable-menu-entry 
       :task-node (game-task-node city-krew-collection-introduction)
       :event-idx 0
@@ -119,6 +208,36 @@
             )
         )
       :forbid-when (lambda () (task-node-closed? (game-task-node city-krew-collection-resolution)))
+      )
+    ;; <ap:note> port run starts through a communicator, will be dealt with later
+    ;;(static-taskable-menu-entry
+    ;;  :task-node (game-task-node city-port-run-introduction)
+    ;;
+    ;;  )
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-meet-brutter-pre-intro)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-city-meet-brutter)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node city-meet-brutter-pre-intro))
+            (task-node-open? (game-task-node city-meet-brutter-introduction))
+            (task-node-open? (game-task-node city-meet-brutter-meet-brutter))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-meet-brutter-resolution)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node sewer-board-introduction)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-sewer-board)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node sewer-board-introduction))
+            (task-node-open? (game-task-node sewer-board-drain))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node sewer-board-resolution)))
       )
     )
   )

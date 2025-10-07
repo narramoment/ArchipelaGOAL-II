@@ -101,7 +101,7 @@
           (task-node-open? (game-task-node strip-rescue-battle))
           )
       )
-      :forbid-when (lambda () (game-task-node strip-rescue-resolution))
+      :forbid-when (lambda () (task-node-closed? (game-task-node strip-rescue-resolution)))
       )
     (static-taskable-menu-entry
       :task-node (game-task-node atoll-battle-introduction)
@@ -114,7 +114,7 @@
           (task-node-open? (game-task-node atoll-battle-battle))
           )
       )
-      :forbid-when (lambda () (game-task-node atoll-battle-resolution))
+      :forbid-when (lambda () (task-node-closed? (game-task-node atoll-battle-resolution)))
       )
     (static-taskable-menu-entry
       :task-node (game-task-node city-shuttle-introduction)
@@ -126,15 +126,15 @@
           (task-node-open? (game-task-node city-shuttle-shuttle))
           )
       )
-      :forbid-when (lambda () (game-task-node city-shuttle-resolution))
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-shuttle-resolution)))
       )
     (static-taskable-menu-entry
       :task-node (game-task-node ruins-enemy-introduction)
       :event-idx 0
       :continue "hideout-start"
       :text-id (text-id progress-missions-ruins-enemy)
-      :allow-when (lambda () (game-task-node ruins-enemy-introduction))
-      :forbid-when (lambda () (game-task-node ruins-enemy-resolution))
+      :allow-when (lambda () (task-node-open? (game-task-node ruins-enemy-introduction)))
+      :forbid-when (lambda () (task-node-closed? (game-task-node ruins-enemy-resolution)))
       )
     (static-taskable-menu-entry
       :task-node (game-task-node city-destroy-guard-vehicles-introduction)

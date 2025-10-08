@@ -274,3 +274,50 @@
   )
   )
 )
+
+(define *onin-menu-list*
+  (new 'static 'boxed-array :type taskable-menu-entry
+    (static-taskable-menu-entry
+      :task-node (game-task-node mountain-lens-introduction)
+      :event-idx 0
+      :continue "onintent-start"
+      :text-id (text-id progress-missions-mountain-lens)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node mountain-lens-introduction))
+            (task-node-open? (game-task-node mountain-lens-started))
+            (task-node-open? (game-task-node mountain-lens-intermediate))
+            (task-node-open? (game-task-node mountain-gear-find))
+            (task-node-open? (game-task-node mountain-shard-dice))
+            )
+      )
+      :forbid-when (lambda () (task-node-closed? (game-task-node mountain-collection-resolution)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-play-onin-game-introduction)
+      :event-idx 0
+      :continue "onintent-start"
+      :text-id (text-id progress-missions-onin-game)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node city-play-onin-game-introduction))
+            (task-node-open? (game-task-node city-play-onin-game-wait))
+            (task-node-open? (game-task-node city-play-onin-game-post-game))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-play-onin-game-resolution)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node canyon-insert-items-introduction)
+      :event-idx 0
+      :continue "onintent-start"
+      :text-id (text-id progress-missions-canyon-insert-items)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node canyon-insert-items-introduction))
+            (task-node-open? (game-task-node canyon-insert-items-door))
+            (task-node-open? (game-task-node canyon-insert-items-gear))
+            (task-node-open? (game-task-node canyon-insert-items-shard))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node canyon-insert-items-resolution)))
+      )
+  )
+)

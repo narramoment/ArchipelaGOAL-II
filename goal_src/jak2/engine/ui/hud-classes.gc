@@ -353,7 +353,10 @@
       (the int (+ 299.0 (* 130.0 f30-0)))
       )
     (cond
-      ((or (= (-> this values 2 target) 100) (= (-> *target* game eco-pill-dark) 100.0))
+      ;; <ap:preserve-this> check for dark jak posession before showing his face.
+      ((and (logtest? (-> *game-info* features) (game-feature darkjak))
+            (or (= (-> this values 2 target) 100) 
+                (= (-> *target* game eco-pill-dark) 100.0)))
        (set! (-> this sprites 0 tex) (get-texture hud-darkjak-head-01 level-default-minimap))
        (set-hud-piece-position!
          (the-as hud-sprite (-> this sprites))

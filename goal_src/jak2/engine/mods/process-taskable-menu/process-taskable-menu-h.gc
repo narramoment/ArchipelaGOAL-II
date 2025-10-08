@@ -148,6 +148,15 @@
         )
       :forbid-when (lambda () (task-node-closed? (game-task-node city-destroy-guard-vehicles-resolution)))
       )
+    (static-taskable-menu-entry
+      :task-node (game-task-node fortress-save-friends-introduction)
+      :event-idx 0
+      :continue "hideout-start"
+      :text-id (text-id progress-missions-fortress-save-friends)
+      :allow-when (lambda () (task-node-open? (game-task-node fortress-save-friends-introduction))
+      )
+      :forbid-when (lambda () (task-node-closed? (game-task-node fortress-save-friends-resolution)))
+      )
   )
 )
 
@@ -191,12 +200,14 @@
       :forbid-when (lambda () (task-node-closed? (game-task-node sewer-enemy-resolution)))
       )
       ;; <ap:note> menu node for blaster/gun course, leave alone for now
-    ;;(static-taskable-menu-entry
-    ;;  :task-node (game-task-node city-yellow-gun-training-introduction)
-    ;;  :event-idx 0
-    ;;  :continue "hiphog-start"
-    ;;
-    ;;  )  
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-yellow-gun-training-introduction)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-city-yellow-gun-training)
+      :allow-when (lambda () (task-node-open? (game-task-node city-yellow-gun-training-introduction)))
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-yellow-gun-training-resolution)))
+      )  
     (static-taskable-menu-entry 
       :task-node (game-task-node city-krew-collection-introduction)
       :event-idx 0
@@ -239,5 +250,27 @@
         )
       :forbid-when (lambda () (task-node-closed? (game-task-node sewer-board-resolution)))
       )
+    (static-taskable-menu-entry
+      :task-node (game-task-node sewer-escort-introduction)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-sewer-escort)
+      :allow-when (lambda () (task-node-open? (game-task-node sewer-escort-introduction))
+      )
+      :forbid-when (lambda () (task-node-closed? (game-task-node sewer-escort-resolution)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-errol-challenge-introduction)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-city-errol-challenge)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node city-errol-challenge-introduction))
+            (task-node-open? (game-task-node city-errol-challenge-race))
+            )
+      )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-errol-challenge-resolution))
     )
   )
+  )
+)

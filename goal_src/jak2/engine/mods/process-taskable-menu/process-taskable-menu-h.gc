@@ -199,15 +199,6 @@
         )
       :forbid-when (lambda () (task-node-closed? (game-task-node sewer-enemy-resolution)))
       )
-      ;; <ap:note> menu node for blaster/gun course, leave alone for now
-    (static-taskable-menu-entry
-      :task-node (game-task-node sewer-enemy-resolution)
-      :event-idx 0
-      :continue "hiphog-start"
-      :text-id (text-id progress-missions-city-yellow-gun-training)
-      :allow-when (lambda () (task-node-open? (game-task-node city-yellow-gun-training-introduction)))
-      :forbid-when (lambda () (task-node-closed? (game-task-node city-yellow-gun-training-resolution)))
-      )  
     (static-taskable-menu-entry 
       :task-node (game-task-node city-krew-collection-introduction)
       :event-idx 0
@@ -300,7 +291,6 @@
       :allow-when (lambda ()
         (or (task-node-open? (game-task-node city-play-onin-game-introduction))
             (task-node-open? (game-task-node city-play-onin-game-wait))
-            (task-node-open? (game-task-node city-play-onin-game-post-game))
             )
         )
       :forbid-when (lambda () (task-node-closed? (game-task-node city-play-onin-game-resolution)))
@@ -318,6 +308,83 @@
             )
         )
       :forbid-when (lambda () (task-node-closed? (game-task-node canyon-insert-items-resolution)))
+      )
+  )
+)
+
+(define *vin-menu-list*
+  (new 'static 'boxed-array :type taskable-menu-entry
+    (static-taskable-menu-entry
+      :task-node (game-task-node drill-eggs-introduction)
+      :event-idx 0
+      :continue "vinroom-start"
+      :text-id (text-id progress-missions-drill-eggs)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node drill-eggs-introduction))
+            (task-node-open? (game-task-node drill-eggs-eggs-0))
+            (task-node-open? (game-task-node drill-eggs-eggs-1))
+            (task-node-open? (game-task-node drill-eggs-eggs-2))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node drill-eggs-resolution)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-power-introduction)
+      :event-idx 0
+      :continue "vinroom-start"
+      :text-id (text-id progress-missions-city-power)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node city-power-introduction))
+            (task-node-open? (game-task-node city-power-vinroom))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-power-resolution)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node strip-grenade-introduction)
+      :event-idx 0
+      :continue "vinroom-start"
+      :text-id (text-id progress-missions-strip-grenade)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node strip-grenade-introduction))
+            (task-node-open? (game-task-node strip-grenade-explode))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node strip-grenade-resolution)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node strip-drop-introduction)
+      :event-idx 0
+      :continue "vinroom-start"
+      :text-id (text-id progress-missions-strip-drop)
+      :allow-when (lambda () (task-node-open? (game-task-node strip-drop-introduction)))
+      :forbid-when (lambda () (task-node-closed? (game-task-node strip-drop-resolution)))
+      )
+  )
+)
+
+(define *sig-menu-list*
+  (new 'static 'boxed-array :type taskable-menu-entry
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-yellow-gun-training-introduction)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-city-yellow-gun-training)
+      :allow-when (lambda () (task-node-open? (game-task-node city-yellow-gun-training-introduction)))
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-yellow-gun-training-resolution)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node forest-hunt-introduction)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-forest-hunt)
+      :allow-when (lambda () (task-node-open? (game-task-node forest-hunt-introduction)))
+      :forbid-when (lambda () (task-node-closed? (game-task-node forest-hunt-resolution)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node under-sig-introduction)
+      :event-idx 0
+      :continue "hiphog-start"
       )
   )
 )

@@ -90,7 +90,7 @@
               )
             ;; print menu header
             (set! (-> font-ctxt color) (font-color progress-old-yellow))
-            (let ((select-text (lookup-text! *common-text* (text-id select-destination) #f)))
+            (let ((select-text (lookup-text! *common-text* (text-id select-mission) #f)))
               (format (clear *temp-string*) select-text)
               )
             (print-game-text *temp-string* font-ctxt #f 44 (bucket-id progress))

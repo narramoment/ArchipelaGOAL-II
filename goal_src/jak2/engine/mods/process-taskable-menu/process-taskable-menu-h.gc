@@ -201,7 +201,7 @@
       )
       ;; <ap:note> menu node for blaster/gun course, leave alone for now
     (static-taskable-menu-entry
-      :task-node (game-task-node city-yellow-gun-training-introduction)
+      :task-node (game-task-node sewer-enemy-resolution)
       :event-idx 0
       :continue "hiphog-start"
       :text-id (text-id progress-missions-city-yellow-gun-training)

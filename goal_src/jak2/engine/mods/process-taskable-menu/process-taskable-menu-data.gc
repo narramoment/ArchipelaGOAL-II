@@ -409,6 +409,7 @@
     (case-str (-> this name)
       (("torn-npc-1" "torn-npc-2" "torn-npc-3" "torn-npc-4") *torn-menu-list*)
       (("krew-npc-1" "krew-npc-2" "krew-npc-4") *krew-menu-list*)
+      
       (else *empty-taskable-menu-list*)
       )
     )

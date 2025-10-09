@@ -192,18 +192,20 @@
                       (new 'static 'sound-id)
                       )
                     )
-                (and (not (logtest? (focus-status dead in-air in-head pole flut tube pilot mech dark) (-> *target* focus-status)))
+                ;; we'll be providing fixed distances for the talk radius and height.
+                ;; the per-actor and default ones are far too large and cause NPC's to overlap.
+                (set! (-> self talk-distance) (meters 6))
+                (set! (-> self talk-height) (meters 12))
+                ;; additionally, check player is not "grabbed" via entering a different NPC's menu list.
+                (and (not (logtest? (focus-status dead in-air in-head pole flut tube pilot mech dark grabbed) (-> *target* focus-status)))
                      (and (or (and (< (-> (target-pos 0) y) (+ (-> self root root-prim prim-core world-sphere y) (-> self talk-height)))
                                    (let ((s5-0 (get-trans self 2))
-                                         (f30-0 (if (= (-> gp-0 distance) 0.0)
-                                                    (-> self talk-distance)
-                                                    (-> gp-0 distance)
-                                                    )
-                                                )
+                                         (f30-0 (-> self talk-distance)) ;; use fixed distance.
                                          )
                                      ;; og:preserve-this added check so we don't use the wrong position for the distance check
                                      (and (not (logtest? (-> self draw status) (draw-control-status uninited)))
-                                          (< (vector-vector-distance (target-pos 0) s5-0) f30-0))
+                                          ;; use the -xz variant to ignore height. the NPC now has a "cylindrical" hitbox, instead of a spherical one.
+                                          (< (vector-vector-xz-distance (target-pos 0) s5-0) f30-0)) 
                                      )
                                    )
                               (not (time-elapsed? (-> self want-to-say) (seconds 4)))
@@ -230,9 +232,9 @@
            (kill-current-talker (the-as symbol '()) '(daxter voicebox ambient) 'exit)
            (talker-surpress!)
            (when (can-display-query? self (the-as string #f) -99.0)
-             (let ((s5-1
-                     (new 'stack 'font-context *font-default-matrix* 32 280 0.0 (font-color default) (font-flags shadow kerning))
-                     )
+             (let ((s5-1 (new 'stack 'font-context *font-default-matrix* 32 280 0.0 (font-color default) (font-flags shadow kerning)))
+                   (talk-prefix "Press ~Y~22L<~Z~Y~26L;~Z~Y~1L>~Z~Y~23L[~Z~+26H to")    ;; Press triangle to...
+                   (talk-suffix (lookup-text! *common-text* (-> self talk-message) #f)) ;; ...Talk to <name>
                    )
                (let ((v1-84 s5-1))
                  (set! (-> v1-84 width) (the float 340))
@@ -244,7 +246,11 @@
                  (set! (-> v1-86 scale) 0.9)
                  )
                (set! (-> s5-1 flags) (font-flags shadow kerning middle-vert large))
-               (print-game-text (lookup-text! *common-text* (-> self talk-message) #f) s5-1 #f 44 (bucket-id progress))
+               (if (= (-> self talk-message) (text-id press-triangle-to-talk))
+                   (format (clear *temp-string*) "~S" talk-suffix)
+                   (format (clear *temp-string*) "~S ~S." talk-prefix talk-suffix) ;; period must be added.
+                   )
+               (print-game-text *temp-string* s5-1 #f 44 (bucket-id progress))
                )
              (when (cpad-pressed? 0 triangle)
                (logclear! (-> *cpad-list* cpads 0 button0-abs 0) (pad-buttons triangle))
@@ -377,7 +383,16 @@
 
 (defmethod process-taskable-method-32 ((this process-taskable))
   (logior! (-> this skel status) (joint-control-status eye-anim))
-  (set! (-> this talk-message) (text-id press-triangle-to-talk))
+  (set! (-> this talk-message)
+    (case-str (-> this name)
+      (("torn-npc-1" "torn-npc-2" "torn-npc-3" "torn-npc-4") (text-id progress-missions-talk-to-torn))
+      (("krew-npc-1" "krew-npc-2" "krew-npc-4") (text-id progress-missions-talk-to-krew))
+      (("onin-npc-1") (text-id progress-missions-talk-to-onin))
+      (("vin-npc-1") (text-id progress-missions-talk-to-vin))
+      (("sig-npc-1" "sig-npc-2") (text-id progress-missions-talk-to-sig))
+      (else (text-id press-triangle-to-talk))
+      )
+    )
   (set! (-> this bounce-away) #t)
   (set! (-> this will-talk) #t)
   (set! (-> this look-at-me) #t)

@@ -439,6 +439,7 @@
         )
       :forbid-when (lambda () (task-node-closed? (game-task-node stadium-race-class3-resolution)))
       )
+<<<<<<< HEAD
     (static-taskable-menu-entry
       :task-node (game-task-node stadium-race-class2-introduction)
       :event-idx 0
@@ -463,5 +464,12 @@
         )
       :forbid-when (lambda () (task-node-closed? (game-task-node stadium-race-class1-resolution)))
       )
+=======
+    ;; (static-taskable-menu-entry
+    ;;   :task-node (game-task-node under-sig-introduction)
+    ;;   :event-idx 0
+    ;;   :continue "hiphog-start"
+    ;;   )
+>>>>>>> remotes/archipelagoal/jak2-improve-npc-menus
   )
 )

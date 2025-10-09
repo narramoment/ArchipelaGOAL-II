@@ -381,10 +381,10 @@
       :allow-when (lambda () (task-node-open? (game-task-node forest-hunt-introduction)))
       :forbid-when (lambda () (task-node-closed? (game-task-node forest-hunt-resolution)))
       )
-    (static-taskable-menu-entry
-      :task-node (game-task-node under-sig-introduction)
-      :event-idx 0
-      :continue "hiphog-start"
-      )
+    ;; (static-taskable-menu-entry
+    ;;   :task-node (game-task-node under-sig-introduction)
+    ;;   :event-idx 0
+    ;;   :continue "hiphog-start"
+    ;;   )
   )
 )

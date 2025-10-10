@@ -424,11 +424,16 @@
     (case-str (-> this name)
       (("torn-npc-1" "torn-npc-2" "torn-npc-3" "torn-npc-4") *torn-menu-list*)
       (("krew-npc-1" "krew-npc-2" "krew-npc-4") *krew-menu-list*)
+      (("sig-npc-1" "sig-npc-2") *sig-menu-list*)
+      (("tess-npc-1" "tess-npc-3") *tess-menu-list*)
       (("onin-npc-1") *onin-menu-list*)
       (("vin-npc-1") *vin-menu-list*)
       (("brutter-npc-1") *brutter-menu-list*)
       (("keira-npc-1" "keira-npc-2") *keira-menu-list*)
+<<<<<<< HEAD
       (("sig-npc-1" "sig-npc-2") *sig-menu-list*)
+=======
+>>>>>>> 83d0a7931b7e3cd966c74668db65f8fd0845a460
       (else *empty-taskable-menu-list*)
       )
     )

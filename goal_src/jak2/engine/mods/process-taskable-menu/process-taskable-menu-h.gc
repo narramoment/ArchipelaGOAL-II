@@ -42,7 +42,7 @@
 ;; used as a fallback when an entity doesn't have a defined menu.
 (define *empty-taskable-menu-list* (new 'static 'boxed-array :type taskable-menu-entry))
 
-(define *hideout-menu-list* 
+(define *torn-menu-list* 
   (new 'static 'boxed-array :type taskable-menu-entry
     (static-taskable-menu-entry 
       :task-node (game-task-node ruins-tower-introduction)
@@ -160,7 +160,7 @@
   )
 )
 
-(define *hiphog-menu-list* 
+(define *krew-menu-list* 
   (new 'static 'boxed-array :type taskable-menu-entry
     (static-taskable-menu-entry
       :task-node (game-task-node city-red-gun-training-introduction)
@@ -212,6 +212,18 @@
       :forbid-when (lambda () (task-node-closed? (game-task-node city-krew-collection-resolution)))
       )
     (static-taskable-menu-entry
+      :task-node (game-task-node city-yellow-gun-training-introduction)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-city-yellow-gun-training)
+      :allow-when (lambda () 
+        (or (task-node-closed? (game-task-node sewer-enemy-resolution))
+            (task-node-open? (game-task-node city-yellow-gun-training-introduction))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-yellow-gun-training-resolution)))
+      )
+    (static-taskable-menu-entry
       :task-node (game-task-node city-keira-delivery-introduction)
       :event-idx 0
       :continue "hiphog-start"
@@ -222,18 +234,6 @@
             )
         )
       :forbid-when (lambda () (task-node-closed? (game-task-node city-keira-delivery-resolution)))
-      )
-    (static-taskable-menu-entry
-      :task-node (game-task-node sewer-enemy-resolution)
-      :event-idx 0
-      :continue "hiphog-start"
-      :text-id (text-id progress-missions-city-yellow-gun-training)
-      :allow-when (lambda () 
-        (or (task-node-closed? (game-task-node sewer-enemy-resolution))
-            (task-node-open? (game-task-node city-yellow-gun-training-introduction))
-            )
-        )
-      :forbid-when (lambda () (task-node-closed? (game-task-node city-yellow-gun-training-resolution)))
       )
     ;; <ap:note> port run starts through a communicator, will be dealt with later
     ;;(static-taskable-menu-entry
@@ -286,6 +286,11 @@
       )
       :forbid-when (lambda () (task-node-closed? (game-task-node city-errol-challenge-resolution)))
       )
+  )
+  )
+
+(define *sig-menu-list*
+  (new 'static 'boxed-array :type taskable-menu-entry
     (static-taskable-menu-entry
       :task-node (game-task-node forest-hunt-introduction)
       :event-idx 0
@@ -295,8 +300,32 @@
       :forbid-when (lambda () (task-node-closed? (game-task-node forest-hunt-resolution)))
       )
   )
-  )
+)
 
+(define *tess-menu-list*
+  (new 'static 'boxed-array :type taskable-menu-entry
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-whack-introduction)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-beat-whack)
+      :allow-when (lambda () 
+        (or (task-node-open? (game-task-node city-whack-introduction))
+            (task-node-open? (game-task-node city-whack-wait))
+        )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-whack-resolution)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node under-mech-introduction)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-under-find-sig)
+      :allow-when (lambda () (task-node-open? (game-task-node under-mech-introduction)))
+      :forbid-when (lambda () (task-node-closed? (game-task-node under-mech-resolution)))
+      )
+  )
+)
 
 (define *onin-menu-list*
   (new 'static 'boxed-array :type taskable-menu-entry

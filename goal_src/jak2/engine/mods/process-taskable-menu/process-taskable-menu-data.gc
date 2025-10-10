@@ -422,8 +422,10 @@
   ;; Use the empty list as a final fallback.
   (set! (-> this menu-list)
     (case-str (-> this name)
-      (("torn-npc-1" "torn-npc-2" "torn-npc-3" "torn-npc-4" "youngsamos-npc-1" "youngsamos-npc-2" "kor-npc-4") *hideout-menu-list*)
-      (("krew-npc-1" "krew-npc-2" "krew-npc-4" "sig-npc-1" "sig-npc-2" "tess-npc-1" "tess-npc-3") *hiphog-menu-list*)
+      (("torn-npc-1" "torn-npc-2" "torn-npc-3" "torn-npc-4") *torn-menu-list*)
+      (("krew-npc-1" "krew-npc-2" "krew-npc-4") *krew-menu-list*)
+      (("sig-npc-1" "sig-npc-2") *sig-menu-list*)
+      (("tess-npc-1" "tess-npc-3") *tess-menu-list*)
       (("onin-npc-1") *onin-menu-list*)
       (("vin-npc-1") *vin-menu-list*)
       (("brutter-npc-1") *brutter-menu-list*)

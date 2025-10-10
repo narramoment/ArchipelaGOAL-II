@@ -211,6 +211,18 @@
         )
       :forbid-when (lambda () (task-node-closed? (game-task-node city-krew-collection-resolution)))
       )
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-keira-delivery-introduction)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-city-keira-delivery)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node city-keira-delivery-introduction))
+            (task-node-open? (game-task-node city-keira-delivery-delivery))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-keira-delivery-resolution)))
+      )
     ;; <ap:note> port run starts through a communicator, will be dealt with later
     ;;(static-taskable-menu-entry
     ;;  :task-node (game-task-node city-port-run-introduction)
@@ -260,11 +272,10 @@
             (task-node-open? (game-task-node city-errol-challenge-race))
             )
       )
-      :forbid-when (lambda () (task-node-closed? (game-task-node city-errol-challenge-resolution))
-    )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-errol-challenge-resolution)))
+      )
   )
   )
-)
 
 (define *onin-menu-list*
   (new 'static 'boxed-array :type taskable-menu-entry
@@ -363,6 +374,82 @@
   )
 )
 
+(define *brutter-menu-list*
+  (new 'static 'boxed-array :type taskable-menu-entry
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-save-lurkers-introduction)
+      :event-idx 0
+      :continue "kiosk-start"
+      :text-id (text-id progress-missions-city-meet-brutter)
+      :allow-when (lambda () 
+        (or (task-node-open? (game-task-node city-save-lurkers-introduction))
+            (task-node-open? (game-task-node city-save-lurkers-save-lurkers))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-save-lurkers-resolution)))
+      )
+  )
+)
+
+(define *keira-menu-list*
+  (new 'static 'boxed-array :type taskable-menu-entry
+    (static-taskable-menu-entry
+      :task-node (game-task-node stadium-board1-introduction)
+      :event-idx 0
+      :continue "garage-start-skate"
+      :text-id (text-id progress-missions-stadium-board1)
+      :allow-when (lambda () 
+        (or (task-node-open? (game-task-node stadium-board1-introduction))
+            (task-node-open? (game-task-node stadium-board1-training))
+            (task-node-open? (game-task-node stadium-board1-training-judge))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node stadium-board1-resolution)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node stadium-race-class3-introduction)
+      :event-idx 0
+      :continue "garage-class3-movie"
+      :text-id (text-id progress-missions-stadium-race-class3)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node stadium-race-class3-introduction))
+            (task-node-open? (game-task-node stadium-race-class3-race))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node stadium-race-class3-resolution)))
+      )
+    ;; (static-taskable-menu-entry
+    ;;   :task-node (game-task-node under-sig-introduction)
+    ;;   :event-idx 0
+    ;;   :continue "hiphog-start"
+    ;;   )
+    (static-taskable-menu-entry
+      :task-node (game-task-node stadium-race-class2-introduction)
+      :event-idx 0
+      :continue "garage-class3-movie"
+      :text-id (text-id progress-missions-stadium-race-class2)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node stadium-race-class2-introduction))
+            (task-node-open? (game-task-node stadium-race-class2-race))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node stadium-race-class2-resolution)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node stadium-race-class1-introduction)
+      :event-idx 0
+      :continue "garage-class3-movie"
+      :text-id (text-id progress-missions-stadium-race-class1)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node stadium-race-class1-introduction))
+            (task-node-open? (game-task-node stadium-race-class1-race))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node stadium-race-class1-resolution)))
+      )
+  )
+)
+
 (define *sig-menu-list*
   (new 'static 'boxed-array :type taskable-menu-entry
     (static-taskable-menu-entry
@@ -379,12 +466,7 @@
       :continue "hiphog-start"
       :text-id (text-id progress-missions-forest-hunt)
       :allow-when (lambda () (task-node-open? (game-task-node forest-hunt-introduction)))
-      :forbid-when (lambda () (task-node-closed? (game-task-node forest-hunt-resolution)))
+      :forbid-when (lambda () (task-node-open? (game-task-node forest-hunt-resolution)))
       )
-    ;; (static-taskable-menu-entry
-    ;;   :task-node (game-task-node under-sig-introduction)
-    ;;   :event-idx 0
-    ;;   :continue "hiphog-start"
-    ;;   )
   )
 )

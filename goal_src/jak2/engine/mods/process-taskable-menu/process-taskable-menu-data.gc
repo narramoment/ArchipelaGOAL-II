@@ -426,6 +426,8 @@
       (("krew-npc-1" "krew-npc-2" "krew-npc-4") *krew-menu-list*)
       (("onin-npc-1") *onin-menu-list*)
       (("vin-npc-1") *vin-menu-list*)
+      (("brutter-npc-1") *brutter-menu-list*)
+      (("keira-npc-1" "keira-npc-2") *keira-menu-list*)
       (("sig-npc-1" "sig-npc-2") *sig-menu-list*)
       (else *empty-taskable-menu-list*)
       )

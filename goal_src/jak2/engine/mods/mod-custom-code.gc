@@ -189,9 +189,9 @@
         (when cty-vin-door
           (set! (cdr (res-lump-struct cty-vin-door 'on-notice pair)) '(#t '(vinroom)))
         )
-        (when vinroom-warp
-          (set! (cdr (res-lump-struct vinroom-warp 'on-notice pair)) '(((and (task-closed? "strip-rescue-introduction") (not (task-complete? 16))) '("strip-warp" (want-load 'vinroom 'strip) (strip))) ((and (task-closed? "drill-eggs-introduction") (not (task-complete? 26))) '("drill1-warp" (want-load 'vinroom 'drillmid) (drillmid))) ((and (task-closed? "city-power-introduction") (not (task-complete? 27))) #f) ((and (task-closed? "strip-grenade-introduction") (not (task-complete? 36))) '("strip-warp" (want-load 'vinroom 'strip) (strip))) ((and (task-closed? "drill-ship-introduction") (not (task-complete? 37))) '("drill-warp-gunship" (want-load 'vinroom 'drillmid) (drillmid))) ((and (task-closed? "strip-drop-introduction") (not (task-complete? 58))) '("strip-warp" (want-load 'vinroom 'strip) (strip))) ((and (task-closed? "drill-mech-introduction") (not (task-complete? 61))) '("drill3-warp" (want-load 'vinroom 'drillmid) (drillmid))) (else '("strip-warp" (want-load 'vinroom 'strip) (strip)))))
-        )
+        ;; (when vinroom-warp
+        ;;   (set! (cdr (res-lump-struct vinroom-warp 'on-notice pair)) '(((and (task-closed? "strip-rescue-introduction") (not (task-complete? 16))) '("strip-warp" (want-load 'vinroom 'strip) (strip))) ((and (task-closed? "drill-eggs-introduction") (not (task-complete? 26))) '("drill1-warp" (want-load 'vinroom 'drillmid) (drillmid))) ((and (task-closed? "city-power-introduction") (not (task-complete? 27))) #f) ((and (task-closed? "strip-grenade-introduction") (not (task-complete? 36))) '("strip-warp" (want-load 'vinroom 'strip) (strip))) ((and (task-closed? "drill-ship-introduction") (not (task-complete? 37))) '("drill-warp-gunship" (want-load 'vinroom 'drillmid) (drillmid))) ((and (task-closed? "strip-drop-introduction") (not (task-complete? 58))) '("strip-warp" (want-load 'vinroom 'strip) (strip))) ((and (task-closed? "drill-mech-introduction") (not (task-complete? 61))) '("drill3-warp" (want-load 'vinroom 'drillmid) (drillmid))) (else '("strip-warp" (want-load 'vinroom 'strip) (strip)))))
+        ;; )
       )
 
       ;; dig
@@ -211,18 +211,101 @@
         )
 
       ;; air trains
-      (let ((air-train-port (entity-by-name "air-train-1"))
-            (air-train-land (entity-by-name "air-train-3"))
-            (air-train-nest (entity-by-name "air-train-4")))
-        (when air-train-port
-          (set! (cdr (res-lump-struct air-train-port 'on-notice pair)) '(((not (has-air-train?)) 'hide) ((task-closed? "dig-knock-down-introduction") '("caspad-warp" (scene-play '("city-air-train-in-caspad" "caspad-air-train-out")) #f (want-anim "city-air-train-in-caspad"))) ((task-closed? "dig-find-totem-introduction") '("caspad-warp" (scene-play '("city-air-train-in-caspad" "caspad-air-train-out")) #f (want-anim "city-air-train-in-caspad"))) ((task-closed? "nest-get-to-gun-introduction") '("nest-warp" (scene-play '("city-air-train-in-nest" "nest-air-train-out")) #f (want-anim "city-air-train-in-nest")))  (else '("caspad-warp" (scene-play '("city-air-train-in-caspad" "caspad-air-train-out")) #f (want-anim "city-air-train-in-caspad")))))
+      ;; (let ((air-train-port (entity-by-name "air-train-1"))
+      ;;       (air-train-land (entity-by-name "air-train-3"))
+      ;;       (air-train-nest (entity-by-name "air-train-4")))
+      ;;   (when air-train-port
+      ;;     (set! (cdr (res-lump-struct air-train-port 'on-notice pair)) '(((not (has-air-train?)) 'hide) ((task-closed? "dig-knock-down-introduction") '("caspad-warp" (scene-play '("city-air-train-in-caspad" "caspad-air-train-out")) #f (want-anim "city-air-train-in-caspad"))) ((task-closed? "dig-find-totem-introduction") '("caspad-warp" (scene-play '("city-air-train-in-caspad" "caspad-air-train-out")) #f (want-anim "city-air-train-in-caspad"))) ((task-closed? "nest-get-to-gun-introduction") '("nest-warp" (scene-play '("city-air-train-in-nest" "nest-air-train-out")) #f (want-anim "city-air-train-in-nest")))  (else '("caspad-warp" (scene-play '("city-air-train-in-caspad" "caspad-air-train-out")) #f (want-anim "city-air-train-in-caspad")))))
+      ;;     )
+      ;;   (when air-train-land
+      ;;     (set! (cdr (res-lump-struct air-train-land 'on-notice pair)) '(((not (has-air-train?)) 'hide) (else '("ctyport-warp" (scene-play '("caspad-air-train-in" "city-air-train-out")) #f (want-anim "caspad-air-train-in")))))
+      ;;     )
+      ;;   (when air-train-nest
+      ;;     (set! (car (res-lump-struct air-train-nest 'on-notice pair)) 'cond)
+      ;;     (set! (cdr (res-lump-struct air-train-nest 'on-notice pair)) '(((not (has-air-train?)) 'hide) (else '("ctyport-warp" (scene-play '("nest-air-train-in" "city-air-train-out")) #f (want-anim "nest-air-train-in")))))
+      ;;     )
+      ;;   )
+
+      ;; stadium
+      (let ((region-557 (region-lookup-by-id 557))
+            (region-317 (region-lookup-by-id 317))
+            (region-787 (region-lookup-by-id 787))
+            )
+        (when region-557
+          (set! (-> region-557 on-enter) 
+            '(cond 
+              ((or (task-closed? "stadium-burning-bush-race-board-introduction") 
+                  (and (task-closed? "stadium-board1-introduction") (not (task-complete? 23)))) 
+                (want-load 'stadium 'ctywide 'skatea)) 
+              ((or (task-closed? "stadium-burning-bush-race-class3-introduction") 
+                  (task-closed? "stadium-burning-bush-race-class3-r-introduction") 
+                  (and (task-closed? "stadium-race-class3-introduction") (not (task-complete? 43)))) 
+                (want-load 'stadium 'ctywide 'stadiumb)) 
+              ((or (task-closed? "stadium-burning-bush-race-class2-introduction") 
+                  (task-closed? "stadium-burning-bush-race-class2-r-introduction") 
+                  (and (task-closed? "stadium-race-class2-introduction") (not (task-complete? 55)))) 
+                (want-load 'stadium 'ctywide 'stadiumc)) 
+              ((or (task-closed? "stadium-burning-bush-race-class1-introduction") 
+                  (task-closed? "stadium-burning-bush-race-class1-r-introduction") 
+                  (and (task-closed? "stadium-race-class1-introduction") (not (task-complete? 63)))) 
+                (want-load 'stadium 'ctywide 'stadiumd)) 
+              (else 
+                (want-load 'stadium 'ctywide 'skatea)))
+            )
+          (set! (-> region-557 on-exit) 
+            '(begin 
+              (when (task-closed? "stadium-burning-bush-race-board-introduction") (task-open! "stadium-burning-bush-race-board-introduction"))
+              (when (task-closed? "stadium-burning-bush-race-class3-introduction") (task-open! "stadium-burning-bush-race-class3-introduction"))
+              (when (task-closed? "stadium-burning-bush-race-class2-introduction") (task-open! "stadium-burning-bush-race-class2-introduction"))
+              (when (task-closed? "stadium-burning-bush-race-class1-introduction") (task-open! "stadium-burning-bush-race-class1-introduction"))
+              (when (task-closed? "stadium-burning-bush-race-class3-r-introduction") (task-open! "stadium-burning-bush-race-class3-r-introduction")) 
+              (when (task-closed? "stadium-burning-bush-race-class2-r-introduction") (task-open! "stadium-burning-bush-race-class2-r-introduction")) 
+              (when (task-closed? "stadium-burning-bush-race-class1-r-introduction") (task-open! "stadium-burning-bush-race-class1-r-introduction")))
+            ) 
           )
-        (when air-train-land
-          (set! (cdr (res-lump-struct air-train-land 'on-notice pair)) '(((not (has-air-train?)) 'hide) (else '("ctyport-warp" (scene-play '("caspad-air-train-in" "city-air-train-out")) #f (want-anim "caspad-air-train-in")))))
+        (when region-317
+          (set! (-> region-317 on-enter) 
+            '(cond 
+              ((or (task-closed? "stadium-burning-bush-race-board-introduction") 
+                  (and (task-closed? "stadium-board1-introduction") (not (task-complete? 23)))) 
+                (want-display 'skatea 'display)) 
+              ((or (task-closed? "stadium-burning-bush-race-class3-introduction") 
+                  (task-closed? "stadium-burning-bush-race-class3-r-introduction") 
+                  (and (task-closed? "stadium-race-class3-introduction") (not (task-complete? 43)))) 
+                (want-display 'stadiumb 'display)) 
+              ((or (task-closed? "stadium-burning-bush-race-class2-introduction") 
+                  (task-closed? "stadium-burning-bush-race-class2-r-introduction") 
+                  (and (task-closed? "stadium-race-class2-introduction") (not (task-complete? 55)))) 
+                (want-display 'stadiumc 'display)) 
+              ((or (task-closed? "stadium-burning-bush-race-class1-introduction") 
+                  (task-closed? "stadium-burning-bush-race-class1-r-introduction") 
+                  (and (task-closed? "stadium-race-class1-introduction") (not (task-complete? 63)))) 
+                (want-display 'stadiumd 'display)) 
+              (else 
+                (want-display 'skatea 'display)))
+            )
           )
-        (when air-train-nest
-          (set! (car (res-lump-struct air-train-nest 'on-notice pair)) 'cond)
-          (set! (cdr (res-lump-struct air-train-nest 'on-notice pair)) '(((not (has-air-train?)) 'hide) (else '("ctyport-warp" (scene-play '("nest-air-train-in" "city-air-train-out")) #f (want-anim "nest-air-train-in")))))
+        (when region-787
+          (set! (-> region-787 on-enter) 
+            '(cond 
+              ((or (task-closed? "stadium-burning-bush-race-board-introduction") 
+                  (and (task-closed? "stadium-board1-introduction") (not (task-complete? 23)))) 
+                (want-sound 'ctywide1 'stadium1 'skate1)) 
+              ((or (task-closed? "stadium-burning-bush-race-class3-introduction") 
+                  (task-closed? "stadium-burning-bush-race-class3-r-introduction") 
+                  (and (task-closed? "stadium-race-class3-introduction") (not (task-complete? 43)))) 
+                (want-sound 'ctywide1 'ctywide2 'stadium1)) 
+              ((or (task-closed? "stadium-burning-bush-race-class2-introduction") 
+                  (task-closed? "stadium-burning-bush-race-class2-r-introduction") 
+                  (and (task-closed? "stadium-race-class2-introduction") (not (task-complete? 55)))) 
+                (want-sound 'ctywide1 'ctywide2 'stadium1)) 
+              ((or (task-closed? "stadium-burning-bush-race-class1-introduction") 
+                  (task-closed? "stadium-burning-bush-race-class1-r-introduction") 
+                  (and (task-closed? "stadium-race-class1-introduction") (not (task-complete? 63)))) 
+                (want-sound 'ctywide1 'ctywide2 'stadium1)) 
+              (else 
+                (want-sound 'ctywide1 'stadium1 'skate1)))
+            )
           )
         )
 

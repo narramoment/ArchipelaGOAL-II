@@ -982,6 +982,7 @@
                        (begin
                          (dotimes (ii 4)
                            (when (and (nonzero? (-> node parent-node ii))
+                                      (= (-> game-nodes (-> node parent-node ii) task) (-> this task))
                                       (not (logtest? (-> game-nodes (-> node parent-node ii) flags) (game-task-node-flag closed)))
                                       )
                              (set! v1-19 #t)

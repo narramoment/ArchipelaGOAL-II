@@ -12156,28 +12156,29 @@
             :on-open #f
             :info #f
             :borrow '()
-            :open? #f
-            ;; <ap:preserve-this> don't open any tasks, they'll reset the mission tree.
-            ;; :on-close '(begin
-            ;;    (when (task-closed? "stadium-race-class3-resolution")
-            ;;      (task-open! "stadium-burning-bush-race-class3-introduction")
-            ;;      (task-open! "stadium-burning-bush-race-class3-r-introduction")
-            ;;      )
-            ;;    (when (task-closed? "stadium-race-class2-resolution")
-            ;;      (task-open! "stadium-burning-bush-race-class2-introduction")
-            ;;      (task-open! "stadium-burning-bush-race-class2-r-introduction")
-            ;;      )
-            ;;    (when (task-closed? "stadium-race-class1-resolution")
-            ;;      (task-open! "stadium-burning-bush-race-class1-introduction")
-            ;;      (task-open! "stadium-burning-bush-race-class1-r-introduction")
-            ;;      )
-            ;;    )
-            :on-close #f
+            ;; <ap:preserve-this> added open hook to check for archipelago items.
+            :open? (lambda ((arg0 game-task-node-info)) 
+              (ap-route-slums-to-stadium?))
+            :on-close '(begin
+               (when (task-closed? "stadium-race-class3-resolution")
+                 (task-open! "stadium-burning-bush-race-class3-introduction")
+                 (task-open! "stadium-burning-bush-race-class3-r-introduction")
+                 )
+               (when (task-closed? "stadium-race-class2-resolution")
+                 (task-open! "stadium-burning-bush-race-class2-introduction")
+                 (task-open! "stadium-burning-bush-race-class2-r-introduction")
+                 )
+               (when (task-closed? "stadium-race-class1-resolution")
+                 (task-open! "stadium-burning-bush-race-class1-introduction")
+                 (task-open! "stadium-burning-bush-race-class1-r-introduction")
+                 )
+               )
             )
           (new 'static 'game-task-node-info
             :level 'stadium
             :task (game-task stadium-burning-bush-race-board)
             :name "stadium-burning-bush-race-board-resolution"
+            :description (text-id board-name) ;; <ap:preserve-this> added
             :when-open (new 'static 'boxed-array :type game-task-event
               (new 'static 'game-task-event
                 :actor (game-task-actor burning-bush-stadium)
@@ -12240,28 +12241,29 @@
             :on-open #f
             :info #f
             :borrow '()
-            :open? #f
-            ;; <ap:preserve-this> don't open any tasks, they'll reset the mission tree.
-            ;; :on-close '(begin
-            ;;    (when (task-closed? "stadium-board1-resolution")
-            ;;      (task-open! "stadium-burning-bush-race-board-introduction")
-            ;;      )
-            ;;    (when (task-closed? "stadium-race-class2-resolution")
-            ;;      (task-open! "stadium-burning-bush-race-class2-introduction")
-            ;;      (task-open! "stadium-burning-bush-race-class2-r-introduction")
-            ;;      )
-            ;;    (when (task-closed? "stadium-race-class1-resolution")
-            ;;      (task-open! "stadium-burning-bush-race-class1-introduction")
-            ;;      (task-open! "stadium-burning-bush-race-class1-r-introduction")
-            ;;      )
-            ;;    (task-open! "stadium-burning-bush-race-class3-r-introduction")
-            ;;    )
-            :on-close #f
+            ;; <ap:preserve-this> added open hook to check for archipelago items.
+            :open? (lambda ((arg0 game-task-node-info)) 
+              (ap-route-slums-to-stadium?))
+            :on-close '(begin
+               (when (task-closed? "stadium-board1-resolution")
+                 (task-open! "stadium-burning-bush-race-board-introduction")
+                 )
+               (when (task-closed? "stadium-race-class2-resolution")
+                 (task-open! "stadium-burning-bush-race-class2-introduction")
+                 (task-open! "stadium-burning-bush-race-class2-r-introduction")
+                 )
+               (when (task-closed? "stadium-race-class1-resolution")
+                 (task-open! "stadium-burning-bush-race-class1-introduction")
+                 (task-open! "stadium-burning-bush-race-class1-r-introduction")
+                 )
+               (task-open! "stadium-burning-bush-race-class3-r-introduction")
+               )
             )
           (new 'static 'game-task-node-info
             :level 'stadium
             :task (game-task stadium-burning-bush-race-class3)
             :name "stadium-burning-bush-race-class3-resolution"
+            :description (text-id race-class3) ;; <ap:preserve-this> added
             :when-open (new 'static 'boxed-array :type game-task-event
               (new 'static 'game-task-event
                 :actor (game-task-actor burning-bush-stadium)
@@ -12319,28 +12321,29 @@
             :on-open #f
             :info #f
             :borrow '()
-            :open? #f
-            ;; <ap:preserve-this> don't open any tasks, they'll reset the mission tree.
-            ;; :on-close '(begin
-            ;;    (when (task-closed? "stadium-board1-resolution")
-            ;;      (task-open! "stadium-burning-bush-race-board-introduction")
-            ;;      )
-            ;;    (when (task-closed? "stadium-race-class3-resolution")
-            ;;      (task-open! "stadium-burning-bush-race-class3-introduction")
-            ;;      (task-open! "stadium-burning-bush-race-class3-r-introduction")
-            ;;      )
-            ;;    (when (task-closed? "stadium-race-class1-resolution")
-            ;;      (task-open! "stadium-burning-bush-race-class1-introduction")
-            ;;      (task-open! "stadium-burning-bush-race-class1-r-introduction")
-            ;;      )
-            ;;    (task-open! "stadium-burning-bush-race-class2-r-introduction")
-            ;;    )
-            :on-close #f
+            ;; <ap:preserve-this> added open hook to check for archipelago items.
+            :open? (lambda ((arg0 game-task-node-info)) 
+              (ap-route-slums-to-stadium?))
+            :on-close '(begin
+               (when (task-closed? "stadium-board1-resolution")
+                 (task-open! "stadium-burning-bush-race-board-introduction")
+                 )
+               (when (task-closed? "stadium-race-class3-resolution")
+                 (task-open! "stadium-burning-bush-race-class3-introduction")
+                 (task-open! "stadium-burning-bush-race-class3-r-introduction")
+                 )
+               (when (task-closed? "stadium-race-class1-resolution")
+                 (task-open! "stadium-burning-bush-race-class1-introduction")
+                 (task-open! "stadium-burning-bush-race-class1-r-introduction")
+                 )
+               (task-open! "stadium-burning-bush-race-class2-r-introduction")
+               )
             )
           (new 'static 'game-task-node-info
             :level 'stadium
             :task (game-task stadium-burning-bush-race-class2)
             :name "stadium-burning-bush-race-class2-resolution"
+            :description (text-id race-class2) ;; <ap:preserve-this> added
             :when-open (new 'static 'boxed-array :type game-task-event
               (new 'static 'game-task-event
                 :actor (game-task-actor burning-bush-stadium)
@@ -12398,28 +12401,29 @@
             :on-open #f
             :info #f
             :borrow '()
-            :open? #f
-            ;; <ap:preserve-this> don't open any tasks, they'll reset the mission tree.
-            ;; :on-close '(begin
-            ;;    (when (task-closed? "stadium-board1-resolution")
-            ;;      (task-open! "stadium-burning-bush-race-board-introduction")
-            ;;      )
-            ;;    (when (task-closed? "stadium-race-class3-resolution")
-            ;;      (task-open! "stadium-burning-bush-race-class3-introduction")
-            ;;      (task-open! "stadium-burning-bush-race-class3-r-introduction")
-            ;;      )
-            ;;    (when (task-closed? "stadium-race-class2-resolution")
-            ;;      (task-open! "stadium-burning-bush-race-class2-introduction")
-            ;;      (task-open! "stadium-burning-bush-race-class2-r-introduction")
-            ;;      )
-            ;;    (task-open! "stadium-burning-bush-race-class1-r-introduction")
-            ;;    )
-            :on-close #f
+            ;; <ap:preserve-this> added open hook to check for archipelago items.
+            :open? (lambda ((arg0 game-task-node-info)) 
+              (ap-route-slums-to-stadium?))
+            :on-close '(begin
+               (when (task-closed? "stadium-board1-resolution")
+                 (task-open! "stadium-burning-bush-race-board-introduction")
+                 )
+               (when (task-closed? "stadium-race-class3-resolution")
+                 (task-open! "stadium-burning-bush-race-class3-introduction")
+                 (task-open! "stadium-burning-bush-race-class3-r-introduction")
+                 )
+               (when (task-closed? "stadium-race-class2-resolution")
+                 (task-open! "stadium-burning-bush-race-class2-introduction")
+                 (task-open! "stadium-burning-bush-race-class2-r-introduction")
+                 )
+               (task-open! "stadium-burning-bush-race-class1-r-introduction")
+               )
             )
           (new 'static 'game-task-node-info
             :level 'stadium
             :task (game-task stadium-burning-bush-race-class1)
             :name "stadium-burning-bush-race-class1-resolution"
+            :description (text-id race-class1) ;; <ap:preserve-this> added
             :when-open (new 'static 'boxed-array :type game-task-event
               (new 'static 'game-task-event
                 :actor (game-task-actor burning-bush-stadium)
@@ -12477,23 +12481,21 @@
             :on-open #f
             :info #f
             :borrow '()
-            ;; <ap:preserve-this> don't do any of this.
-            ;; :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
-            ;; :on-close '(begin
-            ;;    (task-open! "stadium-burning-bush-race-board-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class2-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class2-r-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class1-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class1-r-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class3-introduction")
-            ;;    )
-            :open? (lambda ((arg0 game-task-node-info)) #f)
-            :on-close #f
+            :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
+            :on-close '(begin
+               (task-open! "stadium-burning-bush-race-board-introduction")
+               (task-open! "stadium-burning-bush-race-class2-introduction")
+               (task-open! "stadium-burning-bush-race-class2-r-introduction")
+               (task-open! "stadium-burning-bush-race-class1-introduction")
+               (task-open! "stadium-burning-bush-race-class1-r-introduction")
+               (task-open! "stadium-burning-bush-race-class3-introduction")
+               )
             )
           (new 'static 'game-task-node-info
             :level 'stadium
             :task (game-task stadium-burning-bush-race-class3-r)
             :name "stadium-burning-bush-race-class3-r-resolution"
+            :description (text-id reverse-race-class3) ;; <ap:preserve-this> added
             :when-open (new 'static 'boxed-array :type game-task-event
               (new 'static 'game-task-event
                 :actor (game-task-actor burning-bush-stadium)
@@ -12551,23 +12553,21 @@
             :on-open #f
             :info #f
             :borrow '()
-            ;; <ap:preserve-this> don't do any of this.
-            ;; :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
-            ;; :on-close '(begin
-            ;;    (task-open! "stadium-burning-bush-race-board-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class3-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class3-r-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class1-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class1-r-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class2-introduction")
-            ;;    )
-            :open? (lambda ((arg0 game-task-node-info)) #f)
-            :on-close #f
+            :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
+            :on-close '(begin
+               (task-open! "stadium-burning-bush-race-board-introduction")
+               (task-open! "stadium-burning-bush-race-class3-introduction")
+               (task-open! "stadium-burning-bush-race-class3-r-introduction")
+               (task-open! "stadium-burning-bush-race-class1-introduction")
+               (task-open! "stadium-burning-bush-race-class1-r-introduction")
+               (task-open! "stadium-burning-bush-race-class2-introduction")
+               )
             )
           (new 'static 'game-task-node-info
             :level 'stadium
             :task (game-task stadium-burning-bush-race-class2-r)
             :name "stadium-burning-bush-race-class2-r-resolution"
+            :description (text-id reverse-race-class2) ;; <ap:preserve-this> added
             :when-open (new 'static 'boxed-array :type game-task-event
               (new 'static 'game-task-event
                 :actor (game-task-actor burning-bush-stadium)
@@ -12625,23 +12625,21 @@
             :on-open #f
             :info #f
             :borrow '()
-            ;; <ap:preserve-this> don't do any of this.
-            ;; :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
-            ;; :on-close '(begin
-            ;;    (task-open! "stadium-burning-bush-race-board-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class3-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class3-r-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class2-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class2-r-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class1-introduction")
-            ;;    )
-            :open? (lambda ((arg0 game-task-node-info)) #f)
-            :on-close #f
+            :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
+            :on-close '(begin
+               (task-open! "stadium-burning-bush-race-board-introduction")
+               (task-open! "stadium-burning-bush-race-class3-introduction")
+               (task-open! "stadium-burning-bush-race-class3-r-introduction")
+               (task-open! "stadium-burning-bush-race-class2-introduction")
+               (task-open! "stadium-burning-bush-race-class2-r-introduction")
+               (task-open! "stadium-burning-bush-race-class1-introduction")
+               )
             )
           (new 'static 'game-task-node-info
             :level 'stadium
             :task (game-task stadium-burning-bush-race-class1-r)
             :name "stadium-burning-bush-race-class1-r-resolution"
+            :description (text-id reverse-race-class1) ;; <ap:preserve-this> added
             :when-open (new 'static 'boxed-array :type game-task-event
               (new 'static 'game-task-event
                 :actor (game-task-actor burning-bush-stadium)

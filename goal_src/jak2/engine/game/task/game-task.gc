@@ -4998,13 +4998,14 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag save-on-life)
+            :flags (game-task-node-flag save-on-life abs-task-mask) ;; <ap:preserve-this> added correct mask for strip.
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node dig-knock-down-resolution)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)
               )
+            :task-mask (task-mask task1) ;; <ap:preserve-this> added correct mask for strip.
             :on-open #f
             :info #f
             :borrow '()
@@ -7725,13 +7726,14 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag save-on-life)
+            :flags (game-task-node-flag save-on-life abs-task-mask) ;; <ap:preserve-this> added correct mask for strip.
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-errol-challenge-resolution)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)
               )
+            :task-mask (task-mask task2) ;; <ap:preserve-this> added correct mask for strip.
             :on-open #f
             :info #f
             :borrow '()

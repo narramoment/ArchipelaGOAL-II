@@ -39,10 +39,6 @@
     (missions-checked                uint32 75)
     (side-missions-checked           uint32 35)
 
-    ;; Precursor Orb Information
-    (next-orb-index                  uint)
-    (orbs-checked                    uint32 286)
-
     ;; Connection Status
     (connection-status               ap-connection-status)
 

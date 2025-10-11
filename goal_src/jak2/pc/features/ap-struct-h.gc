@@ -56,8 +56,6 @@
 
 (define-extern ap-side-mission-checked! (function uint uint))
 
-(define-extern ap-orb-checked! (function uint uint))
-
 (define-extern ap-verify-game-completed! (function uint symbol))
 
 (define-extern ap-item-received! (function symbol symbol))

@@ -199,6 +199,18 @@
         )
       :forbid-when (lambda () (task-node-closed? (game-task-node sewer-enemy-resolution)))
       )
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-keira-delivery-introduction)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-city-keira-delivery)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node city-keira-delivery-introduction))
+            (task-node-open? (game-task-node city-keira-delivery-delivery))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-keira-delivery-resolution)))
+      )
     (static-taskable-menu-entry 
       :task-node (game-task-node city-krew-collection-introduction)
       :event-idx 0
@@ -212,18 +224,6 @@
       :forbid-when (lambda () (task-node-closed? (game-task-node city-krew-collection-resolution)))
       )
     (static-taskable-menu-entry
-      :task-node (game-task-node city-keira-delivery-introduction)
-      :event-idx 0
-      :continue "hiphog-start"
-      :text-id (text-id progress-missions-city-keira-delivery)
-      :allow-when (lambda ()
-        (or (task-node-open? (game-task-node city-keira-delivery-introduction))
-            (task-node-open? (game-task-node city-keira-delivery-delivery))
-            )
-        )
-      :forbid-when (lambda () (task-node-closed? (game-task-node city-keira-delivery-resolution)))
-      )
-    (static-taskable-menu-entry
       :task-node (game-task-node sewer-enemy-resolution)
       :event-idx 0
       :continue "hiphog-start"
@@ -235,11 +235,6 @@
         )
       :forbid-when (lambda () (task-node-closed? (game-task-node city-yellow-gun-training-resolution)))
       )
-    ;; <ap:note> port run starts through a communicator, will be dealt with later
-    ;;(static-taskable-menu-entry
-    ;;  :task-node (game-task-node city-port-run-introduction)
-    ;;
-    ;;  )
     (static-taskable-menu-entry
       :task-node (game-task-node city-meet-brutter-pre-intro)
       :event-idx 0
@@ -308,6 +303,18 @@
       :forbid-when (lambda () (task-node-closed? (game-task-node mountain-collection-resolution)))
       )
     (static-taskable-menu-entry
+      :task-node (game-task-node dig-find-totem-introduction)
+      :event-idx 0
+      :continue "onintent-start"
+      :text-id (text-id progress-missions-dig-find-totem)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node dig-find-totem-introduction))
+            (task-node-open? (game-task-node dig-find-totem-raise-log))
+            )
+          )
+      :forbid-when (lambda () (task-node-closed? (game-task-node dig-find-totem-resolution)))
+      )
+    (static-taskable-menu-entry
       :task-node (game-task-node city-play-onin-game-introduction)
       :event-idx 0
       :continue "onintent-start"
@@ -315,6 +322,7 @@
       :allow-when (lambda ()
         (or (task-node-open? (game-task-node city-play-onin-game-introduction))
             (task-node-open? (game-task-node city-play-onin-game-wait))
+            (task-node-open? (game-task-node city-play-onin-game-post-game))
             )
         )
       :forbid-when (lambda () (task-node-closed? (game-task-node city-play-onin-game-resolution)))
@@ -333,7 +341,20 @@
         )
       :forbid-when (lambda () (task-node-closed? (game-task-node canyon-insert-items-resolution)))
       )
-  )
+    (static-taskable-menu-entry
+      :task-node (game-task-node forest-protect-introduction)
+      :event-idx 0
+      :continue "onintent-start"
+      :text-id (text-id progress-missions-forest-protect)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node forest-protect-introduction))
+            (task-node-open? (game-task-node forest-protect-meeting))
+            (task-node-open? (game-task-node forest-protect-post-game))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node forest-protect-resolution)))
+      )
+    )
 )
 
 (define *vin-menu-list*
@@ -376,6 +397,14 @@
         )
       :forbid-when (lambda () (task-node-closed? (game-task-node strip-grenade-resolution)))
       )
+    (static-taskable-menu-entry 
+      :task-node (game-task-node drill-ship-introduction)
+      :event-idx 0
+      :continue "vinroom-start"
+      :text-id (text-id progress-missions-drill-ship)
+      :allow-when (lambda () (task-node-open? (game-task-node drill-ship-introduction)))
+      :forbid-when (lambda () (task-node-closed? (game-task-node drill-ship-resolution)))
+      )
     (static-taskable-menu-entry
       :task-node (game-task-node strip-drop-introduction)
       :event-idx 0
@@ -389,14 +418,7 @@
 
 (define *sig-menu-list*
   (new 'static 'boxed-array :type taskable-menu-entry
-    ;; (static-taskable-menu-entry
-    ;;   :task-node (game-task-node city-yellow-gun-training-introduction)
-    ;;   :event-idx 0
-    ;;   :continue "hiphog-start"
-    ;;   :text-id (text-id progress-missions-city-yellow-gun-training)
-    ;;   :allow-when (lambda () (task-node-open? (game-task-node city-yellow-gun-training-introduction)))
-    ;;   :forbid-when (lambda () (task-node-closed? (game-task-node city-yellow-gun-training-resolution)))
-    ;;   )
+
     (static-taskable-menu-entry
       :task-node (game-task-node forest-hunt-introduction)
       :event-idx 0
@@ -405,18 +427,13 @@
       :allow-when (lambda () (task-node-open? (game-task-node forest-hunt-introduction)))
       :forbid-when (lambda () (task-node-closed? (game-task-node forest-hunt-resolution)))
       )
-    ;; (static-taskable-menu-entry
-    ;;   :task-node (game-task-node under-sig-introduction)
-    ;;   :event-idx 0
-    ;;   :continue "hiphog-start"
-    ;;   )
     )
   )
 
 (define *brutter-menu-list*
   (new 'static 'boxed-array :type taskable-menu-entry
     (static-taskable-menu-entry
-      :task-node (game-task-node city-save-lurkers-introduction)
+      :task-node (game-task-node city-save-lurkers-save-lurkers)
       :event-idx 0
       :continue "kiosk-start"
       :text-id (text-id progress-missions-city-meet-brutter)
@@ -505,6 +522,50 @@
       :text-id (text-id progress-missions-under-find-sig)
       :allow-when (lambda () (task-node-open? (game-task-node under-mech-introduction)))
       :forbid-when (lambda () (task-node-closed? (game-task-node under-mech-resolution)))
+      )
+    )
+  )
+
+(define *young-samos-menu-list*
+  (new 'static 'boxed-array :type taskable-menu-entry
+    (static-taskable-menu-entry
+      :task-node (game-task-node forest-scouts-pre-intro)
+      :event-idx 0
+      :continue "hideout-start"
+      :text-id (text-id progress-missions-forest-scouts)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node forest-scouts-pre-intro))
+            (task-node-open? (game-task-node forest-scouts-introduction))
+            (task-node-open? (game-task-node forest-scouts-voicebox))
+            (task-node-open? (game-task-node forest-scouts-get-board))
+            (task-node-open? (game-task-node forest-scouts-pegasus))
+            )
+          )
+      :forbid-when (lambda () (task-node-closed? (game-task-node forest-scouts-resolution)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-escort-kid-introduction)
+      :event-idx 0
+      :continue "escort-kid-intro"
+      :text-id (text-id progress-missions-city-escort-kid)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node city-escort-kid-pre-intro))
+            (task-node-open? (game-task-node city-escort-kid-introduction))
+            )
+          )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-escort-kid-resolution)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-stop-bomb-bots-introduction)
+      :event-idx 0
+      :continue "hideout-start"
+      :text-id (text-id progress-missions-city-stop-bomb-bots)
+      :allow-when (lambda ()
+        (or (task-node-open? (game-task-node city-stop-bomb-bots-introduction))
+            (task-node-open? (game-task-node city-stop-bomb-bots-destroy))
+            )
+      )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-stop-bomb-bots-resolution)))
       )
     )
   )

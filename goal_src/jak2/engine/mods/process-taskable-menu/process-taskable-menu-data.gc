@@ -432,6 +432,7 @@
       (("keira-npc-1" "keira-npc-2") *keira-menu-list*)
       (("tess-npc-1" "tess-npc-3") *tess-menu-list*)
       (("brutter-npc-1") *brutter-menu-list*)
+      (("young-samos-npc-1" "young-samos-npc-2" "young-samos-npc-3" "young-samos-npc-4" "young-samos-npc-5" "young-samos-npc-9") *young-samos-menu-list*)
       (else *empty-taskable-menu-list*)
       )
     )

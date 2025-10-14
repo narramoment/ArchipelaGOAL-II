@@ -246,7 +246,7 @@
                  (set! (-> v1-86 scale) 0.9)
                  )
                (set! (-> s5-1 flags) (font-flags shadow kerning middle-vert large))
-               (if (= (-> self talk-message) (text-id press-triangle-to-talk))
+               (if (or (= (-> self talk-message) (text-id press-triangle-to-talk)) (= (-> self talk-message) (text-id press-triangle-to-play)))
                    (format (clear *temp-string*) "~S" talk-suffix)
                    (format (clear *temp-string*) "~S ~S." talk-prefix talk-suffix) ;; period must be added.
                    )
@@ -432,7 +432,8 @@
       (("keira-npc-1" "keira-npc-2") *keira-menu-list*)
       (("tess-npc-1" "tess-npc-3") *tess-menu-list*)
       (("brutter-npc-1") *brutter-menu-list*)
-      (("young-samos-npc-1" "young-samos-npc-2" "young-samos-npc-3" "young-samos-npc-4" "young-samos-npc-5" "young-samos-npc-9") *young-samos-menu-list*)
+      (("youngsamos-npc-1" "youngsamos-npc-2" "youngsamos-npc-3" "youngsamos-npc-4" "youngsamos-npc-5" "youngsamos-npc-9") *youngsamos-menu-list*)
+      (("baron-npc-1") *baron-menu-list*)
       (else *empty-taskable-menu-list*)
       )
     )

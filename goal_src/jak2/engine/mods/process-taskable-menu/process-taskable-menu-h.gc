@@ -430,23 +430,6 @@
     )
   )
 
-(define *brutter-menu-list*
-  (new 'static 'boxed-array :type taskable-menu-entry
-    (static-taskable-menu-entry
-      :task-node (game-task-node city-save-lurkers-save-lurkers)
-      :event-idx 0
-      :continue "kiosk-start"
-      :text-id (text-id progress-missions-city-meet-brutter)
-      :allow-when (lambda () 
-        (or (task-node-open? (game-task-node city-save-lurkers-introduction))
-            (task-node-open? (game-task-node city-save-lurkers-save-lurkers))
-            )
-        )
-      :forbid-when (lambda () (task-node-closed? (game-task-node city-save-lurkers-resolution)))
-      )
-    )
-  )
-
 (define *keira-menu-list*
   (new 'static 'boxed-array :type taskable-menu-entry
     (static-taskable-menu-entry
@@ -526,7 +509,25 @@
     )
   )
 
-(define *young-samos-menu-list*
+
+(define *brutter-menu-list*
+  (new 'static 'boxed-array :type taskable-menu-entry
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-save-lurkers-save-lurkers)
+      :event-idx 0
+      :continue "kiosk-start"
+      :text-id (text-id progress-missions-city-meet-brutter)
+      :allow-when (lambda () 
+        (or (task-node-open? (game-task-node city-save-lurkers-introduction))
+            (task-node-open? (game-task-node city-save-lurkers-save-lurkers))
+            )
+        )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-save-lurkers-resolution)))
+      )
+    )
+  )
+
+(define *youngsamos-menu-list*
   (new 'static 'boxed-array :type taskable-menu-entry
     (static-taskable-menu-entry
       :task-node (game-task-node forest-scouts-pre-intro)
@@ -564,8 +565,21 @@
         (or (task-node-open? (game-task-node city-stop-bomb-bots-introduction))
             (task-node-open? (game-task-node city-stop-bomb-bots-destroy))
             )
-      )
+          )
       :forbid-when (lambda () (task-node-closed? (game-task-node city-stop-bomb-bots-resolution)))
+      )
+    )
+  )
+
+(define *baron-menu-list*
+  (new 'static 'boxed-array :type taskable-menu-entry
+    (static-taskable-menu-entry
+      :task-node (game-task-node consite-find-baron-resolution)
+      :event-idx 0
+      :continue "consite-start"
+      :text-id (text-id progress-missions-check-consite)
+      :allow-when (lambda () (task-node-open? (game-task-node consite-find-baron-resolution)))
+      :forbid-when (lambda () (task-node-closed? (game-task-node consite-find-baron-resolution)))
       )
     )
   )

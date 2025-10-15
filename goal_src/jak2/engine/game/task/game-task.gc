@@ -1168,9 +1168,7 @@
               :on-fail #f
               )
             :borrow '()
-            ;; <ap:preserve-this> added open hook to check for archipelago items.
-            :open? (lambda ((arg0 game-task-node-info)) 
-              (logtest? (-> *game-info* features) (game-feature darkjak)))
+            :open? #f
             :on-close #f
             :description (text-id progress-missions-talk-to-kor)
             )

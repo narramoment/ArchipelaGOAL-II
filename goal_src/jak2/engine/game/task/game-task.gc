@@ -2460,14 +2460,13 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task abs-task-mask task-manager)
+            :flags (game-task-node-flag close-task task-manager)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node sewer-enemy-talk-to-krew)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)
               )
-            :task-mask (task-mask task1)
             :on-open #f
             :info (new 'static 'task-manager-info
               :mask (task-manager-mask resolution-scene)
@@ -5533,14 +5532,13 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task abs-task-mask)
+            :flags (game-task-node-flag close-task)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node sewer-board-drain)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)
               )
-            :task-mask (task-mask task2)
             :on-open #f
             :info #f
             :borrow '((hiphog 0 lguard special))

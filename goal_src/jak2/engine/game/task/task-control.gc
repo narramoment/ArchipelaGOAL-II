@@ -379,34 +379,48 @@
        (task-node-closed? (game-task-node canyon-insert-items-shard))
        )
      )
-    (('sewer 'sewerb 'sewesc 'sewescb)
+     ;; <ap:preserve-this> separate sewer and sewesc. 
+     ;; sewer should enable its doors based solely on starting (but not completing) sewer-board.
+    (('sewer 'sewerb)
      (prototypes-game-visible-set!
        '("sewer-c-connect-door.mb")
-       (not (and ;; (task-complete? *game-info* (game-task sewer-enemy)) ;; <ap:preserve-this> remove requirement to complete sewer-enemy before sewer-board.
-                 (task-node-closed? (game-task-node sewer-board-introduction))
+       (not (and (task-node-closed? (game-task-node sewer-board-introduction))
                  (not (task-complete? *game-info* (game-task sewer-board)))
                  )
             )
        )
      (prototypes-game-visible-set!
        '("sewer-hover-door.mb")
-       (and ;; (task-complete? *game-info* (game-task sewer-enemy)) ;; <ap:preserve-this> remove requirement to complete sewer-enemy before sewer-board.
-            (task-node-closed? (game-task-node sewer-board-introduction))
+       (and (task-node-closed? (game-task-node sewer-board-introduction))
             (not (task-complete? *game-info* (game-task sewer-board)))
             )
        )
      (cond
        ((= arg0 'debug)
         )
-       ;; <ap:preserve-this> check sewer-escort-introduction task node to set water level to correct height.
-       ;; ((task-complete? *game-info* (game-task sewer-board))
-       ((task-node-closed? (game-task-node sewer-escort-introduction))
+       ;; if you completed sewer-board before sewer-enemy, keep the water level low.
+       ((task-complete? *game-info* (game-task sewer-board))
         (set! *ocean-height-hack* (ocean-height-hack sewer-lo))
         (set-height! *ocean-map-sewer* -368050.2)
         )
        ((not (task-node-closed? (game-task-node sewer-board-drain)))
         (set! *ocean-height-hack* (ocean-height-hack zero))
         (set-height! *ocean-map-sewer* -216498.17)
+        )
+       )
+     )
+    ;; sewesc should always keep these enabled since there's nothing back there.
+    (('sewesc 'sewescb)
+     (prototypes-game-visible-set! '("sewer-c-connect-door.mb") #t)
+     (prototypes-game-visible-set! '("sewer-hover-door.mb") #t)
+     (cond
+       ((= arg0 'debug)
+        )
+       ;; sewesc also must keep its water level low at all times.
+       ;; the escort cannot be done at high tide as the npc's do not swim.
+       (else
+        (set! *ocean-height-hack* (ocean-height-hack sewer-lo))
+        (set-height! *ocean-map-sewer* -368050.2)
         )
        )
      )

@@ -229,6 +229,8 @@
                     (process-taskable-method-34 self)
                     )
            ;; do not autoplay any cutscene when approaching a process-taskable.
+           ;; this stops us from running minigames like whack-a-metal and onin-game as well,
+           ;; but we will work around that via task-manager init hooks.
            (kill-current-talker (the-as symbol '()) '(daxter voicebox ambient) 'exit)
            (talker-surpress!)
            (when (can-display-query? self (the-as string #f) -99.0)

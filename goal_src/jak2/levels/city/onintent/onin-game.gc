@@ -2695,3 +2695,17 @@
   (go-virtual wait-for-start)
   (none)
   )
+
+;; <ap:preserve-this> added a hook similar to whack-a-metal, allowing onin-game to play.
+(set-subtask-hook!
+  *game-info*
+  (game-task-node city-play-onin-game-resolution)
+  TASK_MANAGER_INIT_HOOK
+  (lambda :behavior onin-game () 
+    (let ((gp-0 (entity-by-name "onin-npc-1")))
+      (if gp-0
+        (process-spawn onin-game :init onin-game-init gp-0 :to self)
+        )
+      )
+    )
+  )

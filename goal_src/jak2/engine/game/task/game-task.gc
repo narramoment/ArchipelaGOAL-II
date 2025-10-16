@@ -7331,10 +7331,10 @@
             :on-open #f
             :info #f
             :borrow '((garage 0 lsamergd #f))
-            ;; <ap:preserve-this> added open hook to check for archipelago items.
+            ;; <ap:preserve-this> added open hook to check for archipelago items, remove on-close hook.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
-            :on-close '(task-close! "stadium-race-class3-select-bush")
+            ;; :on-close '(task-close! "stadium-race-class3-select-bush")
             :description (text-id progress-missions-talk-to-keira)
             )
           (new 'static 'game-task-node-info
@@ -8486,10 +8486,10 @@
             :on-open #f
             :info #f
             :borrow '((garage 0 lsamergd special))
-            ;; <ap:preserve-this> added open hook to check for archipelago items.
+            ;; <ap:preserve-this> added open hook to check for archipelago items, remove on-close hook.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
-            :on-close '(task-close! "stadium-race-class2-select-bush")
+            ;; :on-close '(task-close! "stadium-race-class2-select-bush")
             :description (text-id progress-missions-talk-to-keira)
             )
           (new 'static 'game-task-node-info

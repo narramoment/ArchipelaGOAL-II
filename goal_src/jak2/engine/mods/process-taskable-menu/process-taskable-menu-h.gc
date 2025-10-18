@@ -15,6 +15,7 @@
    (event-idx     int)               ;; the index under `when-open` related to this menu item.
    (continue      string)            ;; the name of the continue point needed to load the cutscene from the event object.
    (text-id       text-id)           ;; the text-id that defines the phrase to be displayed for this menu item.
+   (exclusive?    symbol)            ;; optional: if true and item is available, it will be the only menu item in the list (first come first serve).
    (allow-when    (function symbol)) ;; optional: function that must return true for this entry to become available
    (forbid-when   (function symbol)) ;; optional: function that hides this entry if it returns true, regardless of `allow-when`
    )  
@@ -25,6 +26,7 @@
     &key event-idx
     &key continue
     &key text-id
+    &key (exclusive? #f)
     &key (allow-when (lambda () #f))
     &key (forbid-when (lambda () #f))
     )
@@ -33,6 +35,7 @@
      :event-idx ,event-idx
      :continue ,continue
      :text-id ,text-id
+     :exclusive? ,exclusive?
      :allow-when ,allow-when
      :forbid-when ,forbid-when
      )
@@ -221,6 +224,15 @@
             (task-node-open? (game-task-node city-krew-collection-collection))
             )
         )
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-krew-collection-resolution)))
+      )
+    (static-taskable-menu-entry 
+      :task-node (game-task-node city-krew-collection-resolution)
+      :event-idx 0
+      :continue "hiphog-start"
+      :text-id (text-id progress-missions-city-krew-collection)
+      :exclusive? #t
+      :allow-when (lambda () (task-node-open? (game-task-node city-krew-collection-resolution)))
       :forbid-when (lambda () (task-node-closed? (game-task-node city-krew-collection-resolution)))
       )
     (static-taskable-menu-entry
@@ -443,6 +455,15 @@
             (task-node-open? (game-task-node stadium-board1-training-judge))
             )
         )
+      :forbid-when (lambda () (task-node-closed? (game-task-node stadium-board1-resolution)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node stadium-board1-resolution)
+      :event-idx 0
+      :continue "garage-start-skate"
+      :text-id (text-id progress-missions-stadium-board1)
+      :exclusive? #t
+      :allow-when (lambda () (task-node-open? (game-task-node stadium-board1-resolution)))
       :forbid-when (lambda () (task-node-closed? (game-task-node stadium-board1-resolution)))
       )
     (static-taskable-menu-entry

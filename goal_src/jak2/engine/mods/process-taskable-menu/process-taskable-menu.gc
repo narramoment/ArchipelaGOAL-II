@@ -8,17 +8,31 @@
   (let* ((menu (-> this menu-list))
           (list-length (-> menu length))
           (available-idxs (new 'static 'boxed-array :type int32)) ;; array to store the indexes of the options that are available for selection
-          (available-count 0) ;; stores the amount of options that are available for selection 
+          (available-count 0)                                     ;; stores the amount of options that are available for selection
+          (found-exclusive? #f)                                   ;; determines if an available item is exlusive for later decisions
           )
     (dotimes (i list-length)
       (let* ((allowed? (-> menu i allow-when))
              (forbidden? (-> menu i forbid-when)))
-        ;; include the option if `allowed?` is set and returns true,
+        ;; include the option if `allowed?` is set (not allowed?) and returns true (allowed?),
         ;; and `forbidden?` is either not set (not forbidden?) or does not return true (not (forbidden?)).
-        (when (and (or (not allowed?) (allowed?)) 
+        (when (and (not found-exclusive?)
+                   (or (not allowed?) (allowed?)) 
                    (or (not forbidden?) (not (forbidden?))))
-          (set! (-> available-idxs available-count) i) ;; store the available option indexes in `available-idxs` array  
-          (+! available-count 1)
+          ;; exclusive items take precedence over others (e.g. they are required to complete active missions).
+          ;; they are handled first come first serve, and they will be the only item in the available list.
+          (cond
+            ((-> menu i exclusive?)
+              (set! available-idxs (new 'static 'boxed-array :type int32))
+              (set! (-> available-idxs 0) i)
+              (set! available-count 1)
+              (set! found-exclusive? #t)
+              )
+            (else 
+              (set! (-> available-idxs available-count) i) ;; store the available option indexes in `available-idxs` array  
+              (+! available-count 1)
+              )
+            )
           )
         )
       )
@@ -112,7 +126,11 @@
                                                   (font-color default)
                                                   )
                           )
-                    (print-game-text (lookup-text! *common-text* (-> menu valid-idx text-id) #f) font-ctxt #f 44 (the-as bucket-id 320))
+                    (if found-exclusive?
+                        (format (clear *temp-string*) "~Y~30L<~Z~+26H ~S" (lookup-text! *common-text* (-> menu valid-idx text-id) #f))
+                        (format (clear *temp-string*) "~S" (lookup-text! *common-text* (-> menu valid-idx text-id) #f))
+                        )
+                    (print-game-text *temp-string* font-ctxt #f 44 (the-as bucket-id 320))
                     (+! font-y font-height)
                     )
                   )

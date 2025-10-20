@@ -464,23 +464,15 @@ This gives us more freedom to write code how we want.
           (pc-settings-save))))
 
 (defmacro game-options-pc-archipelagoal-ii ()
-  `(progress-new-generic-scrolling-page (text-id progress-menu-archipelagoal-ii)
-     (new 'static 'menu-sub-menu-option 
-      :name (text-id progress-menu-item-tracker)
-      :scale #t
-      :next-state #t
-      )
-     (new 'static 'menu-sub-menu-option
-      :name (text-id progress-menu-deathlink)
-      :scale #t
-      :next-state #t
-      )
+  `(progress-new-generic-link-to-scrolling-page (text-id progress-menu-archipelagoal-ii)
+     (archipelagoal-ii-item-tracker)
+     (archipelagoal-ii-deathlink)
      )
   )
 
 (defmacro archipelagoal-ii-item-tracker ()
   ;; TODO: Review and reorder items to match the typical acquisition order in base Jak 2 gameplay for better user experience
-  `(progress-new-generic-scrolling-page (text-id progress-menu-item-tracker)
+  `(progress-new-generic-link-to-scrolling-page (text-id progress-menu-item-tracker)
      ;; Weapons/Upgrades
      (new 'static 'menu-generic-boolean-option
        :name (text-id progress-ks-source-gun-red)
@@ -690,7 +682,7 @@ This gives us more freedom to write code how we want.
     :name (text-id progress-menu-deathlink)
     :truthy-text (text-id progress-menu-enabled)
     :falsey-text (text-id progress-menu-disabled)
-    :get-value-fn (lambda () (logtest? (-> *ap-info-jak2* deathlink-enabled)))
+    :get-value-fn (lambda () (nonzero? (-> *ap-info-jak2* deathlink-enabled)))
     :should-disable? (lambda () #t)))
 
 (defmacro misc-options-pc-discord-rpc ()

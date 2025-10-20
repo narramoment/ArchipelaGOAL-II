@@ -47,6 +47,11 @@
     (completion-goal-value           uint32)
     (completed                       uint8)
 
+    ;; Deathlink Information
+    (death-count                     uint32)
+    (cause-of-death                  uint8)
+    (deathlink-enabled               uint8)
+
     ;; End Marker
     (end-marker           uint8 4)))
 

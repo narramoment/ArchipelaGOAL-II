@@ -117,24 +117,7 @@
     )
   )
 
-(deftype ap-save-slot-info (basic)
-  ((name string)
-   (seed string)))
 
-(deftype ap-settings (basic)
-  ((version              uint64)
-   (deathlink?           symbol)
-   (trap-duration        float)
-   (completion-goal      uint8))
-  (:methods
-   (new (symbol type) _type_)
-   (reset (_type_) none)
-   (read-from-file (_type_ string) symbol)
-   (commit-to-file (_type_) none)
-   (write-to-file (_type_ string) symbol)
-   (load-settings (_type_) int)))
-
-(define *ap-settings* (the ap-settings #f))
 
 (define *pc-settings* (the pc-settings-jak2 #f))
 (define *matrix-minimap-north* (quaternion->matrix (new 'static 'matrix) (quaternion-vector-angle! (new 'static 'quaternion) *y-vector* (degrees 180))))
@@ -226,12 +209,31 @@
     )
   0)
 
+(deftype ap-save-slot-info (basic)
+  ((name string)
+   (seed string)))
+
+(deftype ap-settings (basic)
+  ((version              uint64)
+   (deathlink?           symbol)
+   (trap-duration        float)
+   (completion-goal-type      completion-type)
+   (completion-goal-value     uint8))
+  (:methods
+   (new (symbol type) _type_)
+   (reset (_type_) none)
+   (read-from-file (_type_ string) symbol)
+   (commit-to-file (_type_) none)
+   (write-to-file (_type_ string) symbol)
+   (load-settings (_type_) int)))
+
 (defmethod reset ap-settings
   ((obj ap-settings))
   "Set the default settings for archipelago"
   (format 0 "Resetting archipelago settings~%")
   (set! (-> obj version) 0)
   (set! (-> obj deathlink?) #f)
+  (set! (-> obj trap-duration) (the float 30))
   (none))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; other

@@ -227,24 +227,6 @@
     )
   0)
 
-(deftype ap-save-slot-info (basic)
-  ((name string)
-   (seed string)))
-
-(deftype ap-settings (basic)
-  ((version              uint64)
-   (deathlink?           symbol)
-   (trap-duration        float)
-   (completion-goal-type      completion-type)
-   (completion-goal-value     uint8))
-  (:methods
-   (new (symbol type) _type_)
-   (reset (_type_) none)
-   (read-from-file (_type_ string) symbol)
-   (commit-to-file (_type_) none)
-   (write-to-file (_type_ string) symbol)
-   (load-settings (_type_) int)))
-
 (defmethod reset ap-settings
   ((obj ap-settings))
   "Set the default settings for archipelago"
@@ -252,6 +234,8 @@
   (set! (-> obj version) 0)
   (set! (-> obj deathlink?) #f)
   (set! (-> obj trap-duration) (the float 30))
+  (set! (-> obj completion-value) 65)
+  (set! (-> obj completion-type) 1)
   (none))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; other

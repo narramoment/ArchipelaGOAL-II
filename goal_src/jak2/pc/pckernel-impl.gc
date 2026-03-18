@@ -235,8 +235,7 @@
   (set! (-> obj deathlink?) #f)
   (set! (-> obj trap-duration) (the float 30))
   (set! (-> obj completion-value) 65)
-  (set! (-> obj completion-type) 1)
-  (none))
+  (set! (-> obj completion-type) 1))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; other
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

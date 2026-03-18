@@ -130,12 +130,14 @@
                 (-> *ap-info-jak2* next-side-mission-index))
              (-> *ap-info-jak2* completion-goal-value))
         (set! (-> *ap-info-jak2* completed) 1)
+        (task-close! "city-win-resolution")
         )
       )
     ((= (-> *ap-info-jak2* completion-goal-type) (ap-completion-type specific-mission))
       (if (= (the-as uint arg0) 
              (-> *ap-info-jak2* completion-goal-value))
         (set! (-> *ap-info-jak2* completed) 1)
+        (task-close! "city-win-resolution")
         )
       )
     )
@@ -360,7 +362,9 @@
 |# 
 
 (defun ap-trap-received! ((trap symbol))
-  (when (> (-> *ap-info-jak2* trap-duration) 0.0)
+  (when (and (> (-> *ap-info-jak2* trap-duration) 0.0)
+             (task-closed? "fortress-escape-start")
+             (zero? (-> *ap-info-jak2* completed)))
     (sound-play "timer-warn")
       (case trap
       ;; jak 1 ap traps (ordered in the same way)
@@ -539,7 +543,9 @@
               (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
               (logxor! (-> *game-info* secrets) (game-secrets hero-mode)))))
         ))
-    (and (> (-> *ap-info-jak2* trap-duration) 0.0)))
+    (and (> (-> *ap-info-jak2* trap-duration) 0.0)
+             (task-closed? "fortress-escape-start")
+             (zero? (-> *ap-info-jak2* completed))))
 
 (defun ap-route-slums-to-port? ()
   (or (logtest? (-> *game-info* features) (game-feature pass-red))                 ;; direct route.

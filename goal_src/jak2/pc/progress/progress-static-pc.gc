@@ -468,7 +468,7 @@ This gives us more freedom to write code how we want.
      (archipelagoal-ii-item-tracker)
      (archipelagoal-ii-traps)
      ;; <ap:todo> deathlink will come later, leave out for now
-     ;; (archipelagoal-ii-deathlink)
+    (archipelagoal-ii-deathlink)
      )
   )
 
@@ -786,8 +786,6 @@ This gives us more freedom to write code how we want.
     :get-value-fn (lambda () (nonzero? (-> *ap-settings* trap-duration)))
     :should-disable? (lambda () #t))))
 
-;; <ap:todo> deathlink will come later, leave out for now
-#|
 (defmacro archipelagoal-ii-deathlink ()
   '(new 'static 'menu-generic-boolean-option
     :name (text-id progress-menu-deathlink)
@@ -797,7 +795,6 @@ This gives us more freedom to write code how we want.
     :on-confirm (lambda ((val symbol))
       (set! (-> *ap-settings* deathlink?) val)
       (ap-settings-update))))
-|#
 
 (defmacro misc-options-pc-discord-rpc ()
   `(new 'static 'menu-generic-boolean-option

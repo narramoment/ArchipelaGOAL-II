@@ -608,7 +608,7 @@
 
 (defun ap-settings-update ()
   ;; <ap:todo> deathlink will come later, leave it out for now
-  ;; (set! (-> *ap-info-jak2* deathlink-enabled) (if (-> *ap-settings* deathlink?) 1 0))
+  (set! (-> *ap-info-jak2* deathlink-enabled) (if (-> *ap-settings* deathlink?) 1 0))
   (set! (-> *ap-info-jak2* trap-duration) (-> *ap-settings* trap-duration))
   (set! (-> *ap-info-jak2* trap-duration) (-> *ap-settings* trap-duration))
   (set! (-> *ap-info-jak2* completion-goal-type) (the-as ap-completion-type (-> *ap-settings* completion-type)))

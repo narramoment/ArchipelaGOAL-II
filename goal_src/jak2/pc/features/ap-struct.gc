@@ -332,35 +332,20 @@
 ;; <ap:todo> deathlink will come later, leave this out for now
 #|
 (defun ap-deathlink-received! ((chosen-death symbol))
-  ;; <note> if you're in onin's game, whack a metal, the gun courses, or a special mission (mech, turret, races, etc) retry/fail immediately. otherwise, kill jak or fail mission
-  (if (or (task-node-open? (game-task-node city-play-onin-game-resolution))
-          (task-node-open? (game-task-node city-whack-resolution))
-          (task-node-open? (game-task-node city-red-gun-training-resolution))
-          (task-node-open? (game-task-node city-yellow-gun-training-resolution))
-          (task-node-open? (game-task-node drill-eggs-eggs-2))
-          (task-node-open? (game-task-node drill-eggs-resolution))
-          (task-node-open? (game-task-node drill-ship-resolution))
-          (task-node-open? (game-task-node ruins-mech-break-wall-1))
-          (task-node-open? (game-task-node ruins-mech-move-block-1))
-          (task-node-open? (game-task-node ruins-mech-throw-block-1))
-          (task-node-open? (game-task-node ruins-mech-resolution))
-          (task-node-open? (game-task-node drill-mech-started-smashing))
-          (task-node-open? (game-task-node drill-mech-smash-consoles))
-          (task-node-open? (game-task-node drill-mech-resolution))
-          (task-node-open? (game-task-node under-mech-resolution))
-          (task-node-open? (game-task-node stadium-race-class3-race))
-          (task-node-open? (game-task-node stadium-race-class3-resolution))
-          (task-node-open? (game-task-node stadium-race-class2-race))
-          (task-node-open? (game-task-node stadium-race-class2-resolution))
-          (task-node-open? (game-task-node stadium-race-class1-race))
-          (task-node-open? (game-task-node stadium-race-class1-resolution))
-          (task-node-open? (game-task-node city-errol-challenge-race))
-          (task-node-open? (game-task-node city-errol-challenge-resolution)))
-          (restart-mission))        
-      (send-event *target* 'get-pickup (pickup-type health) -8.0)
-      (send-event *target* 'attack #f (static-attack-info ((deathlink-death #t) (mode chosen-death) (vector (new 'static 'vector :y (meters 1) :w 1.0)) (angle 'up) (control 1.0))))#t)
-|# 
-
+    (set! (-> *target* next-state name) 'lose)
+    (send-event *target* 'lose #f)
+    (begin
+      (set! (-> *target* next-state name) 'target-stance)
+      (pickup-collectable! (-> *target* fact) (pickup-type health) -1000.0 (the-as handle #f))
+      (send-event *target* 'attack #f
+        (static-attack-info
+          ((deathlink-death #t)
+            (mode chosen-death)
+            (vector (new 'static 'vector :y (meters 1) :w 1.0))
+            (angle 'up)
+            (control 1.0)))))
+  #t)
+|#
 (defun ap-trap-received! ((trap symbol))
   (when (and (> (-> *ap-info-jak2* trap-duration) 0.0)
              (task-closed? "fortress-escape-start")

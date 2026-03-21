@@ -1040,10 +1040,10 @@
                   (('crush) (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 10))) ;; <ap:note> come back to this later, i have no idea if this is used or not
                   (('death) (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 1)))
                   (('grenade) (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 11)))
-                  (('bot) (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 12))) ;; <ap:note> come back to this later, i have no idea if this is used or not
+                  (('bot) (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 12)))
                   (('turret) (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 13))) ;; <ap:note> come back to this later, i have no idea if this is used or not
                   (('centipede) (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 14))) 
-                  (('big-explosion) (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 15)))) ;; <ap:note> come back to this later, i have no idea if this is used or not
+                  (('big-explosion) (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 15))))
                 )
               (go target-death (-> sv-32 mode))
               )

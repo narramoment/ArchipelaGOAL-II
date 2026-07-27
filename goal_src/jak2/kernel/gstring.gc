@@ -141,7 +141,7 @@
     (let ((s4-0 (length arg0))
           (v1-5 (length arg1))
           )
-      (if (< s4-0 v1-5)
+      (if (> s4-0 v1-5)
           (return #f)
           )
       (let ((v1-7 (&+ s5-0 (- s4-0 v1-5))))

@@ -221,4 +221,13 @@
   (none)
   )
 
+  ;; Added for Archipelago
+(defun draw-string-xy-scaled-ctxt ((str string) (buf dma-buffer) (x int) (y int) (font-ctxt font-context) (scale float))
+  "Draw a string at the given xy location, with the given scale."
+  (*! (-> font-ctxt scale) scale)
+  (*! (-> font-ctxt width) scale)
+  (*! (-> font-ctxt height) scale)
+  (draw-string str buf font-ctxt)
+  (none)
+  )
 

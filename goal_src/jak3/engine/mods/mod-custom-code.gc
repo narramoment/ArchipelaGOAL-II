@@ -20,7 +20,198 @@
     ;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Begin function defintions.
     ;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; AP Messenger System
+(deftype ap-message (structure)
+  ((verb        string)
+   (item-name   string)
+   (dir         string)
+   (player-name string)
+   (trap?       symbol)
+   ))
 
+(deftype ap-message-array (inline-array-class)
+  ((target-index  int)
+   (messages      ap-message :inline :dynamic)
+   ))
+
+(set! (-> ap-message-array heap-base) (the-as uint 80))
+
+(deftype ap-messenger (process)
+  ((both-messages   ap-message-array)
+   (show-size       int)
+   (max-size        int)
+   (state-time      time-frame)
+   (last-index      int)
+   (total-received  int)
+   )
+  (:methods
+    (append-messages (_type_ symbol string string) none)
+    )
+  (:states
+    ap-messenger-show
+    ap-messenger-hide
+    ap-messenger-scroll
+    ))
+
+(defbehavior ap-messenger-init-by-other ap-messenger ()
+  (set! (-> self show-size) 3)
+  (set! (-> self max-size) 10)
+  (set! (-> self last-index) 0)
+  (set! (-> self total-received) 0)
+  (set! (-> self both-messages) (new 'process 'ap-message-array (-> self max-size)))
+  (dotimes (i (-> self max-size))
+    (set! (-> self both-messages messages i verb) (new 'process 'string 32 (the string #f)))
+    (set! (-> self both-messages messages i item-name) (new 'process 'string 32 (the string #f)))
+    (set! (-> self both-messages messages i dir) (new 'process 'string 32 (the string #f)))
+    (set! (-> self both-messages messages i player-name) (new 'process 'string 32 (the string #f)))
+    (set! (-> self both-messages messages i trap?) #f))
+  (set! (-> self both-messages target-index) 0)
+  (go ap-messenger-show))
+
+(defmethod relocate ((this ap-messenger) (offset int))
+  (when (nonzero? (-> this both-messages))
+    (dotimes (i (-> this max-size))
+      (when (nonzero? (-> this both-messages messages i verb)) (&+! (-> this both-messages messages i verb) offset))
+      (when (nonzero? (-> this both-messages messages i item-name)) (&+! (-> this both-messages messages i item-name) offset))
+      (when (nonzero? (-> this both-messages messages i dir)) (&+! (-> this both-messages messages i dir) offset))
+      (when (nonzero? (-> this both-messages messages i player-name)) (&+! (-> this both-messages messages i player-name) offset)))
+    (&+! (-> this both-messages) offset))
+  (call-parent-method this offset))
+
+(defun shift-messages ((target-array ap-message-array) (show-size int) (max-size int))
+  (dotimes (i max-size)
+    (when (< i (- max-size 1))
+      (set! (-> target-array messages i verb) (-> target-array messages (+ i 1) verb))
+      (set! (-> target-array messages i item-name) (-> target-array messages (+ i 1) item-name))
+      (set! (-> target-array messages i dir) (-> target-array messages (+ i 1) dir))
+      (set! (-> target-array messages i player-name) (-> target-array messages (+ i 1) player-name))
+      (set! (-> target-array messages i trap?) (-> target-array messages (+ i 1) trap?))))
+  (if (> (-> target-array target-index) show-size)
+    (-! (-> target-array target-index) 1)))
+
+(defmethod append-messages ((this ap-messenger) (direction symbol) (item-name string) (player-name string))
+  (let* ((target-array (-> this both-messages))
+         (verb (case direction
+          (('sent) "SENT")
+          (('recv) "GOT")
+          (('found) "FOUND")
+          (('trap) "GOT")))
+         (dir (case direction
+          (('sent) "TO")
+          (('recv) "FROM")
+          (('found) "")
+          (('trap) "FROM")))
+         (is-trap? (= direction 'trap)))
+    (if (= (-> target-array target-index) (-> this max-size))
+      (set! (-> target-array target-index) (- (-> this max-size) 1)))
+    (set! (-> target-array messages (-> target-array target-index) verb) verb)
+    (set! (-> target-array messages (-> target-array target-index) item-name) item-name)
+    (set! (-> target-array messages (-> target-array target-index) dir) dir)
+    (set! (-> target-array messages (-> target-array target-index) player-name) player-name)
+    (set! (-> target-array messages (-> target-array target-index) trap?) is-trap?)
+    (if (< (-> target-array target-index) (- (-> this max-size) 1))
+      (+! (-> target-array target-index) 1))
+    (+! (-> this total-received) 1))
+  (none))
+
+(defun draw-message ((message string) (bottom float) (index int))
+  (let ((s4-1 (new 'stack 'font-context *font-default-matrix* 5 (the int bottom) 0.0 (font-color default) (font-flags shadow kerning large))))
+    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id progress))
+      (set! (-> s4-1 origin y) (- bottom (* 14 index)))
+      (set! (-> s4-1 width) (the float 1920))
+      (draw-string-xy-scaled-ctxt message buf 5 (the int (- bottom (* 14 index))) s4-1 0.36))))
+
+(defbehavior draw-messages ap-messenger ((bottom float))
+  (dotimes (i (-> self show-size))
+    (when (not (string= (-> self both-messages messages i item-name) ""))
+      (let* ((item (-> self both-messages messages i item-name))
+             (verb (-> self both-messages messages i verb))
+             (dir (-> self both-messages messages i dir))
+             (player (-> self both-messages messages i player-name))
+             (is-trap? (or (-> self both-messages messages i trap?)
+                           (!= -1 (string-position "TRAP" item))))
+             (msg (if (string= dir "")
+                    (if is-trap?
+                      (string-format "~S ~3L~S~0L" verb item)
+                      (string-format "~S ~8L~S~0L" verb item))
+                    (if is-trap?
+                      (string-format "~S ~3L~S~0L ~S ~12L~S~0L" verb item dir player)
+                      (string-format "~S ~8L~S~0L ~S ~12L~S~0L" verb item dir player)))))
+        (pc-encode-utf8-string msg *pc-encoded-temp-string*)
+        (draw-message *pc-encoded-temp-string* bottom i)))))
+
+(defstate ap-messenger-show (ap-messenger)
+  :code (behavior ()
+    (loop
+      (when (and (not (paused?))
+                 (-> *ap-settings* item-messages?))
+        (draw-messages 400.0))
+      (when (or (paused?) (not (-> *ap-settings* item-messages?)))
+        (go ap-messenger-hide))
+      ;; if messages fit within show window, just update last-index
+      (when (and (<= (-> self total-received) (-> self show-size))
+                 (> (-> self total-received) (-> self last-index)))
+        (set! (-> self last-index) (-> self total-received)))
+      ;; only scroll when we have more messages than show-size
+      (when (and (> (-> self total-received) (-> self last-index))
+                 (> (-> self total-received) (-> self show-size)))
+        (go ap-messenger-scroll))
+      (suspend))))
+
+(defstate ap-messenger-hide (ap-messenger)
+  :code (behavior ()
+    (loop
+      (when (and (not (paused?)) (-> *ap-settings* item-messages?))
+        (go ap-messenger-show))
+      (when (> (-> self both-messages target-index) (-> self show-size))
+        (shift-messages (-> self both-messages) (-> self show-size) (-> self max-size)))
+      (suspend))))
+
+(defstate ap-messenger-scroll (ap-messenger)
+  :enter (behavior ()
+    (set-time! (-> self state-time))
+    (+! (-> self last-index) 1)
+    (when (> (-> self last-index) (-> self total-received))
+      (set! (-> self last-index) (-> self total-received))))
+  :code (behavior ()
+    (loop
+      (let ((y (/ (the float (- (current-time) (-> self state-time))) 7.5)))
+        (cond
+          ((>= y 14.0)
+           (when (> (-> self both-messages target-index) (-> self show-size))
+             (shift-messages (-> self both-messages) (-> self show-size) (-> self max-size)))
+           (if (> (-> self total-received) (-> self last-index))
+             (go ap-messenger-scroll)
+             (go ap-messenger-show)))
+          (else
+           (draw-messages (+ 400.0 y)))))
+      (suspend))))
+
+(defun ap-messenger-run ()
+  "Run the AP Messenger"
+  (process-spawn ap-messenger :init ap-messenger-init-by-other :name "ap-messenger" :to *default-pool*))
+
+(defun ap-messenger-stop ()
+  "Stop the AP Messenger"
+  (kill-by-name "ap-messenger" *active-pool*))
+
+(define-perm *ap-messenger* (pointer ap-messenger) (the (pointer ap-messenger) #f))
+
+(defun debug-messenger ((dir symbol) (item string) (player string))
+  (let ((messenger (the ap-messenger (process-by-name "ap-messenger" *active-pool*))))
+    (when messenger
+      (append-messages messenger dir item player)))
+  (none))
+  
+(defun ap-messenger-reset! ()
+  (let ((messenger (the ap-messenger (process-by-name "ap-messenger" *active-pool*))))
+    (when messenger
+      (set! (-> messenger both-messages target-index) 0)
+      (set! (-> messenger last-index) 0)
+      (set! (-> messenger total-received) 0)
+      (dotimes (i (-> messenger max-size))
+        (set! (-> messenger both-messages messages i item-name) ""))))
+  (none))
     (defun runs-every-frame ()
       ;; (increase-power-cell-by-one) This is a call to increase-power-cell-by-one defined in mod-common-functions.gc
 
@@ -37,12 +228,418 @@
         (input-display-off)
         )
 
+
       (when *debug-segment*
         (orb-placer-maintenance)
         )
+
+;; spawn messenger if not running
+(when (not (process-by-name "ap-messenger" *active-pool*))
+  (ap-messenger-run))
+  
+      ;; Transfer important settings to ap-info struct
+      (ap-settings-update)
       
+      ;; Draw Archipelago connection status
+      (ap-draw-connection-status)
+      
+      ;; <ap:note> comment this out/in to show to testers.
+      (when (and *debug-segment* *show-test-build-info*)
+        (format *stdcon0* "~%~4LArchipelaGOAL II - Test Build~0L~%")
+        (format *stdcon* "Found a bug? Send us a screenshot!~%")
+        (format *stdcon0* "Toggle this text in Debug Menu > Modding Tools.~%~%")
+        (format *stdcon0* "~4Lgame features:~0L ~S~%"
+          (begin
+            (clear *temp-string*)
+            (bit-enum->string game-feature (-> *game-info* features) *temp-string*)
+            *temp-string*
+            )
+          )
+        (format *stdcon0* "~4Lcurrent level:~0L ~S~%~4Ltask masks:~0L    ~S~%"
+          (current-level-name)
+          (begin
+            (clear *temp-string*)
+            (bit-enum->string task-mask (-> (level-get-target-inside *level*) task-mask) *temp-string*)
+            *temp-string*
+            )
+          )
+        (format *stdcon0* "~4Lcurrent tasks:~0L~%~%")
+        (let ((level (level-get-target-inside *level*)))
+          (when level
+            (let ((lvlname (-> level info taskname))
+                  (subtasks (-> *game-info* sub-task-list)))
+              (dotimes (i (-> subtasks length))
+                (when (nonzero? i)
+                  (let ((subtask (-> subtasks i)))
+                    (when (= (-> subtask level) lvlname)
+                      (case lvlname
+                        (('city) ;; too many missions in city, we need to only display open ones.
+                          (if (open? subtask) 
+                            (format *stdcon0* "  ~17L~S~0L~%" (-> subtask name))))
+                        (else
+                          (cond
+                            ((logtest? (-> subtask flags) (game-task-node-flag closed))
+                              (format *stdcon0* "  ~15L~S~0L~%" (-> subtask name)))
+                            ((open? subtask)
+                              (format *stdcon0* "  ~17L~S~0L~%" (-> subtask name)))
+                            (else
+                              (format *stdcon0* "  ~19L~S~0L~%" (-> subtask name)))))))))))))
+          )
+
+      ;; <ap:todo> move all door code overrides from run-every-frame to a separate process.
+
+      ;; <ap:preserve-this> airlock doors in Jak 2 each contain logic determining which level geometry they will load
+      ;; based on the mission tree state. This logic is baked into their objects, not just the actor state machines.
+      ;; Barg's and Alex's best known way to override this behavior is to run code every frame, for each door, 
+      ;; and alter the command list baked into them. We need to modify the car and cdr of the command list separately, 
+      ;; so sometimes the car is a "cond" and we only need to modify its body (the cdr). Other times its a "cond" but
+      ;; we want a "when" so we modify the car.
+
+      ;; prevent the player from leaving the prison while the game is compiling. 
+      (if (= 'debug *cheat-mode*)
+        (let ((region-356 (region-lookup-by-id 356)))
+          (when (and region-356 (point-in-region-debug! region-356 (target-pos 0)))
+            (send-event *target* 'shove #f (static-attack-info ((id (new-attack-id)) (shove-back (meters 3)) (shove-up (meters 1)))))
+            )
+          )
+        )
+
+      ;; city
+      (let ((cty-cable-door (entity-by-name "com-airlock-outer-15")))
+        (when cty-cable-door
+          (set! (cdr (res-lump-struct cty-cable-door 'on-activate pair))
+            '(((focus-test? *target* pilot) #f) 
+              ((and (task-closed? "palace-cable-introduction") (not (task-complete? 28))) (want-load 'ctygenb 'ctywide 'palshaft)) 
+              ((task-closed? "palace-boss-resolution") #f) 
+              ((task-closed? "nest-boss-resolution") (want-load 'ctygenb 'ctywide 'palshaft)))
+            )
+          (set! (cdr (res-lump-struct cty-cable-door 'on-notice pair))
+            '(((focus-test? *target* pilot) #f) 
+              ((and (task-closed? "palace-cable-introduction") (not (task-complete? 28))) '(palshaft)) 
+              ((task-closed? "palace-boss-resolution") #f) 
+              ((task-closed? "nest-boss-resolution") '(palshaft)))
+            )
+          )
+        )
+
+      ;; hideout
+      (let ((cty-ho-out-door (entity-by-name "hide-door-a-3")))
+        (when cty-ho-out-door
+          (set! (cdr (res-lump-struct cty-ho-out-door 'on-notice pair)) '(#t '(hideout)))
+          )
+        )
+
+      ;; oracle
+      (let ((cty-ora-out-door (entity-by-name "oracle-door-3"))
+            (cty-ora-in-door (entity-by-name "oracle-door-1")))
+        (when cty-ora-out-door
+          (set! (cdr (res-lump-struct cty-ora-out-door 'on-notice pair)) '(#t '(oracle)))
+          )
+        (when cty-ora-in-door
+          (set! (cdr (res-lump-struct cty-ora-in-door 'on-notice pair)) '(#t '(ctyslumc ctywide)))
+          )
+        )
+
+      ;; sewer
+      (let ((cty-sew-out-door (entity-by-name "com-airlock-outer-13")))
+        (when cty-sew-out-door
+          (set! (cdr (res-lump-struct cty-sew-out-door 'on-activate pair))   
+            '(((and (task-closed? "sewer-enemy-introduction")  (not (task-complete? 15))) (want-load 'sewerb 'ctyindb 'ctywide)) 
+              ((and (task-closed? "sewer-board-introduction")  (not (task-complete? 40))) (want-load 'sewerb 'ctyindb 'ctywide)) 
+              ((and (task-closed? "sewer-escort-introduction") (not (task-complete? 53))) (want-load 'sewescb 'ctyindb 'ctywide))
+              (else (if (send-event self 'back)
+                        (if (level-active? sewerb)
+                            (want-load 'sewerb 'ctyindb 'ctywide)
+                            (want-load 'sewescb 'ctyindb 'ctywide)))))
+            )
+          (set! (cdr (res-lump-struct cty-sew-out-door 'on-cross pair))      
+            '(((and (task-closed? "sewer-enemy-introduction")  (not (task-complete? 15))) (want-sound 'ctywide1 'ctywide2 'sewer1) '(want-vis 'sewer)) 
+              ((and (task-closed? "sewer-board-introduction")  (not (task-complete? 40))) (want-sound 'ctywide1 'ctywide2 'sewer1) '(want-vis 'sewer)) 
+              ((and (task-closed? "sewer-escort-introduction") (not (task-complete? 53))) (want-sound 'ctywide1 'ctywide2 'sewer4) '(want-vis 'sewesc))
+              (else (if (send-event self 'back)
+                        (if (level-active? sewerb)
+                            (begin (want-sound 'ctywide1 'ctywide2 'sewer1) '(want-vis 'sewer))
+                            (begin (want-sound 'ctywide1 'ctywide2 'sewer4) '(want-vis 'sewesc))))))
+            )
+          (set! (cdr (res-lump-struct cty-sew-out-door 'on-deactivate pair)) 
+            '(((and (task-closed? "sewer-enemy-introduction")  (not (task-complete? 15))) (want-display 'sewerb #f) (want-sound 'ctywide1 'ctywide2 'ctywide3)) 
+              ((and (task-closed? "sewer-board-introduction")  (not (task-complete? 40))) (want-display 'sewerb #f) (want-sound 'ctywide1 'ctywide2 'ctywide3)) 
+              ((and (task-closed? "sewer-escort-introduction") (not (task-complete? 53))) (want-display 'sewescb #f) (want-sound 'ctywide1 'ctywide2 'ctywide3))
+              (else (if (send-event self 'back)
+                        (if (level-active? sewerb)
+                            (begin (want-display 'sewerb #f)  (want-sound 'ctywide1 'ctywide2 'ctywide3))
+                            (begin (want-display 'sewescb #f) (want-sound 'ctywide1 'ctywide2 'ctywide3))))))
+            )
+          (set! (cdr (res-lump-struct cty-sew-out-door 'on-enter pair))      
+            '(((and (task-closed? "sewer-enemy-introduction")  (not (task-complete? 15))) (want-display 'sewerb 'display) (want-sound 'ctywide1 'ctywide2 'sewer1)) 
+              ((and (task-closed? "sewer-board-introduction")  (not (task-complete? 40))) (want-display 'sewerb 'display) (want-sound 'ctywide1 'ctywide2 'sewer1)) 
+              ((and (task-closed? "sewer-escort-introduction") (not (task-complete? 53))) (want-display 'sewescb 'display) (want-sound 'ctywide1 'ctywide2 'sewer4))
+              (else (if (send-event self 'back)
+                        (if (level-active? sewerb)
+                            (begin (want-display 'sewerb 'display)  (want-sound 'ctywide1 'ctywide2 'sewer1))
+                            (begin (want-display 'sewescb 'display) (want-sound 'ctywide1 'ctywide2 'sewer4))))))
+            )
+          (set! (cdr (res-lump-struct cty-sew-out-door 'on-notice pair))     
+            '(((and (task-closed? "sewer-enemy-introduction")  (not (task-complete? 15))) '(sewerb)) 
+              ((and (task-closed? "sewer-board-introduction")  (not (task-complete? 40))) '(sewerb)) 
+              ((and (task-closed? "sewer-escort-introduction") (not (task-complete? 53))) '(sewescb))
+              (else (if (send-event self 'back)
+                        (if (level-active? sewerb) '(sewerb) '(sewerb)))))
+            )
+          )
+        )
+
+      ;; fortress
+      (let ((cty-for-out-door (entity-by-name "fort-entry-gate-17"))
+            (cty-fordump-in-door (entity-by-name "fort-entry-gate-4"))
+            (cty-forresc-in-door (entity-by-name "fort-entry-gate-7")))
+        (when cty-for-out-door
+          (set! (cdr (res-lump-struct cty-for-out-door 'on-activate pair)) 
+            '(((and (task-closed? "fortress-dump-introduction")         (not (task-complete? 11))) (want-load 'ctysluma 'ctywide 'fordumpa)) 
+              ((and (task-closed? "fortress-save-friends-introduction") (not (task-complete? 52))) (want-load 'ctysluma 'ctywide 'forresca)))
+            )
+          (set! (cdr (res-lump-struct cty-for-out-door 'on-cross pair))    
+            '(((and (task-closed? "fortress-dump-introduction")         (not (task-complete? 11))) (want-vis 'fordumpa)) 
+              ((and (task-closed? "fortress-save-friends-introduction") (not (task-complete? 52))) (want-vis 'forresca)))
+            )
+          (set! (cdr (res-lump-struct cty-for-out-door 'on-enter pair))    
+            '(((and (task-closed? "fortress-dump-introduction")         (not (task-complete? 11))) (want-display 'fordumpa 'display) (want-sound 'ctywide1 'ctywide2 'fordump1)) 
+              ((and (task-closed? "fortress-save-friends-introduction") (not (task-complete? 52))) (want-display 'forresca 'display) (want-sound 'ctywide1 'ctywide2 'forresc1)))
+            )
+          (set! (cdr (res-lump-struct cty-for-out-door 'on-notice pair))   
+            '(((and (task-closed? "fortress-dump-introduction")         (not (task-complete? 11))) '(fordumpa)) 
+              ((and (task-closed? "fortress-save-friends-introduction") (not (task-complete? 52))) '(forresca)))
+            )
+          )
+        (when cty-fordump-in-door
+          (set! (cdr (res-lump-struct cty-fordump-in-door 'on-deactivate pair)) '((want-sound 'fordump1 'fordump2 'fordump3)))
+          )
+        (when cty-forresc-in-door
+          (set! (cdr (res-lump-struct cty-forresc-in-door 'on-deactivate pair)) '((want-sound 'ctywide1 'forresc1 'forresc2)))
+          )
+        )
+
+      ;; mountain (affects forest, canyon)
+      (let ((cty-mtn-out-door (entity-by-name "com-airlock-outer-32")))
+        (when cty-mtn-out-door
+          (set! (cdr (res-lump-struct cty-mtn-out-door 'on-notice pair)) 
+            '(((or (task-closed? "mountain-lens-introduction") 
+                   (task-closed? "forest-scouts-introduction") 
+                   (task-closed? "forest-hunt-introduction") 
+                   (task-closed? "forest-protect-introduction") 
+                   (task-closed? "canyon-insert-items-introduction")) 
+              '(ctyfarma)))
+            )
+          )
+       )
+
+      ;; tomb
+      (let ((cty-tomb-out-door (entity-by-name "com-airlock-outer-22")))
+        (when cty-tomb-out-door
+          (set! (cdr (res-lump-struct cty-tomb-out-door 'on-notice pair))
+            '(((or (task-closed? "tomb-poles-introduction")
+                   (task-closed? "tomb-poles-poles")
+                   (task-closed? "tomb-poles-poles2")
+                   (task-closed? "tomb-poles-boulder")
+                   (task-closed? "tomb-poles-block")
+                   (task-closed? "tomb-water-vibe")
+                   (task-closed? "tomb-water-resolution")
+                   (task-closed? "tomb-boss-torches")
+                   (task-closed? "tomb-boss-door")
+                   (task-closed? "tomb-boss-introduction")
+                   (task-closed? "tomb-boss-resolution"))
+              '(tombd)))
+           )
+         )
+       )
+
+      ;; hiphog (affects gungame, under)
+      (let ((cty-hh-out-door (entity-by-name "hip-door-a-6"))
+            (cty-gg-out-door (entity-by-name "hip-door-a-10"))
+            (cty-gg-in-door (entity-by-name "hip-door-a-9")))
+        (when cty-hh-out-door
+          (set! (cdr (res-lump-struct cty-hh-out-door 'on-notice pair)) '((#t '(hiphog))))
+        )
+        (when cty-gg-out-door
+          (set! (cdr (res-lump-struct cty-gg-out-door 'on-notice pair)) '(((task-open? "city-port-run-resolution") #f) (else '(gungame))))
+        )
+        (when cty-gg-in-door
+          (set! (cdr (res-lump-struct cty-gg-in-door 'on-notice pair)) '(#t '(ctyport ctywide)))
+        )
+      )
+
+      ;; vinroom (affects strip, drill)
+      (let ((cty-vin-door (entity-by-name "vin-door-ctyinda-1"))
+            (vinroom-warp (entity-by-name "warp-gate-21")))
+        (when cty-vin-door
+          (set! (cdr (res-lump-struct cty-vin-door 'on-notice pair)) '(#t '(vinroom)))
+        )
+        ;; (when vinroom-warp
+        ;;   (set! (cdr (res-lump-struct vinroom-warp 'on-notice pair)) '(((and (task-closed? "strip-rescue-introduction") (not (task-complete? 16))) '("strip-warp" (want-load 'vinroom 'strip) (strip))) ((and (task-closed? "drill-eggs-introduction") (not (task-complete? 26))) '("drill1-warp" (want-load 'vinroom 'drillmid) (drillmid))) ((and (task-closed? "city-power-introduction") (not (task-complete? 27))) #f) ((and (task-closed? "strip-grenade-introduction") (not (task-complete? 36))) '("strip-warp" (want-load 'vinroom 'strip) (strip))) ((and (task-closed? "drill-ship-introduction") (not (task-complete? 37))) '("drill-warp-gunship" (want-load 'vinroom 'drillmid) (drillmid))) ((and (task-closed? "strip-drop-introduction") (not (task-complete? 58))) '("strip-warp" (want-load 'vinroom 'strip) (strip))) ((and (task-closed? "drill-mech-introduction") (not (task-complete? 61))) '("drill3-warp" (want-load 'vinroom 'drillmid) (drillmid))) (else '("strip-warp" (want-load 'vinroom 'strip) (strip)))))
+        ;; )
+      )
+
+      ;; dig
+      (let ((dig-elev (entity-by-name "cpad-elevator-1"))
+            (region-544 (region-lookup-by-id 544))
+            (region-549 (region-lookup-by-id 549)))
+        (when dig-elev
+          (set! (cdr (res-lump-struct dig-elev 'on-notice pair)) '(#t))
+          )
+        (when region-544
+          (set! (-> region-544 on-enter) '(cond ((and (task-closed? "dig-knock-down-introduction") (not (task-complete? 35))) (want-load 'dig1 'caspad #f) (want-sound 'dig1 'dig2 'dig3)) (else (want-load 'dig3a 'caspad #f) (want-sound 'dig6 'dig7 'dig8))))
+          )
+        (when region-549
+          (set! (-> region-549 on-enter) '(cond ((and (task-closed? "dig-knock-down-introduction") (not (task-complete? 35))) (want-display 'dig1 'display)) (else (want-display 'dig3a 'display))))
+          (set! (-> region-549 on-exit) '(cond ((and (task-closed? "dig-knock-down-introduction") (not (task-complete? 35))) (want-display 'dig1 #f)) (else (want-display 'dig3a #f))))
+          )
+        )
+
+      ;; air trains
+      ;; (let ((air-train-port (entity-by-name "air-train-1"))
+      ;;       (air-train-land (entity-by-name "air-train-3"))
+      ;;       (air-train-nest (entity-by-name "air-train-4")))
+      ;;   (when air-train-port
+      ;;     (set! (cdr (res-lump-struct air-train-port 'on-notice pair)) '(((not (has-air-train?)) 'hide) ((task-closed? "dig-knock-down-introduction") '("caspad-warp" (scene-play '("city-air-train-in-caspad" "caspad-air-train-out")) #f (want-anim "city-air-train-in-caspad"))) ((task-closed? "dig-find-totem-introduction") '("caspad-warp" (scene-play '("city-air-train-in-caspad" "caspad-air-train-out")) #f (want-anim "city-air-train-in-caspad"))) ((task-closed? "nest-get-to-gun-introduction") '("nest-warp" (scene-play '("city-air-train-in-nest" "nest-air-train-out")) #f (want-anim "city-air-train-in-nest")))  (else '("caspad-warp" (scene-play '("city-air-train-in-caspad" "caspad-air-train-out")) #f (want-anim "city-air-train-in-caspad")))))
+      ;;     )
+      ;;   (when air-train-land
+      ;;     (set! (cdr (res-lump-struct air-train-land 'on-notice pair)) '(((not (has-air-train?)) 'hide) (else '("ctyport-warp" (scene-play '("caspad-air-train-in" "city-air-train-out")) #f (want-anim "caspad-air-train-in")))))
+      ;;     )
+      ;;   (when air-train-nest
+      ;;     (set! (car (res-lump-struct air-train-nest 'on-notice pair)) 'cond)
+      ;;     (set! (cdr (res-lump-struct air-train-nest 'on-notice pair)) '(((not (has-air-train?)) 'hide) (else '("ctyport-warp" (scene-play '("nest-air-train-in" "city-air-train-out")) #f (want-anim "nest-air-train-in")))))
+      ;;     )
+      ;;   )
+
+      ;; stadium
+      (let ((region-557 (region-lookup-by-id 557))
+            (region-317 (region-lookup-by-id 317))
+            (region-787 (region-lookup-by-id 787))
+            )
+        (when region-557
+          (set! (-> region-557 on-enter) 
+            '(cond 
+              ((or (task-closed? "stadium-burning-bush-race-board-introduction") 
+                   (and (task-closed? "stadium-board1-introduction") 
+                        (not (task-complete? 23)))) 
+                (want-load 'stadium 'ctywide 'skatea)
+                ) 
+              ((or (task-closed? "stadium-burning-bush-race-class3-introduction") 
+                   (task-closed? "stadium-burning-bush-race-class3-r-introduction") 
+                   (and (task-closed? "stadium-race-class3-introduction") 
+                        (not (task-complete? 43)))) 
+                (want-load 'stadium 'ctywide 'stadiumb)
+                ) 
+              ((or (task-closed? "stadium-burning-bush-race-class2-introduction") 
+                   (task-closed? "stadium-burning-bush-race-class2-r-introduction") 
+                   (and (task-closed? "stadium-race-class2-introduction") 
+                        (not (task-complete? 55)))) 
+                (want-load 'stadium 'ctywide 'stadiumc)
+                ) 
+              ((or (task-closed? "stadium-burning-bush-race-class1-introduction") 
+                   (task-closed? "stadium-burning-bush-race-class1-r-introduction") 
+                   (and (task-closed? "stadium-race-class1-introduction") 
+                        (not (task-complete? 63)))) 
+                (want-load 'stadium 'ctywide 'stadiumd)
+                ) 
+              (else 
+                (want-load 'stadium 'ctywide 'skatea)))
+            )
+          (set! (-> region-557 on-exit) 
+            '(begin 
+              (when (task-closed? "stadium-burning-bush-race-board-introduction")    (task-open! "stadium-burning-bush-race-board-introduction"))
+              (when (task-closed? "stadium-burning-bush-race-class3-introduction")   (task-open! "stadium-burning-bush-race-class3-introduction"))
+              (when (task-closed? "stadium-burning-bush-race-class2-introduction")   (task-open! "stadium-burning-bush-race-class2-introduction"))
+              (when (task-closed? "stadium-burning-bush-race-class1-introduction")   (task-open! "stadium-burning-bush-race-class1-introduction"))
+              (when (task-closed? "stadium-burning-bush-race-class3-r-introduction") (task-open! "stadium-burning-bush-race-class3-r-introduction")) 
+              (when (task-closed? "stadium-burning-bush-race-class2-r-introduction") (task-open! "stadium-burning-bush-race-class2-r-introduction")) 
+              (when (task-closed? "stadium-burning-bush-race-class1-r-introduction") (task-open! "stadium-burning-bush-race-class1-r-introduction")))
+            ) 
+          )
+        (when region-317
+          (set! (-> region-317 on-enter) 
+            '(cond 
+              ((or (task-closed? "stadium-burning-bush-race-board-introduction") 
+                   (and (task-closed? "stadium-board1-introduction") 
+                        (not (task-complete? 23)))) 
+                (want-display 'skatea 'display)
+                ) 
+              ((or (task-closed? "stadium-burning-bush-race-class3-introduction") 
+                   (task-closed? "stadium-burning-bush-race-class3-r-introduction") 
+                   (and (task-closed? "stadium-race-class3-introduction") 
+                        (not (task-complete? 43)))) 
+                (want-display 'stadiumb 'display)
+                ) 
+              ((or (task-closed? "stadium-burning-bush-race-class2-introduction") 
+                   (task-closed? "stadium-burning-bush-race-class2-r-introduction") 
+                   (and (task-closed? "stadium-race-class2-introduction") 
+                        (not (task-complete? 55)))) 
+                (want-display 'stadiumc 'display)
+                ) 
+              ((or (task-closed? "stadium-burning-bush-race-class1-introduction") 
+                   (task-closed? "stadium-burning-bush-race-class1-r-introduction") 
+                   (and (task-closed? "stadium-race-class1-introduction") 
+                        (not (task-complete? 63)))) 
+                (want-display 'stadiumd 'display)
+                ) 
+              (else 
+                (want-display 'skatea 'display)))
+            )
+          )
+        (when region-787
+          (set! (-> region-787 on-enter) 
+            '(cond 
+              ((or (task-closed? "stadium-burning-bush-race-board-introduction") 
+                   (and (task-closed? "stadium-board1-introduction") 
+                        (not (task-complete? 23)))) 
+                (want-sound 'ctywide1 'stadium1 'skate1)
+                ) 
+              ((or (task-closed? "stadium-burning-bush-race-class3-introduction") 
+                   (task-closed? "stadium-burning-bush-race-class3-r-introduction") 
+                   (and (task-closed? "stadium-race-class3-introduction") 
+                        (not (task-complete? 43)))) 
+                (want-sound 'ctywide1 'ctywide2 'stadium1)
+                ) 
+              ((or (task-closed? "stadium-burning-bush-race-class2-introduction") 
+                   (task-closed? "stadium-burning-bush-race-class2-r-introduction") 
+                   (and (task-closed? "stadium-race-class2-introduction") 
+                        (not (task-complete? 55)))) 
+                (want-sound 'ctywide1 'ctywide2 'stadium1)
+                ) 
+              ((or (task-closed? "stadium-burning-bush-race-class1-introduction") 
+                   (task-closed? "stadium-burning-bush-race-class1-r-introduction") 
+                   (and (task-closed? "stadium-race-class1-introduction") 
+                        (not (task-complete? 63)))) 
+                (want-sound 'ctywide1 'ctywide2 'stadium1)
+                ) 
+              (else 
+                (want-sound 'ctywide1 'stadium1 'skate1)))
+            )
+          )
+        )
+      
+      ;; nest
+      (let ((region-738 (region-lookup-by-id 738)))
+        (when region-738
+          (set! (-> region-738 on-enter) 
+            '(begin 
+              (when (task-open? "nest-enter-introduction") (task-close! "nest-enter-resolution"))
+              (when (task-open? "nest-boss-introduction") (scene-play "nest-kor-boss-fight-intro-b")))
+            )
+          )
+        )
+(when (and *ap-settings*
+           (-> *ap-settings* item-messages?)
+           (not (process-by-name "ap-messenger" *active-pool*)))
+  (ap-messenger-run))
       (none)
       )
+    
+    (defun runs-on-orb-pickup ((orb-id uint) (parent process-tree))
+      ;; Code here runs on any precursor orb pickup
+
+      (none)
+    )
 
     (defun runs-on-gem-pickup ()
       ;; Code here runs on any scout fly pickup
@@ -96,16 +693,95 @@
       )
 
     (defun runs-on-jak-death ((death-event symbol))
-      (case death-event
-        (('dying)
-          ;; Code here runs immediately every time jak dies, before any death animation or death cutscene
-          
+      ;; <ap:todo> deathlink will come later, leave it out for now
+      #|
+      (when (-> *ap-settings* deathlink?)
+        (case death-event
+          (('dying)
+            ;; Code here runs immediately every time jak dies, before any death animation or death cutscene
+          )   
+          (('blackout)
+            ;; Code here runs after jak dies (and any death cutscene finishes), during the blackout before he spawns
+            )
+          (('bot)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 5))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
           )
-        (('blackout)
-          ;; Code here runs after jak dies (and any death cutscene finishes), during the blackout before he spawns
-
+          (('centipede)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 6))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))    
+          )
+          (('endlessfall)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 7))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))    
+          )
+          (('instant-death)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 8))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))    
+          )
+          (('lava)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 9))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))    
+          )
+          (('melt)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 10))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))    
+          )
+          (('explode)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 11))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))    
+          )
+          (('big-explosion)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 12))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))    
+          )
+          (('turret)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 13))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))    
+          )
+          (('smush)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 14))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+          )
+          (('attack)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 15))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+          )
+          (('shock)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 16))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+          )
+          (('crush)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 17))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+          )
+          (('death)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 18))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+          )
+          (('grenade)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 19))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+          )
+          (('drown-death)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 20))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+          )
+          (('burn)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 21))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+          )
+          (('burnup)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 22))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+          )
+          (('fail-continue)
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 23))
+            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
           )
         )
+      )
+      |#
       
       (none)
       )

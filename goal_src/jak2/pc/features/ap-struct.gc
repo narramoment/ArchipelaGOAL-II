@@ -1,0 +1,603 @@
+;;-*-Lisp-*-
+(in-package goal)
+
+;; <ap:note> PLEASE COME BACK TO THIS LATER
+;; (define-extern *ap-onin-game* handle)
+
+(define *ap-info-jak2* (new 'static 'ap-info-jak2))
+(pc-get-archipelago-struct)
+
+;; Initialize connection status to default (0)
+(set! (-> *ap-info-jak2* connection-status) (ap-connection-status default))
+
+;; Setup markers
+(charp<-string (-> *ap-info-jak2* end-marker) "end")
+
+;; ****************************************************************************
+;; **** This number must match expected_memory_version in MemoryReader.py! ****
+;; ****************************************************************************
+(set! (-> *ap-info-jak2* version) 4)
+
+(defun ap-mission-checked! ((mission-id uint))
+  (format 0 "~%~%*************************************************~%")
+  (format 0 "*** ARCHIPELAGO MISSION COMPLETION DETECTED ***~%")
+  (format 0 "*************************************************~%")
+  (format 0 "Mission ID: ~D~%" mission-id)
+  (format 0 "Index in array: ~D~%" (-> *ap-info-jak2* next-mission-index))
+  (format 0 "Total missions tracked: ~D~%" (+ (-> *ap-info-jak2* next-mission-index) 1))
+  (format 0 "*************************************************~%~%")
+  (set! (-> *ap-info-jak2* missions-checked (-> *ap-info-jak2* next-mission-index)) mission-id)
+  (+! (-> *ap-info-jak2* next-mission-index) 1))
+
+(defun ap-side-mission-checked! ((side-mission-id uint))
+  (format 0 "~%~%**************************************************~%")
+  (format 0 "*** ARCHIPELAGO SIDE MISSION COMPLETION DETECTED ***~%")
+  (format 0 "**************************************************~%")
+  (format 0 "Side Mission ID: ~D~%" side-mission-id)
+  (format 0 "Index in array: ~D~%" (-> *ap-info-jak2* next-side-mission-index))
+  (format 0 "Total side missions tracked: ~D~%" (+ (-> *ap-info-jak2* next-side-mission-index) 1))
+  (format 0 "**************************************************~%~%")
+  (set! (-> *ap-info-jak2* side-missions-checked (-> *ap-info-jak2* next-side-mission-index)) side-mission-id)
+  (+! (-> *ap-info-jak2* next-side-mission-index) 1))
+
+(defun ap-set-connection-status! ((status ap-connection-status))
+  "Set the Archipelago connection status. Returns the status that was set."
+  (set! (-> *ap-info-jak2* connection-status) status)
+  status)
+
+(defun ap-draw-connection-status ()
+  "Draw the current Archipelago connection status on screen every frame"
+  ;; Safety check: only draw if both required globals are initialized
+  (when (and *ap-info-jak2* *common-text*)
+    (case (-> *ap-info-jak2* connection-status)
+      (((ap-connection-status default))
+       (format *stdcon0* "~%~4LArchipelaGOAL: Not Connected...~0L~%"))
+      (((ap-connection-status wait))
+       (format *stdcon0* "~%~4LArchipelaGOAL: Waiting for Items...~0L~%"))
+      (((ap-connection-status failure))
+       (format *stdcon0* "~%~4LArchipelaGOAL: Connection Failed!~0L~%"))
+      ;; No message for ready status - connection is successful
+      ))
+  (none))
+
+;; Debug function to manually test mission completion tracking
+(defun ap-debug-test-mission-completion ()
+  "Test function to manually trigger mission completion debug output"
+  (format 0 "~%~%===============================================~%")
+  (format 0 "TESTING ARCHIPELAGO MISSION COMPLETION SYSTEM~%")
+  (format 0 "===============================================~%")
+  (format 0 "Current mission index: ~D~%" (-> *ap-info-jak2* next-mission-index))
+  (format 0 "Current side mission index: ~D~%" (-> *ap-info-jak2* next-side-mission-index))
+  (format 0 "Testing mission completion...~%")
+  (ap-mission-checked! (the-as uint 1))  ;; fortress-escape
+  (format 0 "Testing side mission completion...~%")
+  (ap-side-mission-checked! (the-as uint 100))  ;; dummy side mission
+  (format 0 "===============================================~%")
+  (format 0 "TEST COMPLETE - Check output above~%")
+  (format 0 "===============================================~%~%")
+  (none))
+
+;; Debug function to manually test task resolution close
+(defun ap-debug-test-task-resolution ()
+  "Test function to manually call task-resolution-close! to see debug output"
+  (format 0 "~%~%===============================================~%")
+  (format 0 "TESTING TASK-RESOLUTION-CLOSE! DIRECTLY~%")
+  (format 0 "===============================================~%")
+  (format 0 "Calling task-resolution-close! with fortress-escape...~%")
+  (task-resolution-close! (game-task fortress-escape))
+  (format 0 "===============================================~%")
+  (format 0 "TEST COMPLETE - Check output above~%")
+  (format 0 "===============================================~%~%")
+  (none))
+
+;; Debug function to show current task states
+(defun ap-debug-show-task-states ()
+  "Show current completion state of some key missions"
+  (format 0 "~%~%===============================================~%")
+  (format 0 "CURRENT TASK STATES~%")
+  (format 0 "===============================================~%")
+  (format 0 "fortress-escape complete?: ~A~%" (task-complete? *game-info* (game-task fortress-escape)))
+  (format 0 "city-help-kid complete?: ~A~%" (task-complete? *game-info* (game-task city-help-kid)))
+  (format 0 "city-vehicle-training complete?: ~A~%" (task-complete? *game-info* (game-task city-vehicle-training)))
+  (format 0 "Game task counter: ~D~%" (-> *game-info* task-counter))
+  (format 0 "===============================================~%~%")
+  (none))
+
+;; Debug function to test connection status display
+(defun ap-debug-test-connection-status ()
+  "Cycle through connection status values for testing display"
+  (case (-> *ap-info-jak2* connection-status)
+    (((ap-connection-status default)) (ap-set-connection-status! (ap-connection-status wait)))
+    (((ap-connection-status wait)) (ap-set-connection-status! (ap-connection-status failure)))
+    (((ap-connection-status failure)) (ap-set-connection-status! (ap-connection-status ready)))
+    (((ap-connection-status ready)) (ap-set-connection-status! (ap-connection-status default)))
+    (else (ap-set-connection-status! (ap-connection-status default))))
+  (format 0 "~%~%===============================================~%")
+  (format 0 "ARCHIPELAGO DEBUG MODE TOGGLE~%")
+  (format 0 "===============================================~%")
+  (format 0 "Connection status changed to: ~D~%" (-> *ap-info-jak2* connection-status))
+  (format 0 "Status meaning: ~A~%" 
+    (case (-> *ap-info-jak2* connection-status)
+      (((ap-connection-status default)) "Connecting to Archipelago")
+      (((ap-connection-status wait)) "Waiting for items from other players")
+      (((ap-connection-status failure)) "Connection failed - check client")
+      (((ap-connection-status ready)) "Connected and ready")
+      (else "Unknown status")))
+  (format 0 "===============================================~%~%")
+  (none))
+
+(defun ap-verify-game-completed! ((arg0 uint))
+  (cond
+    ((= (-> *ap-info-jak2* completion-goal-type) (ap-completion-type mission-count))
+      (if (= (+ (-> *ap-info-jak2* next-mission-index)
+                (-> *ap-info-jak2* next-side-mission-index))
+             (-> *ap-info-jak2* completion-goal-value))
+        (set! (-> *ap-info-jak2* completed) 1)
+        (task-close! "city-win-resolution")
+        )
+      )
+    ((= (-> *ap-info-jak2* completion-goal-type) (ap-completion-type specific-mission))
+      (if (= (the-as uint arg0) 
+             (-> *ap-info-jak2* completion-goal-value))
+        (set! (-> *ap-info-jak2* completed) 1)
+        (task-close! "city-win-resolution")
+        )
+      )
+    )
+  #t
+  )
+
+(defun ap-item-received! ((item symbol))
+  (case item
+    (('gun-yellow)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-gun-yellow))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "miss012")) ;; blaster mod
+        ))
+    (('gun-red)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-gun-red))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "miss011")) ;; scatter gun
+        ))
+    (('gun-blue)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-gun-blue))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "miss013")) ;; vulcan barrel
+        ))
+    (('gun-dark)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-gun-dark))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "miss014")) ;; peace maker
+        ))
+    (('board)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-board))))
+        (eval-add dummy-node)
+         (script-eval '(talker-spawn "board001")) ;; jetboard
+      ))
+    (('darkjak)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-darkjak))))
+        (eval-add dummy-node)
+         (script-eval '(talker-spawn "dark001")) ;; dark jak
+        ))
+    (('gun-upgrade-speed)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-gun-up-1))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "miss002")))) ;; gun speed upgrade
+    (('gun-upgrade-ammo)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-gun-up-2))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "miss003")))) ;; gun ammo upgrade
+    (('gun-upgrade-damage)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-gun-up-3))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "miss004")))) ;; gun damage upgrade
+    (('pass-red)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-pass-red))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "miss006")))) ;; red security pass
+    (('pass-green)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-pass-green))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "miss007")))) ;; green security pass
+    (('pass-yellow)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-pass-yellow))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "miss008")))) ;; yellow security pass
+    (('darkjak-bomb0)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-darkjak-0))))
+        (eval-add dummy-node)
+         (script-eval '(talker-spawn "dark002")) ;; dark bomb
+        ))
+    (('darkjak-bomb1)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-darkjak-1))))
+        (eval-add dummy-node)
+         (script-eval '(talker-spawn "dark003")) ;; dark blast
+        ))
+    (('darkjak-invinc)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-darkjak-2))))
+        (eval-add dummy-node)
+         (script-eval '(talker-spawn "dark004")) ;; dark invincibility
+        ))
+    (('darkjak-giant)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-darkjak-3))))
+        (eval-add dummy-node)
+         (script-eval '(talker-spawn "dark005")) ;; dark giant
+        ))
+    (('pass-purple)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-pass-purple))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "miss009")))) ;; palace/purple security pass
+    (('pass-black)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-pass-black))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "miss010")))) ;; weapons factory/black security pass
+    (('pass-air-train)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-pass-air-train))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "air001")) ;; air train pass
+        ))
+    (('lens)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-lens))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "lens001")))) ;; mountain lens
+    (('gear)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-gear))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "gear001")))) ;; mountain gear
+    (('shard)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-shard))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "shard001")))) ;; mountain shard
+    (('ruby-key)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-ruby-key))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "ruby001")) ;; ruby key
+        ))
+    (('heart-of-mar)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-heart-of-mar))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "heart001")) ;; heart of mar
+        ))
+    (('time-map)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-time-map))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "time001")) ;; time map
+        ))
+    (('precursor-stone)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-precursor-stone))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "stone001")) ;; precursor stone
+        ))
+    (('life-seed)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-life-seed))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "seed001")) ;; life seed
+        ))
+    (('titan-suit)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-titan-suit))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "suit001")) ;; titan suit
+        ))
+    (('gun-turret)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-gun-turret))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "turret001")) ;; gun turret
+        ))
+    (('seal-piece-1)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-seal-piece-1))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "seal001")) ;; seal piece 1
+        ))
+    (('seal-piece-2)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-seal-piece-2))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "seal002")) ;; seal piece 2
+        ))
+    (('seal-piece-3)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-seal-piece-3))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "seal003")) ;; seal piece 3
+        ))
+    (('rift-rider)
+      (let ((dummy-node (new 'static 'game-task-node-info :add (game-task-node-command add-rift-rider))))
+        (eval-add dummy-node)
+        (script-eval '(talker-spawn "car001")) ;; rift rider
+        ))
+    (('dark-eco-pill)
+      (sound-play "pill-pickup") ;; dark eco pill filler item
+      (send-event *target* 'get-pickup (pickup-type eco-pill-dark) 5.0)
+     )
+    (('health-pack)
+      (sound-play "get-green-eco") ;; health filler item
+      (send-event *target* 'get-pickup (pickup-type health) 2.0)
+     )
+    (('ammo-red)
+      (sound-play "ammo-pickup") ;; red ammo filler item
+      (send-event *target* 'get-pickup (pickup-type ammo-red) 5.0)
+     )
+    (('ammo-yellow) ;; yellow ammo filler item
+      (sound-play "ammo-pickup")
+      (send-event *target* 'get-pickup (pickup-type ammo-yellow) 10.0)
+     )
+    (('ammo-blue) ;; blue ammo filler item
+      (sound-play "ammo-pickup")
+      (send-event *target* 'get-pickup (pickup-type ammo-blue) 10.0)
+     )
+    (('ammo-dark) ;; dark ammo filler item
+      (sound-play "ammo-pickup")
+      (send-event *target* 'get-pickup (pickup-type ammo-dark) 1.0)
+     )
+    )
+  ;; (auto-save-command 'save 0 0 *default-pool* #f) ;; <ap:todo> Fails compilation because ap-struct declared too early. Any way to fix this?
+  #t
+  )
+
+;; <ap:todo> deathlink will come later, leave this out for now (PLEASE COME BACK TO TEST THIS LATER)
+#|
+(defun ap-deathlink-received! ((chosen-death symbol))
+
+  (let ((onin-npc (process-by-ename "onin-npc-1")))
+
+    (format #t "ONIN NPC: ~A\n" onin-npc)
+
+    (if onin-npc
+        (let ((child (-> onin-npc child)))
+          (format #t "ONIN CHILD: ~A\n" child))
+        )
+
+    #t))
+|#
+(defun ap-trap-received! ((trap symbol))
+  (when (and (> (-> *ap-info-jak2* trap-duration) 0.0)
+             (task-closed? "fortress-escape-start")
+             (zero? (-> *ap-info-jak2* completed)))
+    (sound-play "timer-warn")
+      (case trap
+      ;; jak 1 ap traps (ordered in the same way)
+        (('trip) ;; trip trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (send-event *target* 'loading)
+              (if (> (-> *ap-info-jak2* trap-duration) 5.0)
+                (dotimes (i (- (/ (the int (-> *ap-info-jak2* trap-duration)) 5) 1))
+                  (suspend-for (seconds 5))
+                  (send-event *target* 'loading))))))
+        (('ice-physics) ;; slip trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (set! (-> *stone-surface* slope-slip-angle) 16384.0)
+              (set! (-> *stone-surface* slip-factor) 0.7)
+              (set! (-> *stone-surface* transv-max) 1.5)
+              (set! (-> *stone-surface* turnv) 0.5)
+              (set! (-> *stone-surface* nonlin-fric-dist) 4091904.0)
+              (set! (-> *stone-surface* fric) 23756.8)
+              (set! (-> *gravel-surface* slope-slip-angle) 16384.0)
+              (set! (-> *gravel-surface* slip-factor) 0.7)
+              (set! (-> *gravel-surface* transv-max) 1.5)
+              (set! (-> *gravel-surface* turnv) 0.5)
+              (set! (-> *gravel-surface* nonlin-fric-dist) 4091904.0)
+              (set! (-> *gravel-surface* fric) 23756.8)
+              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+              (set! (-> *stone-surface* slope-slip-angle) 8192.0)
+              (set! (-> *stone-surface* slip-factor) 1.0)
+              (set! (-> *stone-surface* transv-max) 1.0)
+              (set! (-> *stone-surface* turnv) 1.0)
+              (set! (-> *stone-surface* nonlin-fric-dist) 5120.0)
+              (set! (-> *stone-surface* fric) 153600.0)
+              (set! (-> *gravel-surface* slope-slip-angle) 16384.0)
+              (set! (-> *gravel-surface* slip-factor) 1.0)
+              (set! (-> *gravel-surface* transv-max) 1.0)
+              (set! (-> *gravel-surface* turnv) 1.0)
+              (set! (-> *gravel-surface* nonlin-fric-dist) 4096.0)
+              (set! (-> *gravel-surface* fric) 122880.0))))
+        (('the-big-apple) ;; gravity trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (*! (-> *standard-dynamics* gravity-length) 3.0)
+              (*! (-> *target* control dynam gravity-length) 3.0)
+              (set! (-> *TARGET-bank* fall-far) (meters 2.5))
+              (set! (-> *TARGET-bank* fall-far-inc) (meters 3.5))
+              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+              (/! (-> *standard-dynamics* gravity-length) 3.0)
+              (/! (-> *target* control dynam gravity-length) 3.0)
+              (set! (-> *TARGET-bank* fall-far) (meters 30))
+              (set! (-> *TARGET-bank* fall-far-inc) (meters 20)))))
+        (('caught-in-4k) ;; camera trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (stack-size-set! (-> self main-thread) 512)
+              (set-setting-by-param *setting-control* 'mode-name 'cam-fixed 0 0)
+              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+              (remove-setting-by-arg0 *setting-control* 'mode-name))))
+        (('daredevil) ;; darkness trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (send-event (ppointer->process *time-of-day*) 'change 'ratio 0.0)
+              (set! (-> *time-of-day-context* mode) (the-as time-of-day-palette-id (/ (the-as int 16384) 8)))
+              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+              (send-event (ppointer->process *time-of-day*) 'change 'ratio 1.0))))
+        (('caseoh) ;; earthquake trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (suspend-for (seconds 1))
+              (activate! *camera-smush-control* 3000.0 50 (the int (seconds (-> *ap-info-jak2* trap-duration))) 1.0 1.0 (-> self clock))
+              (dotimes (i (* 100 (the int (-> *ap-info-jak2* trap-duration))))
+                (set! (-> *standard-dynamics* gravity x) (* 3.0 (the float (update! *camera-smush-control*))))
+                (suspend-for (seconds 0.01))
+                (set! (-> *standard-dynamics* gravity z) (* 3.0 (the float (update! *camera-smush-control*))))
+                (suspend-for (seconds 0.01))))))
+        (('instant-transmission) ;; teleport trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (suspend-for (seconds 1))
+              (while (movie?) (suspend-for (seconds 1)))
+              (set! (-> *game-info* current-continue) (get-continue-by-name *game-info* "ctysluma-alley"))
+              (initialize! *game-info* 'die (the-as game-save #f) "ctysluma-alley"))))
+        ;; <ap:note> despair trap is much harder to do than i initially throught, come back later when you can figure out the sound     
+        (('personal-bubble) ;; pacifism trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (set! (-> *TARGET-bank* punch-radius) (meters -1.0))
+              (set! (-> *TARGET-bank* spin-radius) (meters -1.0))
+              (set! (-> *TARGET-bank* flop-radius) (meters -1.0))
+              (set! (-> *TARGET-bank* uppercut-radius) (meters -1.0))
+              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+              (set! (-> *TARGET-bank* punch-radius) (meters 1.3))
+              (set! (-> *TARGET-bank* spin-radius) (meters 2.2))
+              (set! (-> *TARGET-bank* flop-radius) (meters 1.4))
+              (set! (-> *TARGET-bank* uppercut-radius) (meters 1.0)))))
+        ;; <ap:note> ecoless trap doesn't really make sense in jak 2, as there isn't really any eco besides dark jak and the weapons, and the ammoless trap already exists.      
+        (('hit-by-bus) ;; no health trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (let ((curr-health (-> *target* fact health)))
+                (send-event *target* 'get-pickup (pickup-type health) -8.0)
+                (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+                (send-event *target* 'get-pickup (pickup-type health) curr-health)))))
+        (('rivals-of-aether) ;; ledge trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (set! (-> *collide-edge-spec* max-dir-cosa-delta) 999.0)
+              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+              (set! (-> *collide-edge-spec* max-dir-cosa-delta) 0.6))))
+        ;; <ap:note> zoomer trap doesn't work (to my knowledge)
+        (('man-in-the-mirror) ;; mirror trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (logxor! (-> *game-info* secrets) (the-as uint (/ 16 8))) ;; mirror world secret as a bitflag
+              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+              (logxor! (-> *game-info* secrets) (the-as uint (/ 16 8)))
+              )
+          ))
+        ;; <ap:todo> ammo trap, forced dark jak trap, no health trap, etc (i'm still trying to think of more to include)
+        ;; jak 2 ap traps
+        (('five-star) ;; high alert trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (stack-size-set! (-> self main-thread) 512)
+              (send-event *traffic-manager* 'set-max-alert-level 5)
+              (send-event *traffic-manager* 'set-alert-level 5)
+              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+              (send-event *traffic-manager* 'set-alert-level 0))))
+        (('russian-roulette) ;; ammo trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (stack-size-set! (-> self main-thread) 1024)
+              (let ((curr-red (-> *game-info* gun-ammo (- (pickup-type ammo-red) 13)))
+                    (curr-yellow (-> *game-info* gun-ammo (- (pickup-type ammo-yellow) 13)))
+                    (curr-blue (-> *game-info* gun-ammo (- (pickup-type ammo-blue) 13)))
+                    (curr-dark (-> *game-info* gun-ammo (- (pickup-type ammo-dark) 13))))
+                    (send-event *target* 'get-pickup (pickup-type ammo-red) -100.0)
+                    (send-event *target* 'get-pickup (pickup-type ammo-yellow) -200.0)
+                    (send-event *target* 'get-pickup (pickup-type ammo-blue) -200.0)
+                    (send-event *target* 'get-pickup (pickup-type ammo-dark) -10.0)
+                    (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+                    (send-event *target* 'get-pickup (pickup-type ammo-red) curr-red)
+                    (send-event *target* 'get-pickup (pickup-type ammo-yellow) curr-yellow)
+                    (send-event *target* 'get-pickup (pickup-type ammo-blue) curr-blue)
+                    (send-event *target* 'get-pickup (pickup-type ammo-dark) curr-dark)))))
+        (('anger-issues) ;; forced dark jak trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (send-event *target* 'change-mode 'darkjak #f (darkjak-stage force-on active))
+              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+              (while (logtest? (-> *target* control current-surface flags) (surface-flag air)) ;; if jak is in the air, wait until he lands
+                (suspend)
+              )
+              (send-event *target* 'change-mode 'normal))))
+        (('sonic-speed) ;; speed trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (update-rates! (-> *display* entity-clock) (* 60.0 (-> *display* entity-clock clock-ratio)))
+              (update-rates! (-> *display* target-clock) (* 2.0 (-> *display* target-clock clock-ratio)))
+              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+              (update-rates! (-> *display* entity-clock) (/ 60.0 (-> *display* entity-clock clock-ratio)))
+              (update-rates! (-> *display* target-clock) (/ 2.0 (-> *display* target-clock clock-ratio)))
+              )))
+        (('la-traffic) ;; slow trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (update-rates! (-> *display* entity-clock) (* 0.3 (-> *display* entity-clock clock-ratio)))
+              (update-rates! (-> *display* target-clock) (* 0.5 (-> *display* target-clock clock-ratio)))
+              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+              (update-rates! (-> *display* entity-clock) (/ 0.3 (-> *display* entity-clock clock-ratio)))
+              (update-rates! (-> *display* target-clock) (/ 0.5 (-> *display* target-clock clock-ratio))))))
+        (('hardcore) ;; hero mode trap :D
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (logxor! (-> *game-info* secrets) (game-secrets hero-mode))
+              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+              (logxor! (-> *game-info* secrets) (game-secrets hero-mode)))))
+        ))
+    (and (> (-> *ap-info-jak2* trap-duration) 0.0)
+             (task-closed? "fortress-escape-start")
+             (zero? (-> *ap-info-jak2* completed))))
+
+(defun ap-route-slums-to-port? ()
+  (or (logtest? (-> *game-info* features) (game-feature pass-red))                 ;; direct route.
+      (logtesta? (-> *game-info* features) (game-feature pass-green pass-yellow))  ;; through stadium town and farms.
+      (logtesta? (-> *game-info* features) (game-feature pass-air-train board))    ;; pumping station -> grind rails -> landing pad -> port.
+      )
+  )
+
+(defun ap-route-slums-to-stadium? ()
+  (or (logtest? (-> *game-info* features) (game-feature pass-green))                         ;; direct route.
+      (logtesta? (-> *game-info* features) (game-feature pass-red pass-yellow))              ;; through port and farms.
+      (logtesta? (-> *game-info* features) (game-feature pass-air-train board pass-yellow))  ;; pumping station + yellow pass.
+      )
+  )
+
+(defun ap-route-slums-to-market? ()
+  (or (logtesta? (-> *game-info* features) (game-feature pass-green pass-yellow))            ;; through stadium.
+      (logtesta? (-> *game-info* features) (game-feature pass-red pass-yellow))              ;; through port.
+      (logtesta? (-> *game-info* features) (game-feature pass-air-train board pass-yellow))  ;; pumping station + yellow pass.
+      )
+  )
+
+(defun ap-route-port-to-stadium? ()
+  (or (logtest? (-> *game-info* features) (game-feature pass-yellow))                        ;; direct route.
+      (logtesta? (-> *game-info* features) (game-feature pass-red pass-green))               ;; through slums.
+      (logtesta? (-> *game-info* features) (game-feature pass-air-train board pass-green))   ;; pumping station + green pass.
+      )
+  )
+
+(defun ap-route-port-to-market? ()
+  (logtest? (-> *game-info* features) (game-feature pass-yellow))  ;; there is no way into the market without yellow pass.
+  )
+
+(defun ap-route-market-to-stadium? ()
+  (logtest? (-> *game-info* features) (game-feature pass-yellow))  ;; there is no way OUT OF the market without yellow pass.
+  )
+
+(defun ap-route-slums-to-landing? ()
+  (or (logtest? (-> *game-info* features) (game-feature board))                                   ;; pumping station.
+      (logtesta? (-> *game-info* features) (game-feature pass-red pass-air-train))                ;; through port.
+      (logtesta? (-> *game-info* features) (game-feature pass-green pass-yellow pass-air-train))  ;; through stadium town and farms.
+      )
+  )
+
+(defun ap-route-slums-to-nest? ()
+  (or (logtesta? (-> *game-info* features) (game-feature board pass-air-train))                   ;; pumping station.
+      (logtesta? (-> *game-info* features) (game-feature pass-red pass-air-train))                ;; through port.
+      (logtesta? (-> *game-info* features) (game-feature pass-green pass-yellow pass-air-train))  ;; through stadium town and farms.
+      )
+  )
+
+(defun ap-setup-options! ((options ap-seed-options))
+  (ap-messenger-reset!)
+  (set! (-> *ap-settings* completion-type) (-> options completion-type))
+  (set! (-> *ap-settings* completion-value) (-> options completion-value))
+  (set! (-> *ap-settings* trap-duration) (-> options trap-duration))
+  ;; <ap:todo> do this later
+  ;; (charp<-string (-> *ap-info-jak2* slot-name) (-> options slot-name))
+  ;; (charp<-string (-> *ap-info-jak2* slot-seed) (-> options slot-seed))
+  #t)
+
+(defun ap-settings-update ()
+  ;; <ap:todo> deathlink will come later, leave it out for now
+  (set! (-> *ap-info-jak2* deathlink-enabled) (if (-> *ap-settings* deathlink?) 1 0))
+  (set! (-> *ap-info-jak2* trap-duration) (-> *ap-settings* trap-duration))
+  (set! (-> *ap-info-jak2* completion-goal-type) (the-as ap-completion-type (-> *ap-settings* completion-type)))
+  (set! (-> *ap-info-jak2* completion-goal-value) (-> *ap-settings* completion-value))
+  (none)
+)

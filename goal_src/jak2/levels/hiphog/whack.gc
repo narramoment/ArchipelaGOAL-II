@@ -2052,6 +2052,9 @@
          v0-0
          )
        )
+      (('deathlink)
+       (go-virtual lose)
+       )
       )
     )
   :enter (behavior ((arg0 symbol))

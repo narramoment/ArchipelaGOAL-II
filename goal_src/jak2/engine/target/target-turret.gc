@@ -1103,6 +1103,10 @@
            )
          )
        )
+      ;; <ap:note> is not being reached(?)
+      (('deathlink)
+       (set! (-> self health) 0.0)
+       )
       (else
         (turret-handler proc argc message block)
         )

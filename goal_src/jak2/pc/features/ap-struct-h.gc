@@ -73,7 +73,7 @@
 (define-extern ap-item-received! (function symbol symbol))
 
 ;; <ap:note> deathlink will come later, leave out for now
-;; (define-extern ap-deathlink-received! (function symbol symbol))
+(define-extern ap-deathlink-received! (function symbol symbol))
 
 (define-extern ap-trap-received! (function symbol symbol))
 

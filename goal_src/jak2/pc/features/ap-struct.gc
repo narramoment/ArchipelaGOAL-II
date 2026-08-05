@@ -1,8 +1,6 @@
 ;;-*-Lisp-*-
 (in-package goal)
 
-;; <ap:note> PLEASE COME BACK TO THIS LATER
-;; (define-extern *ap-onin-game* handle)
 
 (define *ap-info-jak2* (new 'static 'ap-info-jak2))
 (pc-get-archipelago-struct)
@@ -16,7 +14,7 @@
 ;; ****************************************************************************
 ;; **** This number must match expected_memory_version in MemoryReader.py! ****
 ;; ****************************************************************************
-(set! (-> *ap-info-jak2* version) 4)
+(set! (-> *ap-info-jak2* version) 5)
 
 (defun ap-mission-checked! ((mission-id uint))
   (format 0 "~%~%*************************************************~%")
@@ -333,20 +331,34 @@
   )
 
 ;; <ap:todo> deathlink will come later, leave this out for now (PLEASE COME BACK TO TEST THIS LATER)
-#|
+
+(defun ap-normal-death! ((chosen-death symbol))
+  (send-event *target*
+              'attack
+              #f
+              (static-attack-info
+               ((deathlink-death #t)
+                (mode chosen-death)
+                (vector (new 'static 'vector :y (meters 1) :w 1.0))
+                (angle 'up)
+                (control 1.0)))))
+
 (defun ap-deathlink-received! ((chosen-death symbol))
+  (let ((manager
+         (handle->process
+          (-> (-> (-> *game-info*
+                      sub-task-list
+                      (game-task-node city-play-onin-game-resolution))
+                  info)
+              manager))))
+    (if manager
+        (let ((onin (ppointer->process (-> (the task-manager manager) child))))
+          (if onin
+              (send-event onin 'deathlink)
+              (ap-normal-death! chosen-death)))
+        (ap-normal-death! chosen-death)))
+  #t)
 
-  (let ((onin-npc (process-by-ename "onin-npc-1")))
-
-    (format #t "ONIN NPC: ~A\n" onin-npc)
-
-    (if onin-npc
-        (let ((child (-> onin-npc child)))
-          (format #t "ONIN CHILD: ~A\n" child))
-        )
-
-    #t))
-|#
 (defun ap-trap-received! ((trap symbol))
   (when (and (> (-> *ap-info-jak2* trap-duration) 0.0)
              (task-closed? "fortress-escape-start")

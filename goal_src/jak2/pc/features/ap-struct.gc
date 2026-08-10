@@ -3,6 +3,7 @@
 
 
 (define *ap-info-jak2* (new 'static 'ap-info-jak2))
+(define-extern ap-messenger-reset! (function none))
 (pc-get-archipelago-struct)
 
 ;; Initialize connection status to default (0)
@@ -332,8 +333,10 @@
 
 ;; <ap:todo> deathlink will come later, leave this out for now (PLEASE COME BACK TO TEST THIS LATER)
 (defun ap-deathlink-received! ((chosen-death symbol))
-  (inspect (the-as turret-info (-> (the-as target *target*) turret)))
   (cond
+    ((and *target*
+          (= (-> (the-as target *target*) state name) 'target-turret-stance))
+          (send-event (handle->process (-> (the-as target *target*) turret handle)) 'deathlink))
     ((and *target*
         (= (send-event *target* 'query 'mode) 'mech))
           (send-event *target* 'deathlink))
@@ -618,6 +621,7 @@
   )
 
 (defun ap-setup-options! ((options ap-seed-options))
+  (ap-messenger-reset!)
   (set! (-> *ap-settings* completion-type) (-> options completion-type))
   (set! (-> *ap-settings* completion-value) (-> options completion-value))
   (set! (-> *ap-settings* trap-duration) (-> options trap-duration))

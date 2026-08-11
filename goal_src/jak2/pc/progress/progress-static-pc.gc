@@ -489,7 +489,7 @@ This gives us more freedom to write code how we want.
      (archipelagoal-ii-item-tracker)
      (archipelagoal-ii-traps)
      ;; <ap:todo> deathlink will come later, leave out for now
-    (archipelagoal-ii-deathlink)
+     (archipelagoal-ii-deathlink)
      )
   )
 

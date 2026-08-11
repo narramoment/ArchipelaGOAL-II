@@ -1247,7 +1247,7 @@
                   )
                 )
               )
-             (('instant-death 'smush 'tomb-spider 'bot)
+             (('instant-death 'smush 'tomb-spider 'bot 'death)
               (pickup-collectable! (-> self fact) (pickup-type health) -1000.0 (the-as handle #f))
               (if (= (-> self game mode) 'play)
                   (go target-indax-death (-> gp-0 mode))

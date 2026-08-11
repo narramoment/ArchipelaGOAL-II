@@ -334,13 +334,15 @@
 ;; <ap:todo> deathlink will come later, leave this out for now (PLEASE COME BACK TO TEST THIS LATER)
 (defun ap-deathlink-received! ((chosen-death symbol))
   (cond
+    ;; check if jak is in a turret
     ((and *target*
           (= (-> (the-as target *target*) state name) 'target-turret-stance))
-          (send-event (handle->process (-> (the-as target *target*) turret handle)) 'deathlink))
+          (send-event (handle->process (send-event *target* 'get-turret)) 'deathlink))
+    ;; check if jak is in a mech
     ((and *target*
         (= (send-event *target* 'query 'mode) 'mech))
           (send-event *target* 'deathlink))
-    ;; <ap:todo> configure a hotfix for being in the mech
+    ;; otherwise, move to minigames
     (else
      (let ((onin-manager
             (handle->process
@@ -357,20 +359,21 @@
                      info)
                  manager))))
        (cond
+       ;; check if jak is playing onin's game
          (onin-manager
           (let ((onin
                  (ppointer->process
                   (-> (the task-manager onin-manager) child))))
             (when onin
               (send-event onin 'deathlink))))
-         
+       ;; check if jak is playing whack-a-metal 
          (whack-manager
           (let ((whack
                  (ppointer->process
                   (-> (the task-manager whack-manager) child))))
             (when whack
               (send-event whack 'deathlink))))
-         
+       ;; otherwise, just kill jak  
          (else
           (send-event
            *target*

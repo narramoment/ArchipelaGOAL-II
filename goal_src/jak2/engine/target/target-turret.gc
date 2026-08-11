@@ -2025,6 +2025,9 @@
 (defstate target-turret-stance (target)
   :event (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
     (case message
+      (('get-turret)
+       (-> self turret handle)
+       )
       (('change-mode)
        (case (-> block param 0)
          (('grab)

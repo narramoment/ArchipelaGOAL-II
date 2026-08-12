@@ -2084,6 +2084,8 @@
             (cond
               ((= (-> self game mode) 'play)
                (send-event (handle->process (-> self turret handle)) 'trans (-> self control trans))
+               (when (zero? (-> (the-as attack-info gp-0) deathlink-death))
+                 (runs-on-jak-death 'turret))
                (go target-death 'turret)
                #t
                )
@@ -2108,6 +2110,8 @@
                 )
               (combine! a0-22 (the-as attack-info gp-0) self)
               )
+            (when (zero? (-> (the-as attack-info gp-0) deathlink-death))
+              (runs-on-jak-death 'bot))
             (go target-death 'bot)
             )
            )

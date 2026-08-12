@@ -29,6 +29,7 @@
 (define-extern target-indax-hit-setup-anim (function attack-info none :behavior target))
 (define-extern target-indax-hit (state symbol attack-info target))
 (define-extern target-indax-death (state symbol target))
+(define-extern runs-on-jak-death (function symbol none))
 
 ;; DECOMP BEGINS
 
@@ -1243,12 +1244,16 @@
                  )
                 (else
                   (pickup-collectable! (-> self fact) (pickup-type health) -1000.0 (the-as handle #f))
+                  (when (zero? (-> arg1 deathlink-death))
+                    (runs-on-jak-death 'endlessfall))
                   (go target-indax-death (-> gp-0 mode))
                   )
                 )
               )
              (('instant-death 'smush 'tomb-spider 'bot 'death)
               (pickup-collectable! (-> self fact) (pickup-type health) -1000.0 (the-as handle #f))
+              (when (zero? (-> arg1 deathlink-death))
+                (runs-on-jak-death (-> gp-0 mode)))
               (if (= (-> self game mode) 'play)
                   (go target-indax-death (-> gp-0 mode))
                   )
@@ -1272,7 +1277,11 @@
         (target-hit-move gp-0 (target-hit-orient gp-0 s5-0) target-falling-anim-trans 1.0)
         )
       (if (and (= (-> self game mode) 'play) (>= 0.0 (-> self fact health)))
-          (go target-indax-death (-> gp-0 mode))
+          (begin
+            (when (zero? (-> arg1 deathlink-death))
+              (runs-on-jak-death (-> gp-0 mode)))
+            (go target-indax-death (-> gp-0 mode))
+            )
           )
       )
     (go target-indax-hit-ground #f)
@@ -1287,9 +1296,6 @@
     (target-indax-exit)
     )
   :trans (-> target-indax-hit trans)
-  :enter (behavior ((arg0 symbol))
-          (runs-on-jak-death arg0)
-          )
   :code (behavior ((arg0 symbol))
     (set! (-> self control unknown-word04) (the-as uint #f))
     (set! (-> self control did-move-to-pole-or-max-jump-height)

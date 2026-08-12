@@ -8,11 +8,11 @@
 (define-extern intro-play (function none))
 (define-extern find-nearest-entity (function vector type entity))
 (define-extern warp-gate type)
-(define-extern runs-on-jak-death (function symbol none))
 
 ;; DECOMP BEGINS
 
 (define *auto-continue* #f)
+(define-extern runs-on-jak-death (function symbol none))
 
 ;; WARN: Return type mismatch object vs continue-point.
 (defun next-continue ((arg0 continue-point))
@@ -998,12 +998,18 @@
                  )
                 (else
                   (pickup-collectable! (-> self fact) (pickup-type health) -1000.0 (the-as handle #f))
+                  (when (zero? (-> arg1 deathlink-death))
+                    (runs-on-jak-death 'endlessfall)
+                    )
                   (go target-death (-> sv-32 mode))
                   )
                 )
               )
              (('lava 'melt)
               (pickup-collectable! (-> self fact) (pickup-type health) -1000.0 (the-as handle #f))
+              (when (zero? (-> arg1 deathlink-death))
+                (runs-on-jak-death 'lava)
+                )
               (part-tracker-spawn :to *entity-pool* :group group-lava-death :mat-joint (-> self control trans))
               (set! (-> sv-32 angle) 'lava)
               (set! (-> sv-32 shove-up) 20480.0)
@@ -1021,6 +1027,8 @@
                 'big-explosion
                 )
               (pickup-collectable! (-> self fact) (pickup-type health) -1000.0 (the-as handle #f))
+              (when (and (= (-> self game mode) 'play) (zero? (-> arg1 deathlink-death)))
+                (runs-on-jak-death (-> sv-32 mode)))
               (if (= (-> self game mode) 'play)
                   (go target-death (-> sv-32 mode))
                   )
@@ -1028,7 +1036,11 @@
              (('explode)
               (pickup-collectable! (-> self fact) (pickup-type health) (- (-> sv-32 damage)) (the-as handle #f))
               (if (and (= (-> self game mode) 'play) (>= 0.0 (-> self fact health)))
-                  (go target-death (-> sv-32 mode))
+                  (begin
+                    (when (zero? (-> arg1 deathlink-death))
+                      (runs-on-jak-death 'explode))
+                    (go target-death (-> sv-32 mode))
+                    )
                   )
               )
              (('smush)
@@ -1174,6 +1186,8 @@
           (go target-darkjak-get-off)
           )
       (if (and (= (-> self game mode) 'play) (>= 0.0 (-> self fact health)))
+          (when (zero? (-> arg1 deathlink-death))
+            (runs-on-jak-death (-> sv-32 mode)))
           (go target-death (-> sv-32 mode))
           )
       )
@@ -1461,9 +1475,6 @@
     (set-vector! (-> self draw color-mult) 1.0 1.0 1.0 1.0)
     )
   :trans (-> target-hit trans)
-  :enter (behavior ((arg0 symbol))
-          (runs-on-jak-death arg0)
-          )
   :code (behavior ((arg0 symbol))
     (set! (-> self control unknown-word04) (the-as uint #f))
     (set! (-> self control did-move-to-pole-or-max-jump-height)

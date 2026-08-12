@@ -696,6 +696,7 @@
       )
 
     (defun runs-on-jak-death ((death-event symbol))
+      (format 0 "runs-on-jak-death called with: ~A~%" death-event)
       ;; <ap:todo> deathlink will come later, leave it out for now
       (when (-> *ap-settings* deathlink?)
         (case death-event
@@ -707,79 +708,79 @@
             )
           (('bot) ;; does not kill
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 5))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+            (+! (-> *ap-info-jak2* death-count) 1)
           )
           (('centipede) ;; does not kill
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 6))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))    
+            (+! (-> *ap-info-jak2* death-count) 1)    
           )
           (('endlessfall) ;; kills
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 7))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))    
+            (+! (-> *ap-info-jak2* death-count) 1)    
           )
           (('instant-death) ;; kills
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 8))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))    
+            (+! (-> *ap-info-jak2* death-count) 1)    
           )
           (('lava) ;; kills
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 9))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))    
+            (+! (-> *ap-info-jak2* death-count) 1)    
           )
           (('melt) ;; kills
-            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 10))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))    
+            (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 00))
+            (+! (-> *ap-info-jak2* death-count) 1)    
           )
           (('explode) ;; does not kill
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 11))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))    
+            (+! (-> *ap-info-jak2* death-count) 1)   
           )
           (('big-explosion) ;; kills
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 12))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))    
+            (+! (-> *ap-info-jak2* death-count) 1)
           )
           (('turret) ;; kills
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 13))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))    
+            (+! (-> *ap-info-jak2* death-count) 1)   
           )
           (('smush) ;; does not kill
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 14))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+            (+! (-> *ap-info-jak2* death-count) 1)
           )
           (('attack) ;; does not kill
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 15))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+            (+! (-> *ap-info-jak2* death-count) 1)
           )
           (('shock) ;; does not kill
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 16))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+            (+! (-> *ap-info-jak2* death-count) 1)
           )
           (('crush) ;; does not kill
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 17))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+            (+! (-> *ap-info-jak2* death-count) 1)
           )
           (('death) ;; kills
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 18))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+            (+! (-> *ap-info-jak2* death-count) 1)
           )
           (('grenade) ;; kills
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 19))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+            (+! (-> *ap-info-jak2* death-count) 1)
           )
           (('drown-death) ;; kills
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 20))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+            (+! (-> *ap-info-jak2* death-count) 1)
           )
           (('burn) ;; does not kill
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 21))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+            (+! (-> *ap-info-jak2* death-count) 1)
           )
           (('burnup) ;; does not kill
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 22))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+            (+! (-> *ap-info-jak2* death-count) 1)
           )
-          (('fail-continue) ;; does not kill
+          (('dark-eco-pool)
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 23))
-            (+! (-> *ap-info-jak2* death-count) (the-as uint 1))
+            (+! (-> *ap-info-jak2* death-count) 1)
           )
         )
       )

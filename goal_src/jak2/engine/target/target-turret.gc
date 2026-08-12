@@ -1103,7 +1103,6 @@
            )
          )
        )
-      ;; <ap:note> is not being reached(?)
       (('deathlink)
        (set! (-> self health) 0.0)
        )

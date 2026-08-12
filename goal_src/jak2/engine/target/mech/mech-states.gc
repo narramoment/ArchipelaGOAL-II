@@ -979,6 +979,8 @@
                )
               (else
                 (pickup-collectable! (-> self fact) (pickup-type health) -1000.0 (the-as handle #f))
+                (when (zero? (-> arg1 deathlink-death))
+                  (runs-on-jak-death 'endlessfall))
                 (go target-mech-death (-> gp-0 mode))
                 )
               )
@@ -986,6 +988,8 @@
            )
          (target-hit-effect gp-0)
          (pickup-collectable! (-> self fact) (pickup-type health) -1000.0 (the-as handle #f))
+         (when (zero? (-> arg1 deathlink-death))
+          (runs-on-jak-death (-> gp-0 mode)))
          (go target-mech-death (-> gp-0 mode))
          )
         (else
@@ -1030,8 +1034,7 @@
   :enter (behavior ((arg0 symbol))
   (when (= arg0 'deathlink)
     (set! (-> self attack-info attacker) (the-as handle #f))
-    )
-  (runs-on-jak-death arg0))
+    ))
   :code (behavior ((arg0 symbol))
     (set! (-> self mech stick-off) (the-as basic #t))
     (set! (-> self control unknown-word04) (the-as uint #f))

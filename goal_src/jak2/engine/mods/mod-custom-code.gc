@@ -439,25 +439,6 @@
           )
        )
 
-      ;; tomb
-      (let ((cty-tomb-out-door (entity-by-name "com-airlock-outer-22")))
-        (when cty-tomb-out-door
-          (set! (cdr (res-lump-struct cty-tomb-out-door 'on-notice pair))
-            '(((or (task-closed? "tomb-poles-introduction")
-                   (task-closed? "tomb-poles-poles")
-                   (task-closed? "tomb-poles-poles2")
-                   (task-closed? "tomb-poles-boulder")
-                   (task-closed? "tomb-poles-block")
-                   (task-closed? "tomb-water-vibe")
-                   (task-closed? "tomb-water-resolution")
-                   (task-closed? "tomb-boss-torches")
-                   (task-closed? "tomb-boss-door")
-                   (task-closed? "tomb-boss-introduction")
-                   (task-closed? "tomb-boss-resolution"))
-              '(tombd)))
-           )
-         )
-       )
 
       ;; hiphog (affects gungame, under)
       (let ((cty-hh-out-door (entity-by-name "hip-door-a-6"))

@@ -496,7 +496,6 @@
      )
     (else
       (case arg2
-        ;;<ap:note> using the function while in the turrent can reach this event, but it returns #f... or it returns #t, but doesn't kill.
         (('deathlink)
           (go target-mech-death 'deathlink)
          )

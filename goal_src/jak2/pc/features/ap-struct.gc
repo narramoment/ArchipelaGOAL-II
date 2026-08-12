@@ -4,6 +4,7 @@
 
 (define *ap-info-jak2* (new 'static 'ap-info-jak2))
 (define-extern ap-messenger-reset! (function none))
+(define-extern *ap-reverse-controls* symbol)
 (pc-get-archipelago-struct)
 
 ;; Initialize connection status to default (0)
@@ -545,29 +546,18 @@
                 (suspend)
               )
               (send-event *target* 'change-mode 'normal))))
-        (('sonic-speed) ;; speed trap
-          (process-spawn-function process
-            (lambda :behavior process ()
-              (update-rates! (-> *display* entity-clock) (* 60.0 (-> *display* entity-clock clock-ratio)))
-              (update-rates! (-> *display* target-clock) (* 2.0 (-> *display* target-clock clock-ratio)))
-              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
-              (update-rates! (-> *display* entity-clock) (/ 60.0 (-> *display* entity-clock clock-ratio)))
-              (update-rates! (-> *display* target-clock) (/ 2.0 (-> *display* target-clock clock-ratio)))
-              )))
-        (('la-traffic) ;; slow trap
-          (process-spawn-function process
-            (lambda :behavior process ()
-              (update-rates! (-> *display* entity-clock) (* 0.3 (-> *display* entity-clock clock-ratio)))
-              (update-rates! (-> *display* target-clock) (* 0.5 (-> *display* target-clock clock-ratio)))
-              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
-              (update-rates! (-> *display* entity-clock) (/ 0.3 (-> *display* entity-clock clock-ratio)))
-              (update-rates! (-> *display* target-clock) (/ 0.5 (-> *display* target-clock clock-ratio))))))
         (('hardcore) ;; hero mode trap :D
           (process-spawn-function process
             (lambda :behavior process ()
               (logxor! (-> *game-info* secrets) (game-secrets hero-mode))
               (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
               (logxor! (-> *game-info* secrets) (game-secrets hero-mode)))))
+        (('turn-right-to-go-left) ;; reverse controls trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (set! *ap-reverse-controls* #t)
+              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+              (set! *ap-reverse-controls* #f))))
         ))
     (and (> (-> *ap-info-jak2* trap-duration) 0.0)
              (task-closed? "fortress-escape-start")

@@ -759,7 +759,7 @@
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 22))
             (+! (-> *ap-info-jak2* death-count) 1)
           )
-          (('dark-eco-pool)
+          (('dark-eco-pool) ;; kills
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 23))
             (+! (-> *ap-info-jak2* death-count) 1)
           )

@@ -20,6 +20,10 @@
     ;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Begin function defintions.
     ;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(when *display-sha*
+  (set! *display-sha* #f))
+
 ;; AP Messenger Code :)
 (deftype ap-message (structure)
   ((verb        string)

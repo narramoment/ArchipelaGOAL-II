@@ -929,6 +929,10 @@
   (burningbush-incoming-call #x2163)
 
   (progress-menu-trap-duration #x2164)
+
+  (progress-menu-ap-item-show-hide #x2165)
+  (progress-menu-ap-show #x2166)
+  (progress-menu-ap-hide #x2167)
   
   ;; destination names text
   (caspad-name #x10000)

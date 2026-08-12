@@ -490,6 +490,7 @@ This gives us more freedom to write code how we want.
      (archipelagoal-ii-traps)
      ;; <ap:todo> deathlink will come later, leave out for now
      (archipelagoal-ii-deathlink)
+     (archipelagoal-ii-item-messenger)
      )
   )
 
@@ -721,6 +722,16 @@ This gives us more freedom to write code how we want.
     :get-value-fn (lambda () (-> *ap-settings* deathlink?))
     :on-confirm (lambda ((val symbol))
       (set! (-> *ap-settings* deathlink?) val)
+      (ap-settings-update))))
+
+(defmacro archipelagoal-ii-item-messenger ()
+  '(new 'static 'menu-generic-boolean-option
+    :name (text-id progress-menu-ap-item-show-hide)
+    :truthy-text (text-id progress-menu-ap-show)
+    :falsey-text (text-id progress-menu-ap-hide)
+    :get-value-fn (lambda () (-> *ap-settings* item-messages?))
+    :on-confirm (lambda ((val symbol))
+      (set! (-> *ap-settings* item-messages?) val)
       (ap-settings-update))))
 
 (defmacro misc-options-pc-discord-rpc ()

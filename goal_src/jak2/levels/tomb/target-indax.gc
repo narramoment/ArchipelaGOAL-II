@@ -129,7 +129,7 @@
                                                 )
                          )
                     )
-           (mem-copy! (the-as pointer (-> self attack-info-rec)) (the-as pointer (-> arg3 param 1)) 160)
+           (mem-copy! (the-as pointer (-> self attack-info-rec)) (the-as pointer (-> arg3 param 1)) 172)
            (when (not (logtest? (-> self attack-info-rec mask) (attack-mask attacker)))
              (set! (-> self attack-info-rec attacker) (process->handle arg0))
              (logior! (-> self attack-info-rec mask) (attack-mask attacker))

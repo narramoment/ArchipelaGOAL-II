@@ -923,16 +923,23 @@
   (ap-filler-ammo-dark #x2159)
 
   (progress-menu-deathlink #x2160)
-  (progress-menu-enabled #x2161)
-  (progress-menu-disabled #x2162)
   
-  (burningbush-incoming-call #x2163)
+  (burningbush-incoming-call #x2161)
 
-  (progress-menu-trap-duration #x2164)
+  (progress-menu-trap-duration #x2162)
 
-  (progress-menu-ap-item-show-hide #x2165)
-  (progress-menu-ap-show #x2166)
-  (progress-menu-ap-hide #x2167)
+  (progress-menu-ap-item-show-hide #x2163)
+
+  (progress-menu-seed-options #x2164)
+  (progress-menu-completion-type #x2165)
+  (progress-menu-completion-type-mission-count #x2166)
+  (progress-menu-completion-type-specific-mission #x2167)
+  (progress-menu-completion-value #x2168)
+  (progress-menu-completion-specific-mission #x2169)
+  (progress-menu-mission-palace-boss #x2170)
+  (progress-menu-mission-unlock-tomb #x2171)
+  (progress-menu-mission-tomb-boss #x2172)
+  (progress-menu-mission-nest-boss #x2173)
   
   ;; destination names text
   (caspad-name #x10000)

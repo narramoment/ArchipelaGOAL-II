@@ -969,6 +969,9 @@
     ;; file contents
     (format file "  (deathlink? ~A)~%" (-> obj deathlink?))
     (format file "  (item-messages? ~A)~%" (-> obj item-messages?))
+    (format file "  (completion-type ~D)~%" (-> obj completion-type))
+    (format file "  (completion-value ~D)~%" (-> obj completion-value))
+    (format file "  (completion-mission-count ~D)~%" (-> obj completion-mission-count))
       ;; slot info entry contents
     ;;  (format file "  (slot-info-~D-name ~A)~%" i (the-as string (-> obj slot-info i name)))
     ;;  (format file "  (slot-info-~D-seed ~A)~%" i (the-as string (-> obj slot-info i seed))))
@@ -1006,6 +1009,9 @@
             (case-str *pc-temp-string*
               (("deathlink?") (set! (-> obj deathlink?) (file-stream-read-symbol file)))
               (("item-messages?") (set! (-> obj item-messages?) (file-stream-read-symbol file)))
+              (("completion-type") (set! (-> obj completion-type) (the-as uint8 (file-stream-read-int file))))
+              (("completion-value") (set! (-> obj completion-value) (the-as uint8 (file-stream-read-int file))))
+              (("completion-mission-count") (set! (-> obj completion-mission-count) (the-as uint8 (file-stream-read-int file))))
               ))))))
     (inspect file)
     (file-stream-close file))

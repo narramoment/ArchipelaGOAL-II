@@ -22,11 +22,12 @@
 ;; Holds what the user has chosen for their seed options.
 (deftype ap-seed-options (structure)
   (
-    (slot-name            string)
-    (slot-seed            string)
-    (trap-duration        float)
-    (completion-type      uint8)
-    (completion-value     uint8)
+    (slot-name                       string)
+    (slot-seed                       string)
+    (trap-duration                   float)
+    (completion-type                 uint8)
+    (completion-value                uint8)
+    (completion-mission-count        uint8)
     ))
 
 (deftype ap-info-jak2 (structure)

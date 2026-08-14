@@ -17,7 +17,23 @@
 ;; **** This number must match expected_memory_version in MemoryReader.py! ****
 ;; ****************************************************************************
 (set! (-> *ap-info-jak2* version) 5)
+;; <ap:preserve-this> autosave timer for preventing progress loss on life resets
+(define *ap-autosave-timer* (the time-frame 0))
 
+;; <ap:preserve-this> guard flag to prevent multiple simultaneous saves
+(define *ap-auto-saving?* #f)
+
+;; <ap:preserve-this> auto save function using the official save mechanism
+(defun ap-auto-save! ()
+  (when (not *ap-auto-saving?*)
+    (process-spawn-function process
+      (lambda :behavior process ()
+        (true! *ap-auto-saving?*)
+        (auto-save-command 'auto-save 0 0 *default-pool* #f)
+        (suspend-for (seconds 1))
+        (false! *ap-auto-saving?*))))
+  *ap-auto-saving?*)
+  
 (defun ap-mission-checked! ((mission-id uint))
   (format 0 "~%~%*************************************************~%")
   (format 0 "*** ARCHIPELAGO MISSION COMPLETION DETECTED ***~%")
@@ -615,6 +631,8 @@
 
 (defun ap-setup-options! ((options ap-seed-options))
   (ap-messenger-reset!)
+  (set! (-> *ap-info-jak2* needs-item-replay) (the-as uint8 0))
+  (set! (-> *ap-info-jak2* initial-replay-done) (the-as uint8 0))
   (set! (-> *ap-settings* completion-type) (-> options completion-type))
   (set! (-> *ap-settings* completion-value) (-> options completion-value))
   (set! (-> *ap-settings* completion-mission-count) (-> options completion-mission-count))
@@ -626,7 +644,6 @@
   #t)
 
 (defun ap-settings-update ()
-  ;; <ap:todo> deathlink will come later, leave it out for now
   (set! (-> *ap-info-jak2* deathlink-enabled) (if (-> *ap-settings* deathlink?) 1 0))
   (set! (-> *ap-info-jak2* trap-duration) (-> *ap-settings* trap-duration))
   (set! (-> *ap-info-jak2* completion-goal-type) (the-as ap-completion-type (-> *ap-settings* completion-type)))
@@ -636,5 +653,13 @@
       (-> *ap-settings* completion-value)
       )
     )
+  ;; <ap:preserve-this> autosave every 30 seconds to prevent progress loss on life resets
+  (when (and *game-info*
+             *target*
+             (not (movie?))
+             (not *progress-process*)
+             (time-elapsed? *ap-autosave-timer* (seconds 30)))
+    (set! *ap-autosave-timer* (current-time))
+    (ap-auto-save!))
   (none)
 )

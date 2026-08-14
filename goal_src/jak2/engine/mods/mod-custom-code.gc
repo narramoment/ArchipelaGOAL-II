@@ -670,9 +670,11 @@
       (none)
       )
 
-    (defun runs-on-jak-spawn ()
+(defun runs-on-jak-spawn ()
       ;; Code here runs every time jak spawns (loading a file new game or death)   
-
+      (when (zero? (-> *ap-info-jak2* initial-replay-done))
+        (set! (-> *ap-info-jak2* needs-item-replay) (the-as uint8 1))
+        (set! (-> *ap-info-jak2* initial-replay-done) (the-as uint8 1)))
       (none)
       )
 

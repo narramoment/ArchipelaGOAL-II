@@ -1746,7 +1746,7 @@
                   (set! (-> a1-0 num-params) 2)
                   (set! (-> a1-0 message) 'attack-invinc)
                   (set! (-> a1-0 param 0) (the-as uint #f))
-                  (set! (-> a1-0 param 1) (the-as uint (static-attack-info ((id (new-attack-id)) (mode 'bot)))))
+                  (set! (-> a1-0 param 1) (the-as uint (static-attack-info ((id (new-attack-id)) (mode 'bot) (deathlink-death #t)))))
                   (not (or (send-event-function *target* a1-0) (and *target* (focus-test? *target* dead))))
                   )
                 )

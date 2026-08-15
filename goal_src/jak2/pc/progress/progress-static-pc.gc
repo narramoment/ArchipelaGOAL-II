@@ -769,7 +769,7 @@ This gives us more freedom to write code how we want.
     :name (text-id progress-menu-completion-value)
     :should-disable? (lambda () (= (-> *ap-settings* completion-type) 1))
     :min-value 0.0
-    :max-value 97.0
+    :max-value 92.0
     :step 1.0
     :show-decimal? #f
     :get-value-fn (lambda () (the float (-> *ap-settings* completion-mission-count)))

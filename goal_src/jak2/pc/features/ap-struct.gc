@@ -344,11 +344,126 @@
       (send-event *target* 'get-pickup (pickup-type ammo-dark) 1.0)
      )
     )
-  ;; (auto-save-command 'save 0 0 *default-pool* #f) ;; <ap:todo> Fails compilation because ap-struct declared too early. Any way to fix this?
+  (ap-auto-save!)
   #t
   )
 
-;; <ap:todo> deathlink will come later, leave this out for now (PLEASE COME BACK TO TEST THIS LATER)
+(defun ap-item-checked! ((item uint))
+  (set! (-> *ap-info-jak2* items-checked (-> *ap-info-jak2* next-item-index)) item)
+  (+! (-> *ap-info-jak2* next-item-index) 1.0)
+  )
+
+(defun ap-item-checked? ((item symbol))
+  (case item ;; sorted by chronological progression
+    (('darkjak) ;; dark jak
+      (task-node-closed? (game-task-node city-help-kid-resolution))
+      )
+    (('pass-red) ;; red security pass
+      (task-node-closed? (game-task-node fortress-dump-deal))
+      )
+    (('gun-red) ;; scatter gun
+      (task-node-closed? (game-task-node city-krew-delivery-resolution))
+      )
+    (('gun-yellow) ;; blaster
+      (task-node-closed? (game-task-node sewer-enemy-resolution))
+      )
+    (('lens)
+      (task-node-closed? (game-task-node mountain-lens-resolution))
+      )
+    (('gear)
+      (task-node-closed? (game-task-node mountain-gear-resolution))
+      )
+    (('shard)
+      (task-node-closed? (game-task-node mountain-shard-resolution))
+      )
+    (('gun-turret) ;; gunpod
+      (or (task-node-closed? (game-task-node drill-eggs-eggs-0))
+          (task-node-closed? (game-task-node drill-ship-resolution)))
+      )
+    (('pass-yellow) ;; yellow security pass
+      (task-node-closed? (game-task-node atoll-battle-resolution))
+      )
+    (('pass-green) ;; green security pass
+      (task-node-closed? (game-task-node city-keira-delivery-introduction))
+      )
+    (('gun-upgrade-speed) ;; fire rate upgrade
+      (task-node-closed? (game-task-node city-krew-collection-resolution))
+      )
+    (('pass-air-train) ;; air train pass
+      (or (task-node-closed? (game-task-node city-escort-kid-resolution))
+          (task-node-closed? (game-task-node dig-find-totem-introduction)))
+      )
+    (('gun-blue) ;; vulcan fury
+      (task-node-closed? (game-task-node ruins-enemy-introduction))
+      )
+    (('board) ;; jet-board
+      (task-node-closed? (game-task-node forest-scouts-get-board))
+      )
+    (('seal-piece-1) ;; water slums seal piece
+      (task-node-closed? (game-task-node city-protect-water-slums-get-seal))
+      )
+    (('seal-piece-2) ;; dig seal piece
+      (task-node-closed? (game-task-node dig-find-totem-resolution))
+      )
+    (('seal-piece-3) ;; onin's seal piece
+      (task-node-closed? (game-task-node city-play-onin-game-resolution))
+      )
+    (('ruby-key) ;; ruby key
+      (task-node-closed? (game-task-node sewer-board-resolution))
+      )
+    (('gun-upgrade-ammo) ;; ammo capacity upgrade
+      (task-node-closed? (game-task-node city-meet-brutter-pre-intro))
+      )
+    (('gun-dark) ;; peacemaker
+      (task-node-closed? (game-task-node sewer-escort-get-gun))
+      )
+    (('titan-suit) ;; titan suit
+      (or (task-node-closed? (game-task-node ruins-mech-introduction))
+          (task-node-closed? (game-task-node drill-mech-introduction))
+          (task-node-closed? (game-task-node under-mech-introduction)))
+      )
+    (('life-seed) ;; life seed
+      (task-node-closed? (game-task-node ruins-mech-resolution))
+      )
+    (('pass-purple) ;; purple security pass
+      (task-node-closed? (game-task-node stadium-race-class1-resolution))
+      )
+    (('pass-black)
+      (task-node-closed? (game-task-node palace-sneak-in-meeting))
+      )
+    (('gun-upgrade-damage) ;; damage upgrade
+      (task-node-closed? (game-task-node castle-boss-introduction))
+      )
+    (('heart-of-mar) ;; heart of mar
+      (task-node-closed? (game-task-node castle-boss-resolution))
+      )
+    (('time-map) ;; time map
+      (task-node-closed? (game-task-node city-whack-resolution))
+      )
+    (('rift-rider) ;; rift rider
+      (task-node-closed? (game-task-node city-defend-stadium-resolution))
+      )
+    (('precursor-stone) ;; precursor stone
+      (task-node-closed? (game-task-node consite-find-baron-resolution))
+      )
+    (('darkjak-bomb0) ;; dark bomb
+      (task-node-closed? (game-task-node city-oracle-level0))
+      )
+    (('darkjak-bomb1) ;; dark blast
+      (task-node-closed? (game-task-node city-oracle-level1))
+      )
+    (('darkjak-invinc) ;; dark invincibility
+      (task-node-closed? (game-task-node city-oracle-level2))
+      )
+    (('darkjak-giant) ;; dark giant
+      (task-node-closed? (game-task-node city-oracle-level3))
+      )
+    (else ;; default case
+      #f
+      )
+    )
+  )
+
 (defun ap-deathlink-received! ((chosen-death symbol))
   (cond
     ;; check if jak is in a turret

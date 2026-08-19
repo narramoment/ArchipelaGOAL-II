@@ -41,6 +41,10 @@
     (missions-checked                uint32 75)
     (side-missions-checked           uint32 35)
 
+    ;; Item Information
+    (next-item-index                 uint)
+    (items-checked                   uint32 35) ;; not all 35 are used, but it's nice to have wiggle room
+
     ;; Connection Status
     (connection-status               ap-connection-status)
     (slot-name                       uint8 16)
@@ -75,7 +79,9 @@
 
 (define-extern ap-verify-game-completed! (function uint symbol))
 
-(define-extern ap-item-received! (function symbol symbol))
+(define-extern ap-item-checked? (function symbol symbol))
+
+(define-extern ap-item-checked! (function symbol uint))
 
 ;; <ap:note> deathlink will come later, leave out for now
 (define-extern ap-deathlink-received! (function symbol symbol))

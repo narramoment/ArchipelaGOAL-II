@@ -940,7 +940,15 @@
   (progress-menu-mission-unlock-tomb #x2171)
   (progress-menu-mission-tomb-boss #x2172)
   (progress-menu-mission-nest-boss #x2173)
-  
+  (progress-mission-dark-bomb #x2174)
+  (progress-mission-dark-blast #x2175)
+  (progress-mission-dark-invincible #x2176)
+  (progress-mission-dark-giant #x2177)
+  (progress-menu-oracle-cost-level0 #x2178)
+  (progress-menu-oracle-cost-level1 #x2179)
+  (progress-menu-oracle-cost-level2 #x2180)
+  (progress-menu-oracle-cost-level3 #x2181)
+
   ;; destination names text
   (caspad-name #x10000)
   (nest-name #x10001)

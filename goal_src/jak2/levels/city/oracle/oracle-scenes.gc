@@ -252,7 +252,12 @@
       (440 (fadeout (frame-time-30 (new 'static 'bfloat :data 10.0))))
       (10000
         (task-close! "city-oracle-level0")
-        (send-event *target* 'get-pickup (unbox 21) (unbox (new 'static 'bfloat :data -25.0)))
+        (task-close! "city-oracle-level0-training")
+        (apply ,(lambda ()
+          (send-event *target* 'get-pickup 21
+            (- (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
+                   (the float (-> *ap-settings* oracle-cost-level0))
+                   25.0)))))
         )
       )
     :cut-list '(49)
@@ -433,7 +438,12 @@
       (440 (fadeout (frame-time-30 (new 'static 'bfloat :data 10.0))))
       (10000
         (task-close! "city-oracle-level1")
-        (send-event *target* 'get-pickup (unbox 21) (unbox (new 'static 'bfloat :data -200.0)))
+        (task-close! "city-oracle-level1-training")
+        (apply ,(lambda ()
+          (send-event *target* 'get-pickup 21
+            (- (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
+                   (the float (-> *ap-settings* oracle-cost-level1))
+                   200.0)))))
         )
       )
     :cut-list '(49)
@@ -592,7 +602,12 @@
       (440 (fadeout (frame-time-30 (new 'static 'bfloat :data 10.0))))
       (10000
         (task-close! "city-oracle-level2")
-        (send-event *target* 'get-pickup (unbox 21) (unbox (new 'static 'bfloat :data -200.0)))
+        (task-close! "city-oracle-level2-training")
+        (apply ,(lambda ()
+          (send-event *target* 'get-pickup 21
+            (- (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
+                   (the float (-> *ap-settings* oracle-cost-level2))
+                   200.0)))))
         )
       )
     :cut-list '(49)
@@ -751,7 +766,12 @@
       (440 (fadeout (frame-time-30 (new 'static 'bfloat :data 10.0))))
       (10000
         (task-close! "city-oracle-level3")
-        (send-event *target* 'get-pickup (unbox 21) (unbox (new 'static 'bfloat :data -100.0)))
+        (task-close! "city-oracle-level3-training")
+        (apply ,(lambda ()
+          (send-event *target* 'get-pickup 21
+            (- (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
+                   (the float (-> *ap-settings* oracle-cost-level3))
+                   100.0)))))
         )
       )
     :cut-list '(49)

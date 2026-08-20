@@ -14,7 +14,7 @@
   (lambda :behavior task-manager
     ()
     (set! (-> self data-float 0) (the-as float (send-event *target* 'test-pickup (pickup-type eco-pill-dark))))
-    (send-event *target* 'change-mode 'darkjak #f (darkjak-stage force-on no-anim))
+    ;;(send-event *target* 'change-mode 'darkjak #f (darkjak-stage force-on no-anim))
     (set! (-> self sound-id 0)
           (add-process *gui-control* self (gui-channel message) (gui-action play) (-> self name) 81920.0 0)
           )
@@ -108,7 +108,7 @@
   (lambda :behavior task-manager
     ()
     (set! (-> self data-float 0) (the-as float (send-event *target* 'test-pickup (pickup-type eco-pill-dark))))
-    (send-event *target* 'change-mode 'darkjak #f (darkjak-stage force-on no-anim))
+    ;; (send-event *target* 'change-mode 'darkjak #f (darkjak-stage force-on no-anim)) (remove this line to prevent the player from being forced into darkjak mode)
     (set! (-> self sound-id 0)
           (add-process *gui-control* self (gui-channel message) (gui-action play) (-> self name) 81920.0 0)
           )
@@ -202,7 +202,7 @@
   (lambda :behavior task-manager
     ()
     (set! (-> self data-float 0) (the-as float (send-event *target* 'test-pickup (pickup-type eco-pill-dark))))
-    (send-event *target* 'change-mode 'darkjak #f (darkjak-stage force-on no-anim))
+    ;; (send-event *target* 'change-mode 'darkjak #f (darkjak-stage force-on no-anim)) (remove this line to prevent the player from being forced into darkjak mode)
     (set! (-> self sound-id 0)
           (add-process *gui-control* self (gui-channel message) (gui-action play) (-> self name) 81920.0 0)
           )
@@ -277,7 +277,7 @@
   (lambda :behavior task-manager
     ()
     (set! (-> self data-float 0) (the-as float (send-event *target* 'test-pickup (pickup-type eco-pill-dark))))
-    (send-event *target* 'change-mode 'darkjak #f (darkjak-stage force-on no-anim))
+    ;;(send-event *target* 'change-mode 'darkjak #f (darkjak-stage force-on no-anim))
     (set! (-> self sound-id 0)
           (add-process *gui-control* self (gui-channel message) (gui-action play) (-> self name) 81920.0 0)
           )

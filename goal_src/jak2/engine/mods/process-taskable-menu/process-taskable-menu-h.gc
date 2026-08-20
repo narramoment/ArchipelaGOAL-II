@@ -673,3 +673,47 @@
       )
   )
 )
+(define *oracle-menu-list*
+  (new 'static 'boxed-array :type taskable-menu-entry
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-oracle-introduction)
+      :event-idx 1
+      :continue #f
+      :text-id (text-id progress-missions-go-to-oracle)
+      :allow-when (lambda () (task-node-open? (game-task-node city-oracle-introduction)))
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-oracle-introduction)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-oracle-level0)
+      :event-idx 1
+      :continue #f
+      :text-id (text-id progress-mission-dark-bomb)
+      :allow-when (lambda () (task-node-open? (game-task-node city-oracle-level0)))
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-oracle-level0-training)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-oracle-level1)
+      :event-idx 1
+      :continue #f
+      :text-id (text-id progress-mission-dark-blast)
+      :allow-when (lambda () (task-node-open? (game-task-node city-oracle-level1)))
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-oracle-level1-training)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-oracle-level2)
+      :event-idx 1
+      :continue #f
+      :text-id (text-id progress-mission-dark-invincible)
+      :allow-when (lambda () (task-node-open? (game-task-node city-oracle-level2)))
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-oracle-level2-training)))
+      )
+    (static-taskable-menu-entry
+      :task-node (game-task-node city-oracle-level3)
+      :event-idx 1
+      :continue #f
+      :text-id (text-id progress-mission-dark-giant)
+      :allow-when (lambda () (task-node-open? (game-task-node city-oracle-level3)))
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-oracle-level3-training)))
+      )
+    )
+  )

@@ -9956,9 +9956,9 @@
             :borrow '()
             :open? (lambda ((arg0 game-task-node-info))
               (>= (-> *game-info* gem)
-              (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
-                  (the float (-> *ap-settings* oracle-cost-level1))
-                  200.0)))
+                (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
+                        (the float (-> *ap-settings* oracle-cost-level1))
+                    200.0)))
             :on-close #f
             ;; :add (game-task-node-command add-darkjak-1) ;; <ap:preserve-this> removed mission reward.
             :description (text-id progress-missions-go-to-oracle)
@@ -10046,9 +10046,9 @@
             :borrow '()
             :open? (lambda ((arg0 game-task-node-info))
               (>= (-> *game-info* gem)
-              (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
-                  (the float (-> *ap-settings* oracle-cost-level2))
-                  200.0)))
+                (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
+                        (the float (-> *ap-settings* oracle-cost-level2))
+                    200.0)))
             :on-close #f
             ;; :add (game-task-node-command add-darkjak-2) ;; <ap:preserve-this> removed mission reward.
             :description (text-id progress-missions-go-to-oracle)
@@ -10136,9 +10136,9 @@
             :borrow '()
             :open? (lambda ((arg0 game-task-node-info))
               (>= (-> *game-info* gem)
-              (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
-                  (the float (-> *ap-settings* oracle-cost-level3))
-                  100.0)))
+                (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
+                        (the float (-> *ap-settings* oracle-cost-level3))
+                    100.0)))
             :on-close #f
             ;; :add (game-task-node-command add-darkjak-3) ;; <ap:preserve-this> removed mission reward.
             :description (text-id progress-missions-go-to-oracle)

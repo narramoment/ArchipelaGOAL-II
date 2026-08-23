@@ -948,6 +948,7 @@
   (progress-menu-oracle-cost-level1 #x2179)
   (progress-menu-oracle-cost-level2 #x2180)
   (progress-menu-oracle-cost-level3 #x2181)
+  (progress-menu-oracle-options #x2182)
 
   ;; destination names text
   (caspad-name #x10000)

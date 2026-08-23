@@ -950,6 +950,14 @@
   (progress-menu-oracle-cost-level3 #x2181)
   (progress-menu-oracle-options #x2182)
 
+  (progress-menu-hideout #x2183)
+  (progress-menu-hip-hog #x2184)
+  (progress-menu-power   #x2185)
+  (progress-menu-tent    #x2186)
+  (progress-menu-stadium #x2187)
+  (progress-menu-palace  #x2188)
+  (progress-menu-weapons #x2189)
+
   ;; destination names text
   (caspad-name #x10000)
   (nest-name #x10001)

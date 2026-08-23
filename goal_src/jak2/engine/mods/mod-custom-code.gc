@@ -253,7 +253,7 @@
       (when (and *debug-segment* *show-test-build-info*)
         (format *stdcon0* "~%~4LArchipelaGOAL II - Test Build~0L~%")
         (format *stdcon* "Found a bug? Send us a screenshot!~%")
-        (format *stdcon0* "Toggle this text in Debug Menu > Modding Tools.~%~%")
+        (format *stdcon0* "Toggle this text in Debug Menu (L3 + Start) > Modding Tools.~%~%")
         (format *stdcon0* "~4Lgame features:~0L ~S~%"
           (begin
             (clear *temp-string*)

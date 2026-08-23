@@ -798,7 +798,7 @@ This gives us more freedom to write code how we want.
         ((40) 1)
         ((43) 2)
         ((65) 3)
-        (else 0)))
+        (else 3)))
     :on-confirm (lambda ((index int) (the-progress progress))
       (set! (-> *ap-settings* completion-value)
         (the-as uint8 (case index
@@ -806,7 +806,7 @@ This gives us more freedom to write code how we want.
           ((1) 40)
           ((2) 43)
           ((3) 65)
-          (else 0))))
+          (else 65))))
       (ap-settings-update)
       (ap-settings-save))))
 
@@ -827,7 +827,7 @@ This gives us more freedom to write code how we want.
   '(new 'static 'menu-generic-slider-option
     :name (text-id progress-menu-oracle-cost-level1)
     :min-value 0.0
-    :max-value 100.0
+    :max-value 200.0
     :step 1.0
     :show-decimal? #f
     :get-value-fn (lambda () (the float (-> *ap-settings* oracle-cost-level1)))
@@ -840,7 +840,7 @@ This gives us more freedom to write code how we want.
   '(new 'static 'menu-generic-slider-option
     :name (text-id progress-menu-oracle-cost-level2)
     :min-value 0.0
-    :max-value 100.0
+    :max-value 200.0
     :step 1.0
     :show-decimal? #f
     :get-value-fn (lambda () (the float (-> *ap-settings* oracle-cost-level2)))

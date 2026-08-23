@@ -9815,7 +9815,9 @@
             :on-open #f
             :info #f
             :borrow '()
-            :open? #f
+            ;; <ap:preserve-this> add open? hook to check for having dark jak
+            :open? (lambda ((arg0 game-task-node-info))
+              (logtest? (-> *game-info* features) (game-feature darkjak)))
             :on-close #f
             :description (text-id progress-missions-go-to-oracle)
             )
@@ -9864,11 +9866,14 @@
               :on-fail #f
               )
             :borrow '()
+            ;; <ap:preserve-this> added open? hook to check for gem rando and having dark jak
             :open? (lambda ((arg0 game-task-node-info))
+              (and
               (>= (-> *game-info* gem)
                   (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
                       (the float (-> *ap-settings* oracle-cost-level0))
-                  25.0)))
+                  25.0))
+              (logtest? (-> *game-info* features) (game-feature darkjak))))
             :on-close #f
             ;; :add (game-task-node-command add-darkjak-0) ;; <ap:preserve-this> removed mission reward.
             :description (text-id progress-missions-go-to-oracle)
@@ -9954,11 +9959,14 @@
               :on-fail #f
               )
             :borrow '()
+            ;; <ap:preserve-this> added open hook to check for gem rando and for having dark jak
             :open? (lambda ((arg0 game-task-node-info))
+              (and
               (>= (-> *game-info* gem)
-                (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
-                        (the float (-> *ap-settings* oracle-cost-level1))
-                    200.0)))
+                  (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
+                      (the float (-> *ap-settings* oracle-cost-level1))
+                  200.0))
+              (logtest? (-> *game-info* features) (game-feature darkjak))))
             :on-close #f
             ;; :add (game-task-node-command add-darkjak-1) ;; <ap:preserve-this> removed mission reward.
             :description (text-id progress-missions-go-to-oracle)
@@ -10044,11 +10052,14 @@
               :on-fail #f
               )
             :borrow '()
+            ;; <ap:preserve-this> added open? hook for gem rando and for having dark jak
             :open? (lambda ((arg0 game-task-node-info))
+              (and
               (>= (-> *game-info* gem)
-                (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
-                        (the float (-> *ap-settings* oracle-cost-level2))
-                    200.0)))
+                  (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
+                      (the float (-> *ap-settings* oracle-cost-level2))
+                  200.0))
+              (logtest? (-> *game-info* features) (game-feature darkjak))))
             :on-close #f
             ;; :add (game-task-node-command add-darkjak-2) ;; <ap:preserve-this> removed mission reward.
             :description (text-id progress-missions-go-to-oracle)
@@ -10134,11 +10145,14 @@
               :on-fail #f
               )
             :borrow '()
+            ;; <ap:preserve-this> added open? hook to check for gem rando and having dark jak
             :open? (lambda ((arg0 game-task-node-info))
+              (and
               (>= (-> *game-info* gem)
-                (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
-                        (the float (-> *ap-settings* oracle-cost-level3))
-                    100.0)))
+                  (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
+                      (the float (-> *ap-settings* oracle-cost-level0))
+                  100.0))
+              (logtest? (-> *game-info* features) (game-feature darkjak))))
             :on-close #f
             ;; :add (game-task-node-command add-darkjak-3) ;; <ap:preserve-this> removed mission reward.
             :description (text-id progress-missions-go-to-oracle)

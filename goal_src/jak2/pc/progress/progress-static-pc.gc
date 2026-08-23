@@ -486,6 +486,7 @@ This gives us more freedom to write code how we want.
 
 (defmacro game-options-pc-archipelagoal-ii ()
   `(progress-new-generic-link-to-scrolling-page (text-id progress-menu-archipelagoal-ii)
+     ;; <ap:todo> move warp to home here
      (archipelagoal-ii-item-tracker)
      (archipelagoal-ii-deathlink)
      (archipelagoal-ii-item-messenger)

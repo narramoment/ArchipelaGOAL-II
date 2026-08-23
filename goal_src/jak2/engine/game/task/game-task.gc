@@ -10150,7 +10150,7 @@
               (and
               (>= (-> *game-info* gem)
                   (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
-                      (the float (-> *ap-settings* oracle-cost-level0))
+                      (the float (-> *ap-settings* oracle-cost-level3))
                   100.0))
               (logtest? (-> *game-info* features) (game-feature darkjak))))
             :on-close #f

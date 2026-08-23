@@ -495,7 +495,7 @@ This gives us more freedom to write code how we want.
 
 (defmacro archipelagoal-ii-seed-options-link ()
   '(progress-new-generic-link-to-scrolling-page (text-id progress-menu-seed-options)
-    (archipelagoal-ii-traps)
+    (archipelagoal-ii-trap-duration)
     (archipelagoal-ii-oracle-cost-level0)
     (archipelagoal-ii-oracle-cost-level1)
     (archipelagoal-ii-oracle-cost-level2)
@@ -703,7 +703,7 @@ This gives us more freedom to write code how we want.
       :should-disable? (lambda () #t))
      ))
 
-(defmacro archipelagoal-ii-traps ()
+(defmacro archipelagoal-ii-trap-duration ()
   '(new 'static 'menu-generic-slider-option
     :name (text-id progress-menu-trap-duration)
     :min-value 0.0
@@ -747,13 +747,13 @@ This gives us more freedom to write code how we want.
       (case (-> *ap-settings* completion-type)
         ((2) 0) ;; mission count
         ((1) 1) ;; specific mission
-        (else 0)))
+        (else 1)))
     :on-confirm (lambda ((index int) (the-progress progress))
       (set! (-> *ap-settings* completion-type)
         (the-as uint8 (case index
           ((0) 2) ;; mission-count
           ((1) 1) ;; specific-mission
-          (else 2))))
+          (else 1))))
       (ap-settings-update)
       (ap-settings-save))))
 

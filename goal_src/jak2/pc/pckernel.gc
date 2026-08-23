@@ -1004,7 +1004,6 @@
           (("settings")
           (set! version (file-stream-read-int file))
           ;; read through file and set fields
-          ;; <ap:todo> deathlink will come later, leave out for now
           (dosettings (file)
             (case-str *pc-temp-string*
               (("deathlink?") (set! (-> obj deathlink?) (file-stream-read-symbol file)))

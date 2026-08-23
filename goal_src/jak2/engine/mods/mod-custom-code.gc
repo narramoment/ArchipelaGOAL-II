@@ -675,7 +675,6 @@
 
     (defun runs-on-jak-death ((death-event symbol))
       (format 0 "runs-on-jak-death called with: ~A~%" death-event)
-      ;; <ap:todo> deathlink will come later, leave it out for now
       (when (-> *ap-settings* deathlink?)
         (case death-event
           (('dying)

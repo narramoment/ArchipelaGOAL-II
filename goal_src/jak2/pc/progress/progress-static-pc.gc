@@ -716,7 +716,6 @@ This gives us more freedom to write code how we want.
       (ap-settings-update)
       (ap-settings-save))))
 
-;; <ap:todo> deathlink will come later, leave out for now
 (defmacro archipelagoal-ii-deathlink ()
   '(new 'static 'menu-generic-boolean-option
     :name (text-id progress-menu-deathlink)

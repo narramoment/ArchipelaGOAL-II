@@ -713,7 +713,6 @@
               (logxor! (-> *game-info* secrets) (the-as uint (/ 16 8)))
               )
           ))
-        ;; <ap:todo> ammo trap, forced dark jak trap, no health trap, etc (i'm still trying to think of more to include)
         ;; jak 2 ap traps
         (('five-star) ;; high alert trap
           (process-spawn-function process
@@ -830,9 +829,8 @@
     (set! (-> *ap-settings* oracle-cost-level1) (-> options oracle-cost-level1))
     (set! (-> *ap-settings* oracle-cost-level2) (-> options oracle-cost-level2))
     (set! (-> *ap-settings* oracle-cost-level3) (-> options oracle-cost-level3)))
-  ;; <ap:todo> do this later
-  ;; (charp<-string (-> *ap-info-jak2* slot-name) (-> options slot-name))
-  ;; (charp<-string (-> *ap-info-jak2* slot-seed) (-> options slot-seed))
+  (charp<-string (-> *ap-info-jak2* slot-name) (-> options slot-name))
+  (charp<-string (-> *ap-info-jak2* slot-seed) (-> options slot-seed))
   (ap-settings-update)
   #t)
 

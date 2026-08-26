@@ -789,6 +789,12 @@ This gives us more freedom to write code how we want.
       :get-value-fn (lambda () (logtest? (-> *game-info* features) (game-feature rift-rider)))
       :should-disable? (lambda () #t))
      (new 'static 'menu-generic-boolean-option
+      :name (text-id progress-ks-source-precursor-stone)
+      :truthy-text (text-id progress-unlocked)
+      :falsey-text (text-id progress-locked)
+      :get-value-fn (lambda () (logtest? (-> *game-info* features) (game-feature precursor-stone)))
+      :should-disable? (lambda () #t))
+     (new 'static 'menu-generic-boolean-option
       :name (text-id progress-ks-source-darkjak-bomb0)
       :truthy-text (text-id progress-unlocked)
       :falsey-text (text-id progress-locked)

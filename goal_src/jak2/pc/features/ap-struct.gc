@@ -677,7 +677,19 @@
               (while (movie?) (suspend-for (seconds 1)))
               (set! (-> *game-info* current-continue) (get-continue-by-name *game-info* "ctysluma-alley"))
               (initialize! *game-info* 'die (the-as game-save #f) "ctysluma-alley"))))
-        ;; <ap:note> despair trap is much harder to do than i initially throught, come back later when you can figure out the sound     
+        (('emotional-damage) ;; despair trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (let ((curr-lang (the-as language-enum (get-game-language *pc-settings*))))
+                (set-game-language! *pc-settings* (language-enum japanese))
+                (talker-spawn-func (-> *talker-speech* 281) *entity-pool* (target-pos 0) (the-as region #f))
+                (when (> (-> *ap-info-jak2* trap-duration) 5.0)
+                  (dotimes (i (- (/ (the int (-> *ap-info-jak2* trap-duration)) 5) 1))
+                    (suspend-for (seconds 5))
+                    (talker-spawn-func (-> *talker-speech* 281) *entity-pool* (target-pos 0) (the-as region #f))))
+                (suspend-for (seconds 0.1))
+                (when (!= curr-lang (language-enum japanese)) ;; <ap:note> make sure to revert it back after :sob:
+                  (set-game-language! *pc-settings* curr-lang))))))
         (('personal-bubble) ;; pacifism trap
           (process-spawn-function process
             (lambda :behavior process ()

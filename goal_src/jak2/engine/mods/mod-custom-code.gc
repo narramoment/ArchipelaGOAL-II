@@ -269,6 +269,22 @@
             *temp-string*
             )
           )
+        (format *stdcon0* "~4Lcurrent mission:~0L ~S~%~%"
+          (let ((subtasks (-> *game-info* sub-task-list))
+                (found (the-as string #f)))
+            (dotimes (i (-> subtasks length))
+              (when (and (not found) (nonzero? i))
+                (let ((subtask (-> subtasks i)))
+                  (when (and (-> subtask info)
+                             (handle->process (-> subtask info manager)))
+                    (set! found (-> subtask name))
+                    )
+                  )
+                )
+              )
+            (or found "none")
+            )
+          )
         (format *stdcon0* "~4Lcurrent tasks:~0L~%~%")
         (let ((level (level-get-target-inside *level*)))
           (when level

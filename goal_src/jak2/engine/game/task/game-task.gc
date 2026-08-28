@@ -5904,12 +5904,7 @@
             :info #f
             :borrow '()
             :open? #f
-            ;; <ap:preserve-this> don't open any tasks, they'll reset the mission tree.
-            ;; :on-close '(begin
-            ;;    (task-open! "stadium-burning-bush-race-board-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class3-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class3-r-introduction")
-            ;;    )
+            ;; <ap:note> changed to #f for simplification
             :on-close #f
             )
           (new 'static 'game-task-node-info
@@ -7447,14 +7442,7 @@
             :info #f
             :borrow '()
             :open? #f
-            ;; <ap:preserve-this> don't open any tasks, they'll reset the mission tree.
-            ;; :on-close '(begin
-            ;;    (task-open! "stadium-burning-bush-race-board-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class3-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class3-r-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class2-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class2-r-introduction")
-            ;;    )
+            ;; <ap:note> changed to #f for simplification
             :on-close #f
             )
           (new 'static 'game-task-node-info
@@ -12195,7 +12183,9 @@
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
-            :on-close '(begin
+            :on-close #f ;; <ap:note> change this so it doesn't mess with the other side stadium missions
+            #|
+            '(begin
                (when (task-closed? "stadium-race-class3-resolution")
                  (task-open! "stadium-burning-bush-race-class3-introduction")
                  (task-open! "stadium-burning-bush-race-class3-r-introduction")
@@ -12209,6 +12199,7 @@
                  (task-open! "stadium-burning-bush-race-class1-r-introduction")
                  )
                )
+            |#
             )
           (new 'static 'game-task-node-info
             :level 'stadium
@@ -12280,7 +12271,9 @@
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
-            :on-close '(begin
+            :on-close #f ;; <ap:note> change this to not mess with the other stadium side missions
+            #|
+            '(begin
                (when (task-closed? "stadium-board1-resolution")
                  (task-open! "stadium-burning-bush-race-board-introduction")
                  )
@@ -12294,6 +12287,7 @@
                  )
                (task-open! "stadium-burning-bush-race-class3-r-introduction")
                )
+            |#
             )
           (new 'static 'game-task-node-info
             :level 'stadium
@@ -12360,7 +12354,9 @@
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
-            :on-close '(begin
+            :on-close #f ;; <ap:note> change this to not mess with other stadium side missions
+            #|
+            '(begin
                (when (task-closed? "stadium-board1-resolution")
                  (task-open! "stadium-burning-bush-race-board-introduction")
                  )
@@ -12374,6 +12370,7 @@
                  )
                (task-open! "stadium-burning-bush-race-class2-r-introduction")
                )
+            |#
             )
           (new 'static 'game-task-node-info
             :level 'stadium
@@ -12440,7 +12437,9 @@
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
-            :on-close '(begin
+            :on-close #f ;; <ap:note> change this to not mess with other stadium missions
+            #|
+            '(begin
                (when (task-closed? "stadium-board1-resolution")
                  (task-open! "stadium-burning-bush-race-board-introduction")
                  )
@@ -12454,6 +12453,7 @@
                  )
                (task-open! "stadium-burning-bush-race-class1-r-introduction")
                )
+            |#
             )
           (new 'static 'game-task-node-info
             :level 'stadium
@@ -12517,8 +12517,12 @@
             :on-open #f
             :info #f
             :borrow '()
-            :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
-            :on-close '(begin
+            ;; <ap:note> change this from a secret to being available when you gain access to the stadium
+            :open? (lambda ((arg0 game-task-node-info)) 
+              (ap-route-slums-to-stadium?))
+            :on-close #f ;; <ap:note> change this to not mess with other stadium side missions
+            #|
+            '(begin
                (task-open! "stadium-burning-bush-race-board-introduction")
                (task-open! "stadium-burning-bush-race-class2-introduction")
                (task-open! "stadium-burning-bush-race-class2-r-introduction")
@@ -12526,6 +12530,7 @@
                (task-open! "stadium-burning-bush-race-class1-r-introduction")
                (task-open! "stadium-burning-bush-race-class3-introduction")
                )
+            |#
             )
           (new 'static 'game-task-node-info
             :level 'stadium
@@ -12589,8 +12594,12 @@
             :on-open #f
             :info #f
             :borrow '()
-            :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
-            :on-close '(begin
+            ;; <ap:note> change this from being a secret to opening when you have access to the stadium
+            :open? (lambda ((arg0 game-task-node-info)) 
+              (ap-route-slums-to-stadium?))
+            :on-close #f ;; <ap:note> change this to not mess with stadium side missions
+            #|
+            '(begin
                (task-open! "stadium-burning-bush-race-board-introduction")
                (task-open! "stadium-burning-bush-race-class3-introduction")
                (task-open! "stadium-burning-bush-race-class3-r-introduction")
@@ -12598,6 +12607,7 @@
                (task-open! "stadium-burning-bush-race-class1-r-introduction")
                (task-open! "stadium-burning-bush-race-class2-introduction")
                )
+            |#
             )
           (new 'static 'game-task-node-info
             :level 'stadium
@@ -12661,8 +12671,12 @@
             :on-open #f
             :info #f
             :borrow '()
-            :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
-            :on-close '(begin
+            ;; <ap:note> change this from a secret to being able to access when you get access to stadium
+            :open? (lambda ((arg0 game-task-node-info)) 
+              (ap-route-slums-to-stadium?))
+            :on-close #f ;; <ap:note> change this to not mess with other stadium side missions
+            #|
+            '(begin
                (task-open! "stadium-burning-bush-race-board-introduction")
                (task-open! "stadium-burning-bush-race-class3-introduction")
                (task-open! "stadium-burning-bush-race-class3-r-introduction")
@@ -12670,6 +12684,7 @@
                (task-open! "stadium-burning-bush-race-class2-r-introduction")
                (task-open! "stadium-burning-bush-race-class1-introduction")
                )
+            |#
             )
           (new 'static 'game-task-node-info
             :level 'stadium

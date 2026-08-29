@@ -497,7 +497,7 @@
               (while (movie?) (suspend-for (seconds 1)))
               (set! (-> *game-info* current-continue) (get-continue-by-name *game-info* "ctysluma-alley"))
               (initialize! *game-info* 'die (the-as game-save #f) "ctysluma-alley"))))
-         (('emotional-damage) ;; despair trap
+        (('emotional-damage) ;; despair trap
           (process-spawn-function process
             (lambda :behavior process ()
               (let ((curr-lang (the-as language-enum (get-game-language *pc-settings*))))

@@ -927,6 +927,27 @@
   (burningbush-incoming-call #x2161)
 
   (progress-menu-trap-duration #x2162)
+
+  (progress-menu-hideout #x2163)
+  (progress-menu-hip-hog #x2164)
+  (progress-menu-power   #x2165)
+  (progress-menu-tent    #x2166)
+  (progress-menu-stadium #x2167)
+  (progress-menu-palace  #x2168)
+  (progress-menu-weapons #x2169)
+
+  (progress-menu-item-messages #x2170)
+
+  (progress-menu-seed-options #x2171)
+  (progress-menu-completion-type #x2172)
+  (progress-menu-completion-type-mission-count #x2173)
+  (progress-menu-completion-type-specific-mission #x2174)
+  (progress-menu-completion-value #x2175)
+  (progress-menu-completion-specific-mission #x2176)
+  (progress-menu-mission-palace-boss #x2177)
+  (progress-menu-mission-unlock-tomb #x2178)
+  (progress-menu-mission-tomb-boss #x2179)
+  (progress-menu-mission-nest-boss #x2180)
   
   ;; destination names text
   (caspad-name #x10000)

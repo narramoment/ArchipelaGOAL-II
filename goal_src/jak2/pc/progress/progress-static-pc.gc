@@ -477,10 +477,20 @@ This gives us more freedom to write code how we want.
 
 (defmacro archipelagoal-ii-seed-options ()
   '(progress-new-generic-link-to-scrolling-page (text-id progress-menu-seed-options)
+    (archipelagoal-ii-oracle-options)
     (archipelagoal-ii-trap-duration)
     (archipelagoal-ii-completion-type)
     (archipelagoal-ii-completion-specific-mission)
     (archipelagoal-ii-completion-value)
+    )
+  )
+
+(defmacro archipelagoal-ii-oracle-options ()
+  '(progress-new-generic-link-to-scrolling-page (text-id progress-menu-oracle-options)
+    (archipelagoal-ii-oracle-cost-level0)
+    (archipelagoal-ii-oracle-cost-level1)
+    (archipelagoal-ii-oracle-cost-level2)
+    (archipelagoal-ii-oracle-cost-level3)
     )
   )
 
@@ -810,6 +820,58 @@ This gives us more freedom to write code how we want.
     :get-value-fn (lambda () (-> *ap-settings* deathlink?))
     :on-confirm (lambda ((val symbol))
       (set! (-> *ap-settings* deathlink?) val)
+      (ap-settings-update)
+      (ap-settings-save))))
+
+(defmacro archipelagoal-ii-oracle-cost-level0 ()
+  '(new 'static 'menu-generic-slider-option
+    :name (text-id progress-menu-oracle-cost-level0)
+    :min-value 0.0
+    :max-value 100.0
+    :step 1.0
+    :show-decimal? #f
+    :get-value-fn (lambda () (the float (-> *ap-settings* oracle-cost-level0)))
+    :on-confirm (lambda ((val float))
+      (set! (-> *ap-settings* oracle-cost-level0) (the uint32 val))
+      (ap-settings-update)
+      (ap-settings-save))))
+
+(defmacro archipelagoal-ii-oracle-cost-level1 ()
+  '(new 'static 'menu-generic-slider-option
+    :name (text-id progress-menu-oracle-cost-level1)
+    :min-value 0.0
+    :max-value 200.0
+    :step 1.0
+    :show-decimal? #f
+    :get-value-fn (lambda () (the float (-> *ap-settings* oracle-cost-level1)))
+    :on-confirm (lambda ((val float))
+      (set! (-> *ap-settings* oracle-cost-level1) (the uint32 val))
+      (ap-settings-update)
+      (ap-settings-save))))
+
+(defmacro archipelagoal-ii-oracle-cost-level2 ()
+  '(new 'static 'menu-generic-slider-option
+    :name (text-id progress-menu-oracle-cost-level2)
+    :min-value 0.0
+    :max-value 200.0
+    :step 1.0
+    :show-decimal? #f
+    :get-value-fn (lambda () (the float (-> *ap-settings* oracle-cost-level2)))
+    :on-confirm (lambda ((val float))
+      (set! (-> *ap-settings* oracle-cost-level2) (the uint32 val))
+      (ap-settings-update)
+      (ap-settings-save))))
+
+(defmacro archipelagoal-ii-oracle-cost-level3 ()
+  '(new 'static 'menu-generic-slider-option
+    :name (text-id progress-menu-oracle-cost-level3)
+    :min-value 0.0
+    :max-value 100.0
+    :step 1.0
+    :show-decimal? #f
+    :get-value-fn (lambda () (the float (-> *ap-settings* oracle-cost-level3)))
+    :on-confirm (lambda ((val float))
+      (set! (-> *ap-settings* oracle-cost-level3) (the uint32 val))
       (ap-settings-update)
       (ap-settings-save))))
 

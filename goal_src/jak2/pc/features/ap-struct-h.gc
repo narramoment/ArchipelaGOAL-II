@@ -28,6 +28,11 @@
     (completion-type          uint8)
     (completion-value         uint8)
     (completion-mission-count uint8)
+    (randomize-oracle-cost    uint8)
+    (oracle-cost-level0       uint32)
+    (oracle-cost-level1       uint32)
+    (oracle-cost-level2       uint32)
+    (oracle-cost-level3       uint32)
     ))
 
 (deftype ap-info-jak2 (structure)

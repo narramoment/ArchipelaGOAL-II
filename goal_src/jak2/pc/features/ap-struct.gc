@@ -845,6 +845,12 @@
   (set! (-> *ap-settings* completion-value) (-> options completion-value))
   (set! (-> *ap-settings* completion-mission-count) (-> options completion-mission-count))
   (set! (-> *ap-settings* trap-duration) (-> options trap-duration))
+  (set! (-> *ap-settings* randomize-oracle-cost) (if (nonzero? (-> options randomize-oracle-cost)) #t #f))
+  (when (nonzero? (-> options randomize-oracle-cost))
+    (set! (-> *ap-settings* oracle-cost-level0) (-> options oracle-cost-level0))
+    (set! (-> *ap-settings* oracle-cost-level1) (-> options oracle-cost-level1))
+    (set! (-> *ap-settings* oracle-cost-level2) (-> options oracle-cost-level2))
+    (set! (-> *ap-settings* oracle-cost-level3) (-> options oracle-cost-level3)))
   ;; <ap:todo> do this later
   ;; (charp<-string (-> *ap-info-jak2* slot-name) (-> options slot-name))
   ;; (charp<-string (-> *ap-info-jak2* slot-seed) (-> options slot-seed))
@@ -859,6 +865,8 @@
     (if (= (-> *ap-settings* completion-type) 2)
       (-> *ap-settings* completion-mission-count)
       (-> *ap-settings* completion-value)))
+  ;; <ap:preserve-this> poll for individually-tracked item checks (used for dual-check mode)
+  (ap-poll-item-checks!)
   ;; <ap:preserve-this> autosave every 30 seconds to prevent progress loss on life resets  
   (when (and *game-info*
              *target*

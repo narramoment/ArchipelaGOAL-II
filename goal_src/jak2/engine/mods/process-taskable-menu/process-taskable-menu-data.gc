@@ -394,7 +394,7 @@
       (("sig-npc-1" "sig-npc-2") (text-id progress-missions-talk-to-sig))
       (("keira-npc-1" "keira-npc-2") (text-id progress-missions-talk-to-keira))
       (("brutter-npc-1") (text-id progress-missions-talk-to-brutter))
-      (else (text-id press-triangle-to-talk)) ;; npc's with no "talk to me" strings: tess
+      (else (text-id press-triangle-to-talk)) ;; npc's with no "talk to me" strings: tess, oracle
       )
     )
   (set! (-> this bounce-away) #t)
@@ -437,6 +437,7 @@
       (("youngsamos-npc-1" "youngsamos-npc-2" "youngsamos-npc-3" "youngsamos-npc-4" "youngsamos-npc-5" "youngsamos-npc-6" "youngsamos-npc-7" "youngsamos-npc-9") *youngsamos-menu-list*)
       (("baron-npc-1") *baron-menu-list*)
       (("kor-npc-1") *kor-menu-list*)
+      (("oracle-npc-1") *oracle-menu-list*)
       (else *empty-taskable-menu-list*)
       )
     )

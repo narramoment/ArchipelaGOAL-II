@@ -238,7 +238,7 @@
           )
        )
 
-            ;; tomb
+      ;; tomb
       (let ((cty-tomb-out-door (entity-by-name "com-airlock-outer-22")))
         (when cty-tomb-out-door
           (set! (cdr (res-lump-struct cty-tomb-out-door 'on-notice pair))

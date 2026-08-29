@@ -5905,11 +5905,13 @@
             :borrow '()
             :open? #f
             ;; <ap:preserve-this> don't open any tasks, they'll reset the mission tree.
-            ;; :on-close '(begin
-            ;;    (task-open! "stadium-burning-bush-race-board-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class3-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class3-r-introduction")
-            ;;    )
+            #|
+            :on-close '(begin
+              (task-open! "stadium-burning-bush-race-board-introduction")
+              (task-open! "stadium-burning-bush-race-class3-introduction")
+              (task-open! "stadium-burning-bush-race-class3-r-introduction")
+              )
+            |#
             :on-close #f
             )
           (new 'static 'game-task-node-info
@@ -7448,13 +7450,15 @@
             :borrow '()
             :open? #f
             ;; <ap:preserve-this> don't open any tasks, they'll reset the mission tree.
-            ;; :on-close '(begin
-            ;;    (task-open! "stadium-burning-bush-race-board-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class3-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class3-r-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class2-introduction")
-            ;;    (task-open! "stadium-burning-bush-race-class2-r-introduction")
-            ;;    )
+            #|
+            :on-close '(begin
+              (task-open! "stadium-burning-bush-race-board-introduction")
+              (task-open! "stadium-burning-bush-race-class3-introduction")
+              (task-open! "stadium-burning-bush-race-class3-r-introduction")
+              (task-open! "stadium-burning-bush-race-class2-introduction")
+              (task-open! "stadium-burning-bush-race-class2-r-introduction")
+              )
+            |#
             :on-close #f
             )
           (new 'static 'game-task-node-info
@@ -12193,6 +12197,9 @@
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
+            ;; <ap:preserve-this> changed to #f, as it'll reset the mission tree otherwise
+            :on-close #f
+            #|
             :on-close '(begin
                (when (task-closed? "stadium-race-class3-resolution")
                  (task-open! "stadium-burning-bush-race-class3-introduction")
@@ -12207,6 +12214,7 @@
                  (task-open! "stadium-burning-bush-race-class1-r-introduction")
                  )
                )
+            |#
             )
           (new 'static 'game-task-node-info
             :level 'stadium
@@ -12278,6 +12286,8 @@
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
+            :on-close #f ;;
+            #|
             :on-close '(begin
                (when (task-closed? "stadium-board1-resolution")
                  (task-open! "stadium-burning-bush-race-board-introduction")
@@ -12292,6 +12302,7 @@
                  )
                (task-open! "stadium-burning-bush-race-class3-r-introduction")
                )
+            |#
             )
           (new 'static 'game-task-node-info
             :level 'stadium
@@ -12358,6 +12369,9 @@
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
+            ;; <ap:preserve-this> changed to #f, it'll reset the mission tree otherwise
+            :on-close #f
+            #|
             :on-close '(begin
                (when (task-closed? "stadium-board1-resolution")
                  (task-open! "stadium-burning-bush-race-board-introduction")
@@ -12372,6 +12386,7 @@
                  )
                (task-open! "stadium-burning-bush-race-class2-r-introduction")
                )
+            |#
             )
           (new 'static 'game-task-node-info
             :level 'stadium
@@ -12438,6 +12453,9 @@
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
+            ;; <ap:preserve-this> changed to #f, it'll reset the mission tree otherwise
+            :on-close #f
+            #|
             :on-close '(begin
                (when (task-closed? "stadium-board1-resolution")
                  (task-open! "stadium-burning-bush-race-board-introduction")
@@ -12452,6 +12470,7 @@
                  )
                (task-open! "stadium-burning-bush-race-class1-r-introduction")
                )
+            |#
             )
           (new 'static 'game-task-node-info
             :level 'stadium
@@ -12515,7 +12534,12 @@
             :on-open #f
             :info #f
             :borrow '()
-            :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
+            ;; <ap:preserve-this> added open hook to check for archipelago items.
+            :open? (lambda ((arg0 game-task-node-info)) 
+              (ap-route-slums-to-stadium?))
+            ;; <ap:preserve-this> changed to #f, it'll reset the mission tree otherwise
+            :on-close #f
+            #|
             :on-close '(begin
                (task-open! "stadium-burning-bush-race-board-introduction")
                (task-open! "stadium-burning-bush-race-class2-introduction")
@@ -12524,6 +12548,7 @@
                (task-open! "stadium-burning-bush-race-class1-r-introduction")
                (task-open! "stadium-burning-bush-race-class3-introduction")
                )
+            |#
             )
           (new 'static 'game-task-node-info
             :level 'stadium
@@ -12587,7 +12612,12 @@
             :on-open #f
             :info #f
             :borrow '()
-            :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
+            ;; <ap:preserve-this> added open hook to check for archipelago items.
+            :open? (lambda ((arg0 game-task-node-info)) 
+              (ap-route-slums-to-stadium?))
+            ;; <ap:preserve-this> changed to #f, it'll reset the mission tree otherwise
+            :on-close #f
+            #|
             :on-close '(begin
                (task-open! "stadium-burning-bush-race-board-introduction")
                (task-open! "stadium-burning-bush-race-class3-introduction")
@@ -12596,6 +12626,7 @@
                (task-open! "stadium-burning-bush-race-class1-r-introduction")
                (task-open! "stadium-burning-bush-race-class2-introduction")
                )
+            |#
             )
           (new 'static 'game-task-node-info
             :level 'stadium
@@ -12659,7 +12690,12 @@
             :on-open #f
             :info #f
             :borrow '()
-            :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
+            ;; <ap:preserve-this> added open hook to check for archipelago items.
+            :open? (lambda ((arg0 game-task-node-info)) 
+              (ap-route-slums-to-stadium?))
+            ;; <ap:preserve-this> changed to #f, it'll reset the mission tree otherwise
+            :on-close #f
+            #|
             :on-close '(begin
                (task-open! "stadium-burning-bush-race-board-introduction")
                (task-open! "stadium-burning-bush-race-class3-introduction")
@@ -12668,6 +12704,7 @@
                (task-open! "stadium-burning-bush-race-class2-r-introduction")
                (task-open! "stadium-burning-bush-race-class1-introduction")
                )
+            |#
             )
           (new 'static 'game-task-node-info
             :level 'stadium

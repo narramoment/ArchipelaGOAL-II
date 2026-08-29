@@ -6,6 +6,7 @@
 
 (define *ap-info-jak2* (new 'static 'ap-info-jak2))
 (define-extern ap-messenger-reset! (function none))
+(define-extern *ap-reverse-controls* symbol)
 (pc-get-archipelago-struct)
 
 ;; Initialize connection status to default (0)
@@ -496,7 +497,19 @@
               (while (movie?) (suspend-for (seconds 1)))
               (set! (-> *game-info* current-continue) (get-continue-by-name *game-info* "ctysluma-alley"))
               (initialize! *game-info* 'die (the-as game-save #f) "ctysluma-alley"))))
-        ;; <ap:note> despair trap is much harder to do than i initially throught, come back later when you can figure out the sound     
+         (('emotional-damage) ;; despair trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (let ((curr-lang (the-as language-enum (get-game-language *pc-settings*))))
+                (set-game-language! *pc-settings* (language-enum japanese))
+                (talker-spawn-func (-> *talker-speech* 281) *entity-pool* (target-pos 0) (the-as region #f))
+                (when (> (-> *ap-info-jak2* trap-duration) 5.0)
+                  (dotimes (i (- (/ (the int (-> *ap-info-jak2* trap-duration)) 5) 1))
+                    (suspend-for (seconds 5))
+                    (talker-spawn-func (-> *talker-speech* 281) *entity-pool* (target-pos 0) (the-as region #f))))
+                (suspend-for (seconds 0.1))
+                (when (!= curr-lang (language-enum japanese)) ;; <ap:note> make sure to revert it back after :sob:
+                  (set-game-language! *pc-settings* curr-lang))))))    
         (('personal-bubble) ;; pacifism trap
           (process-spawn-function process
             (lambda :behavior process ()
@@ -568,29 +581,18 @@
                 (suspend)
               )
               (send-event *target* 'change-mode 'normal))))
-        (('sonic-speed) ;; speed trap
-          (process-spawn-function process
-            (lambda :behavior process ()
-              (update-rates! (-> *display* entity-clock) (* 60.0 (-> *display* entity-clock clock-ratio)))
-              (update-rates! (-> *display* target-clock) (* 2.0 (-> *display* target-clock clock-ratio)))
-              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
-              (update-rates! (-> *display* entity-clock) (/ 60.0 (-> *display* entity-clock clock-ratio)))
-              (update-rates! (-> *display* target-clock) (/ 2.0 (-> *display* target-clock clock-ratio)))
-              )))
-        (('la-traffic) ;; slow trap
-          (process-spawn-function process
-            (lambda :behavior process ()
-              (update-rates! (-> *display* entity-clock) (* 0.3 (-> *display* entity-clock clock-ratio)))
-              (update-rates! (-> *display* target-clock) (* 0.5 (-> *display* target-clock clock-ratio)))
-              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
-              (update-rates! (-> *display* entity-clock) (/ 0.3 (-> *display* entity-clock clock-ratio)))
-              (update-rates! (-> *display* target-clock) (/ 0.5 (-> *display* target-clock clock-ratio))))))
         (('hardcore) ;; hero mode trap :D
           (process-spawn-function process
             (lambda :behavior process ()
               (logxor! (-> *game-info* secrets) (game-secrets hero-mode))
               (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
               (logxor! (-> *game-info* secrets) (game-secrets hero-mode)))))
+        (('turn-right-to-go-left) ;; reverse controls trap
+          (process-spawn-function process
+            (lambda :behavior process ()
+              (set! *ap-reverse-controls* #t)
+              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+              (set! *ap-reverse-controls* #f))))
         ))
     (and (> (-> *ap-info-jak2* trap-duration) 0.0)
              (task-closed? "fortress-escape-start")

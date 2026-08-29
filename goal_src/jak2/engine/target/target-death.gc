@@ -12,6 +12,7 @@
 ;; DECOMP BEGINS
 
 (define *auto-continue* #f)
+(define-extern runs-on-jak-spawn (function none))
 (define-extern runs-on-jak-death (function symbol none))
 
 ;; WARN: Return type mismatch object vs continue-point.
@@ -410,6 +411,8 @@
         )
       (set! (-> self mode-cache) #f)
       )
+    (unless (logtest? (-> arg0 flags) (continue-flags title title-movie))
+      (runs-on-jak-spawn))
     (go target-stance)
     )
   :post target-no-move-post

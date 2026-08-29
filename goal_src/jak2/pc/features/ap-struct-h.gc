@@ -59,6 +59,10 @@
     ;; Trap Information
     (trap-duration                   float)
 
+    ;; Item Replay Information
+    (needs-item-replay               uint8)
+    (initial-replay-done             uint8)
+
     ;; End Marker
     (end-marker           uint8 4)))
 

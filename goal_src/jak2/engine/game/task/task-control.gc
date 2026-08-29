@@ -373,7 +373,7 @@
        '("ctyp-statue-wall-breakable.mb")
        ;; <ap:preserve-this> change this to check for tomb access.
        ;; (not (task-node-closed? (game-task-node canyon-insert-items-shard)))
-       (not (task-node-closed? (game-task-node tomb-poles-introduction)))
+       (not (task-node-closed? (game-task-node canyon-insert-items-shard))) ;; <ap:note> allows access to tomb right after caynon-insert is complete, no mission until tomb access though
        )
      (prototypes-game-visible-set!
        '("ctyp-statue-rubble-a.mb" "ctyp-statue-rubble-b.mb" "ctyp-statue-rubble-big-a.mb")

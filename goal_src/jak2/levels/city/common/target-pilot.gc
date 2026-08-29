@@ -51,6 +51,8 @@
          (process->handle arg0)
          (go target-pilot-get-off)
          )
+        (('deathlink)
+          (go target-pilot-death 'deathlink))
         (('change-mode)
          (case (-> arg3 param 0)
            (('grab)

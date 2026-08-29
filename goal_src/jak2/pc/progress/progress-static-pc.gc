@@ -469,8 +469,7 @@ This gives us more freedom to write code how we want.
   `(progress-new-generic-link-to-scrolling-page (text-id progress-menu-archipelagoal-ii)
      (archipelagoal-ii-item-tracker)
      (archipelagoal-ii-traps)
-     ;; <ap:todo> deathlink will come later, leave out for now
-     ;; (archipelagoal-ii-deathlink)
+     (archipelagoal-ii-deathlink)
      )
   )
 
@@ -693,8 +692,6 @@ This gives us more freedom to write code how we want.
       (set! (-> *ap-settings* trap-duration) val)
       (ap-settings-update))))
 
-;; <ap:todo> deathlink will come later, leave out for now
-#|
 (defmacro archipelagoal-ii-deathlink ()
   '(new 'static 'menu-generic-boolean-option
     :name (text-id progress-menu-deathlink)
@@ -704,7 +701,6 @@ This gives us more freedom to write code how we want.
     :on-confirm (lambda ((val symbol))
       (set! (-> *ap-settings* deathlink?) val)
       (ap-settings-update))))
-|#
 
 (defmacro misc-options-pc-discord-rpc ()
   `(new 'static 'menu-generic-boolean-option

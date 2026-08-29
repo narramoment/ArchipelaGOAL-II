@@ -16,7 +16,7 @@
 ;; ****************************************************************************
 ;; **** This number must match expected_memory_version in MemoryReader.py! ****
 ;; ****************************************************************************
-(set! (-> *ap-info-jak2* version) 4)
+(set! (-> *ap-info-jak2* version) 5)
 
 (defun ap-mission-checked! ((mission-id uint))
   (format 0 "~%~%*************************************************~%")
@@ -332,21 +332,66 @@
   #t
   )
 
-;; <ap:todo> deathlink will come later, leave this out for now (PLEASE COME BACK TO TEST THIS LATER)
-#|
 (defun ap-deathlink-received! ((chosen-death symbol))
+  ;; first, check if jak's in a turret, a mech, a zoomer, or is daxter
+  (cond
+      ((and *target*
+          (= (-> (the-as target *target*) state name) 'target-turret-stance))
+            (send-event (handle->process (send-event *target* 'get-turret)) 'deathlink))
+      ((and *target*
+          (= (send-event *target* 'query 'mode) 'mech))
+            (send-event *target* 'deathlink))
+      ((and *target*
+          (or (= (send-event *target* 'query 'mode) 'pilot)
+              (= (send-event *target* 'query 'mode) 'pilot-dax)))
+                (send-event *target* 'deathlink))
+      ((and *target*
+          (= (send-event *target* 'query 'mode) 'indax))
+            (send-event *target* 'deathlink))
+      ;; then, check if jak is in a minigame
+      (else
+      (let ((onin-manager
+              (handle->process
+              (-> (-> (-> *game-info*
+                          sub-task-list
+                          (game-task-node city-play-onin-game-resolution))
+                      info)
+                  manager)))
+            (whack-manager
+              (handle->process
+              (-> (-> (-> *game-info*
+                          sub-task-list
+                          (game-task-node city-whack-resolution))
+                      info)
+                  manager))))
+        (cond
+          (onin-manager
+            (let ((onin
+                  (ppointer->process
+                    (-> (the task-manager onin-manager) child))))
+              (when onin
+                (send-event onin 'deathlink))))
+          
+          (whack-manager
+            (let ((whack
+                  (ppointer->process
+                    (-> (the task-manager whack-manager) child))))
+              (when whack
+                (send-event whack 'deathlink))))
+          ;; otherwise, just kill jak
+          (else
+            (send-event
+            *target*
+            'attack
+            #f
+            (static-attack-info
+              ((deathlink-death #t)
+              (mode chosen-death)
+              (vector (new 'static 'vector :y (meters 1) :w 1.0))
+              (angle 'up)
+              (control 1.0)))))))))
+  #t)
 
-  (let ((onin-npc (process-by-ename "onin-npc-1")))
-
-    (format #t "ONIN NPC: ~A\n" onin-npc)
-
-    (if onin-npc
-        (let ((child (-> onin-npc child)))
-          (format #t "ONIN CHILD: ~A\n" child))
-        )
-
-    #t))
-|#
 (defun ap-trap-received! ((trap symbol))
   (when (and (> (-> *ap-info-jak2* trap-duration) 0.0)
              (task-closed? "fortress-escape-start")

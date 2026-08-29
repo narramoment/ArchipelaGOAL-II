@@ -683,6 +683,7 @@
    (arrow-red              float)
    (red-filter-timer       time-frame)
    (ride-height            float)
+   (deathlink-death?        symbol)
    )
   (:state-methods
     idle
@@ -1103,6 +1104,10 @@
            )
          )
        )
+      (('deathlink)
+       (set! (-> self deathlink-death?) #t)
+       (set! (-> self health) 0.0)
+       )
       (else
         (turret-handler proc argc message block)
         )
@@ -1454,7 +1459,7 @@
       (handle->process (-> self rider))
       'attack
       #f
-      (static-attack-info ((id (new-attack-id)) (mode 'turret)))
+      (static-attack-info ((id (new-attack-id)) (mode 'turret) (deathlink-death (-> self deathlink-death?))))
       )
     (let ((v1-17 (-> self root root-prim)))
       (set! (-> v1-17 prim-core collide-as) (collide-spec))
@@ -2021,6 +2026,9 @@
 (defstate target-turret-stance (target)
   :event (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
     (case message
+      (('get-turret)
+        (-> self turret handle)
+        )
       (('change-mode)
        (case (-> block param 0)
          (('grab)
@@ -2049,7 +2057,7 @@
        )
       (('attack 'attack-invinc)
        (let ((gp-0
-               (the-as object (mem-copy! (the-as pointer (-> self attack-info-rec)) (the-as pointer (-> block param 1)) 160))
+               (the-as object (mem-copy! (the-as pointer (-> self attack-info-rec)) (the-as pointer (-> block param 1)) 172))
                )
              )
          ((method-of-type attack-info compute-intersect-info)
@@ -2078,6 +2086,8 @@
             (cond
               ((= (-> self game mode) 'play)
                (send-event (handle->process (-> self turret handle)) 'trans (-> self control trans))
+               (when (zero? (-> (the-as attack-info gp-0) deathlink-death))
+                (runs-on-jak-death 'turret))
                (go target-death 'turret)
                #t
                )
@@ -2102,6 +2112,8 @@
                 )
               (combine! a0-22 (the-as attack-info gp-0) self)
               )
+            (when (zero? (-> (the-as attack-info gp-0) deathlink-death))
+              (runs-on-jak-death 'bot))
             (go target-death 'bot)
             )
            )

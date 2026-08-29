@@ -495,9 +495,8 @@
       )
 
     (defun runs-on-jak-death ((death-event symbol))
-      ;; <ap:todo> deathlink will come later, leave it out for now
-      #|
       (when (-> *ap-settings* deathlink?)
+        (format 0 "runs-on-jak-death called with: ~A~%" death-event)
         (case death-event
           (('dying)
             ;; Code here runs immediately every time jak dies, before any death animation or death cutscene
@@ -583,7 +582,6 @@
           )
         )
       )
-      |#
       
       (none)
       )

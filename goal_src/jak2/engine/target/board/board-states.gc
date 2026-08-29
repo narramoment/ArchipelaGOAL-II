@@ -24,6 +24,7 @@
 (define-extern *smack-mods* surface)
 (define-extern target-hit-orient (function attack-info vector symbol :behavior target))
 (define-extern target-hit-move (function attack-info symbol (function none :behavior target) float none :behavior target))
+(define-extern runs-on-jak-death (function symbol none))
 
 (define-extern *target-board-hold-tricks* int)
 
@@ -2902,18 +2903,24 @@
                  )
                 (else
                   (pickup-collectable! (-> self fact) (pickup-type health) -1000.0 (the-as handle #f))
+                  (when (zero? (-> arg1 deathlink-death))
+                    (runs-on-jak-death 'endlessfall))
                   (go target-death (-> gp-0 mode))
                   )
                 )
               )
              (('drown-death 'sharkey 'lava 'dark-eco-pool 'melt 'instant-death 'crush 'death 'grenade 'big-explosion 'bot)
               (pickup-collectable! (-> self fact) (pickup-type health) -1000.0 (the-as handle #f))
+              (when (zero? (-> arg1 deathlink-death))
+                (runs-on-jak-death (-> gp-0 mode)))
               (if (= (-> self game mode) 'play)
                   (go target-death (-> gp-0 mode))
                   )
               )
              (('death)
               (pickup-collectable! (-> self fact) (pickup-type health) -1000.0 (the-as handle #f))
+              (when (zero? (-> arg1 deathlink-death))
+                (runs-on-jak-death 'endlessfall))
               )
              (else
                (pickup-collectable! (-> self fact) (pickup-type health) (- (-> gp-0 damage)) (the-as handle #f))

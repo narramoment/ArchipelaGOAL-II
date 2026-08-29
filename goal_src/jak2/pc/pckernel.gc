@@ -968,6 +968,7 @@
     (format file "(settings #x~X~%" (-> obj version))
     ;; file contents
     (format file "  (deathlink? ~A)~%" (-> obj deathlink?))
+    (format file "  (item-messages? ~A)~%" (-> obj item-messages?))
       ;; slot info entry contents
     ;;  (format file "  (slot-info-~D-name ~A)~%" i (the-as string (-> obj slot-info i name)))
     ;;  (format file "  (slot-info-~D-seed ~A)~%" i (the-as string (-> obj slot-info i seed))))
@@ -1000,10 +1001,10 @@
           (("settings")
           (set! version (file-stream-read-int file))
           ;; read through file and set fields
-          
           (dosettings (file)
             (case-str *pc-temp-string*
               (("deathlink?") (set! (-> obj deathlink?) (file-stream-read-symbol file)))
+              (("item-messages?") (set! (-> obj item-messages?) (file-stream-read-symbol file)))
               ))))))
     (inspect file)
     (file-stream-close file))

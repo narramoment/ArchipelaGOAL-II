@@ -5,6 +5,7 @@
 ;; (define-extern *ap-onin-game* handle)
 
 (define *ap-info-jak2* (new 'static 'ap-info-jak2))
+(define-extern ap-messenger-reset! (function none))
 (pc-get-archipelago-struct)
 
 ;; Initialize connection status to default (0)
@@ -629,6 +630,7 @@
   )
 
 (defun ap-setup-options! ((options ap-seed-options))
+  (ap-messenger-reset!)
   (set! (-> *ap-settings* completion-type) (-> options completion-type))
   (set! (-> *ap-settings* completion-value) (-> options completion-value))
   (set! (-> *ap-settings* trap-duration) (-> options trap-duration))

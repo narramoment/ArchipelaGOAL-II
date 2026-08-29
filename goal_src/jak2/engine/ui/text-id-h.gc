@@ -923,12 +923,10 @@
   (ap-filler-ammo-dark #x2159)
 
   (progress-menu-deathlink #x2160)
-  (progress-menu-enabled #x2161)
-  (progress-menu-disabled #x2162)
   
-  (burningbush-incoming-call #x2163)
+  (burningbush-incoming-call #x2161)
 
-  (progress-menu-trap-duration #x2164)
+  (progress-menu-trap-duration #x2162)
   
   ;; destination names text
   (caspad-name #x10000)

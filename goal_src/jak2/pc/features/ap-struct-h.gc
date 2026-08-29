@@ -41,6 +41,10 @@
     (missions-checked                uint32 75)
     (side-missions-checked           uint32 35)
 
+    ;; Item Information
+    (next-item-index                 uint)
+    (items-checked                   uint32 35) ;; not everything will be used, just giving future me some wiggle room
+
     ;; Connection Status
     (connection-status               ap-connection-status)
     (slot-name                       uint8 16)
@@ -74,6 +78,10 @@
 (define-extern ap-side-mission-checked! (function uint uint))
 
 (define-extern ap-verify-game-completed! (function uint symbol))
+
+(define-extern ap-item-checked? (function symbol symbol))
+
+(define-extern ap-item-checked! (function uint uint))
 
 (define-extern ap-item-received! (function symbol symbol))
 

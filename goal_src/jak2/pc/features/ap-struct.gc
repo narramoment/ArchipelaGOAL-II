@@ -347,8 +347,197 @@
       (send-event *target* 'get-pickup (pickup-type ammo-dark) 1.0)
      )
     )
-  ;; (auto-save-command 'save 0 0 *default-pool* #f) ;; <ap:todo> Fails compilation because ap-struct declared too early. Any way to fix this?
+  (ap-auto-save!)
   #t
+  )
+
+(defun ap-item-checked! ((item uint))
+  (set! (-> *ap-info-jak2* items-checked (-> *ap-info-jak2* next-item-index)) item)
+  (+! (-> *ap-info-jak2* next-item-index) 1)
+  )
+
+(defun ap-item-checked? ((item symbol))
+  (case item ;; sorted by chronological progression
+    (('darkjak) ;; dark jak
+      (task-node-closed? (game-task-node city-help-kid-resolution))
+      )
+    (('pass-red) ;; red security pass
+      (task-node-closed? (game-task-node fortress-dump-deal))
+      )
+    (('gun-red) ;; scatter gun
+      (task-node-closed? (game-task-node city-krew-delivery-resolution))
+      )
+    (('gun-yellow) ;; blaster
+      (task-node-closed? (game-task-node sewer-enemy-resolution))
+      )
+    (('lens)
+      (task-node-closed? (game-task-node mountain-lens-resolution))
+      )
+    (('gear)
+      (task-node-closed? (game-task-node mountain-gear-resolution))
+      )
+    (('shard)
+      (task-node-closed? (game-task-node mountain-shard-resolution))
+      )
+    (('gun-turret) ;; gunpod
+      (or (task-node-closed? (game-task-node drill-eggs-eggs-0))
+          (task-node-closed? (game-task-node drill-ship-resolution)))
+      )
+    (('pass-yellow) ;; yellow security pass
+      (task-node-closed? (game-task-node atoll-battle-resolution))
+      )
+    (('pass-green) ;; green security pass
+      (task-node-closed? (game-task-node city-keira-delivery-introduction))
+      )
+    (('gun-upgrade-speed) ;; fire rate upgrade
+      (task-node-closed? (game-task-node city-krew-collection-resolution))
+      )
+    (('pass-air-train) ;; air train pass
+      (or (task-node-closed? (game-task-node city-escort-kid-resolution))
+          (task-node-closed? (game-task-node dig-find-totem-introduction)))
+      )
+    (('gun-blue) ;; vulcan fury
+      (task-node-closed? (game-task-node ruins-enemy-introduction))
+      )
+    (('board) ;; jet-board
+      (task-node-closed? (game-task-node forest-scouts-get-board))
+      )
+    (('seal-piece-1) ;; water slums seal piece
+      (task-node-closed? (game-task-node city-protect-water-slums-get-seal))
+      )
+    (('seal-piece-2) ;; dig seal piece
+      (task-node-closed? (game-task-node dig-find-totem-resolution))
+      )
+    (('seal-piece-3) ;; onin's seal piece
+      (task-node-closed? (game-task-node city-play-onin-game-resolution))
+      )
+    (('ruby-key) ;; ruby key
+      (task-node-closed? (game-task-node sewer-board-resolution))
+      )
+    (('gun-upgrade-ammo) ;; ammo capacity upgrade
+      (task-node-closed? (game-task-node city-meet-brutter-pre-intro))
+      )
+    (('gun-dark) ;; peacemaker
+      (task-node-closed? (game-task-node sewer-escort-get-gun))
+      )
+    (('titan-suit) ;; titan suit
+      (or (task-node-closed? (game-task-node ruins-mech-introduction))
+          (task-node-closed? (game-task-node drill-mech-introduction))
+          (task-node-closed? (game-task-node under-mech-introduction)))
+      )
+    (('life-seed) ;; life seed
+      (task-node-closed? (game-task-node ruins-mech-resolution))
+      )
+    (('pass-purple) ;; purple security pass
+      (task-node-closed? (game-task-node stadium-race-class1-resolution))
+      )
+    (('pass-black)
+      (task-node-closed? (game-task-node palace-sneak-in-meeting))
+      )
+    (('gun-upgrade-damage) ;; damage upgrade
+      (task-node-closed? (game-task-node castle-boss-introduction))
+      )
+    (('heart-of-mar) ;; heart of mar
+      (task-node-closed? (game-task-node castle-boss-resolution))
+      )
+    (('time-map) ;; time map
+      (task-node-closed? (game-task-node city-whack-resolution))
+      )
+    (('rift-rider) ;; rift rider
+      (task-node-closed? (game-task-node city-defend-stadium-resolution))
+      )
+    (('precursor-stone) ;; precursor stone
+      (task-node-closed? (game-task-node consite-find-baron-resolution))
+      )
+    (('darkjak-bomb0) ;; dark bomb
+      (task-node-closed? (game-task-node city-oracle-level0))
+      )
+    (('darkjak-bomb1) ;; dark blast
+      (task-node-closed? (game-task-node city-oracle-level1))
+      )
+    (('darkjak-invinc) ;; dark invincibility
+      (task-node-closed? (game-task-node city-oracle-level2))
+      )
+    (('darkjak-giant) ;; dark giant
+      (task-node-closed? (game-task-node city-oracle-level3))
+      )
+    (else ;; default case
+      #f
+      )
+    )
+  )
+
+;; <ap:preserve-this> list of all items tracked for individual AP check purposes, in the same
+;; order as ap-item-checked?'s case branches.
+(define *ap-tracked-items* '(darkjak pass-red gun-red gun-yellow lens gear shard gun-turret
+                              pass-yellow pass-green gun-upgrade-speed pass-air-train gun-blue
+                              board seal-piece-1 seal-piece-2 seal-piece-3 ruby-key gun-upgrade-ammo
+                              gun-dark titan-suit life-seed pass-purple pass-black gun-upgrade-damage
+                              heart-of-mar time-map rift-rider precursor-stone darkjak-bomb0
+                              darkjak-bomb1 darkjak-invinc darkjak-giant))
+
+(define *ap-item-feature-ids*
+  '((darkjak . 13)
+    (pass-red . 18)
+    (gun-red . 7)
+    (gun-yellow . 6)
+    (lens . 30)
+    (gear . 31)
+    (shard . 32)
+    (gun-turret . 39)
+    (pass-yellow . 20)
+    (pass-green . 19)
+    (gun-upgrade-speed . 14)
+    (pass-air-train . 29)
+    (gun-blue . 8)
+    (board . 10)
+    (seal-piece-1 . 40)
+    (seal-piece-2 . 41)
+    (seal-piece-3 . 42)
+    (ruby-key . 33)
+    (gun-upgrade-ammo . 15)
+    (gun-dark . 9)
+    (titan-suit . 38)
+    (life-seed . 37)
+    (pass-purple . 27)
+    (pass-black . 28)
+    (gun-upgrade-damage . 16)
+    (heart-of-mar . 34)
+    (time-map . 35)
+    (rift-rider . 43)
+    (precursor-stone . 36)
+    (darkjak-bomb0 . 22)
+    (darkjak-bomb1 . 23)
+    (darkjak-invinc . 24)
+    (darkjak-giant . 25)
+    )
+  )
+
+(defun ap-item-already-checked? ((item-id uint))
+  (let ((found #f))
+    (dotimes (i (the-as int (-> *ap-info-jak2* next-item-index)))
+      (when (= (-> *ap-info-jak2* items-checked i) item-id)
+        (set! found #t)
+        )
+      )
+    found
+    )
+  )
+
+(defun ap-poll-item-checks! ()
+  (let ((items *ap-tracked-items*))
+    (while (not (null? items))
+      (let* ((item (the-as symbol (car items)))
+             (entry (assoc item *ap-item-feature-ids*))
+             (item-id (the uint (if entry (sar (the-as int (cdr entry)) 3) 0))))
+        (when (and (nonzero? item-id) (ap-item-checked? item) (not (ap-item-already-checked? item-id)))
+          (ap-item-checked! item-id)
+          )
+        )
+      (set! items (cdr items))
+      )
+    )
+  (none)
   )
 
 (defun ap-deathlink-received! ((chosen-death symbol))

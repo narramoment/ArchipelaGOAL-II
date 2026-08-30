@@ -683,7 +683,7 @@
    (arrow-red              float)
    (red-filter-timer       time-frame)
    (ride-height            float)
-   (deathlink-death?       symbol)
+   (deathlink-death?        symbol)
    )
   (:state-methods
     idle
@@ -2027,8 +2027,8 @@
   :event (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
     (case message
       (('get-turret)
-       (-> self turret handle)
-       )
+        (-> self turret handle)
+        )
       (('change-mode)
        (case (-> block param 0)
          (('grab)
@@ -2087,7 +2087,7 @@
               ((= (-> self game mode) 'play)
                (send-event (handle->process (-> self turret handle)) 'trans (-> self control trans))
                (when (zero? (-> (the-as attack-info gp-0) deathlink-death))
-                 (runs-on-jak-death 'turret))
+                (runs-on-jak-death 'turret))
                (go target-death 'turret)
                #t
                )

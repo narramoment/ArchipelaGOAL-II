@@ -17,8 +17,23 @@
 ;; **** This number must match expected_memory_version in MemoryReader.py! ****
 ;; ****************************************************************************
 (set! (-> *ap-info-jak2* version) 5)
+
 ;; <ap:preserve-this> autosave timer for preventing progress loss on life resets
 (define *ap-autosave-timer* (the time-frame 0))
+
+;; <ap:preserve-this> guard flag to prevent multiple simultaneous saves
+(define *ap-auto-saving?* #f)
+
+;; <ap:preserve-this> auto save function using the official save mechanism
+(defun ap-auto-save! ()
+  (when (not *ap-auto-saving?*)
+    (process-spawn-function process
+      (lambda :behavior process ()
+        (true! *ap-auto-saving?*)
+        (auto-save-command 'auto-save 0 0 *default-pool* #f)
+        (suspend-for (seconds 1))
+        (false! *ap-auto-saving?*))))
+  *ap-auto-saving?*)
 
 ;; <ap:preserve-this> guard flag to prevent multiple simultaneous saves
 (define *ap-auto-saving?* #f)
@@ -463,6 +478,7 @@
       )
     )
   )
+
 ;; <ap:preserve-this> list of all items tracked for individual AP check purposes, in the same
 ;; order as ap-item-checked?'s case branches.
 (define *ap-tracked-items* '(darkjak pass-red gun-red gun-yellow lens gear shard gun-turret
@@ -537,58 +553,63 @@
   )
 
 (defun ap-deathlink-received! ((chosen-death symbol))
+  ;; first, check if jak's in a turret, a mech, a zoomer, or is daxter
   (cond
-    ;; check if jak is in a turret
-    ((and *target*
+      ((and *target*
           (= (-> (the-as target *target*) state name) 'target-turret-stance))
-          (send-event (handle->process (send-event *target* 'get-turret)) 'deathlink))
-    ;; check if jak is in a mech
-    ((and *target*
-        (= (send-event *target* 'query 'mode) 'mech))
-          (send-event *target* 'deathlink))
-    ;; otherwise, move to minigames
-    (else
-     (let ((onin-manager
-            (handle->process
-             (-> (-> (-> *game-info*
-                         sub-task-list
-                         (game-task-node city-play-onin-game-resolution))
-                     info)
-                 manager)))
-           (whack-manager
-            (handle->process
-             (-> (-> (-> *game-info*
-                         sub-task-list
-                         (game-task-node city-whack-resolution))
-                     info)
-                 manager))))
-       (cond
-       ;; check if jak is playing onin's game
-         (onin-manager
-          (let ((onin
-                 (ppointer->process
-                  (-> (the task-manager onin-manager) child))))
-            (when onin
-              (send-event onin 'deathlink))))
-       ;; check if jak is playing whack-a-metal 
-         (whack-manager
-          (let ((whack
-                 (ppointer->process
-                  (-> (the task-manager whack-manager) child))))
-            (when whack
-              (send-event whack 'deathlink))))
-       ;; otherwise, just kill jak  
-         (else
-          (send-event
-           *target*
-           'attack
-           #f
-           (static-attack-info
-            ((deathlink-death #t)
-             (mode chosen-death)
-             (vector (new 'static 'vector :y (meters 1) :w 1.0))
-             (angle 'up)
-             (control 1.0)))))))))
+            (send-event (handle->process (send-event *target* 'get-turret)) 'deathlink))
+      ((and *target*
+          (= (send-event *target* 'query 'mode) 'mech))
+            (send-event *target* 'deathlink))
+      ((and *target*
+          (or (= (send-event *target* 'query 'mode) 'pilot)
+              (= (send-event *target* 'query 'mode) 'pilot-dax)))
+                (send-event *target* 'deathlink))
+      ((and *target*
+          (= (send-event *target* 'query 'mode) 'indax))
+            (send-event *target* 'deathlink))
+      ;; then, check if jak is in a minigame
+      (else
+      (let ((onin-manager
+              (handle->process
+              (-> (-> (-> *game-info*
+                          sub-task-list
+                          (game-task-node city-play-onin-game-resolution))
+                      info)
+                  manager)))
+            (whack-manager
+              (handle->process
+              (-> (-> (-> *game-info*
+                          sub-task-list
+                          (game-task-node city-whack-resolution))
+                      info)
+                  manager))))
+        (cond
+          (onin-manager
+            (let ((onin
+                  (ppointer->process
+                    (-> (the task-manager onin-manager) child))))
+              (when onin
+                (send-event onin 'deathlink))))
+          
+          (whack-manager
+            (let ((whack
+                  (ppointer->process
+                    (-> (the task-manager whack-manager) child))))
+              (when whack
+                (send-event whack 'deathlink))))
+          ;; otherwise, just kill jak
+          (else
+            (send-event
+            *target*
+            'attack
+            #f
+            (static-attack-info
+              ((deathlink-death #t)
+              (mode chosen-death)
+              (vector (new 'static 'vector :y (meters 1) :w 1.0))
+              (angle 'up)
+              (control 1.0)))))))))
   #t)
 
 (defun ap-trap-received! ((trap symbol))
@@ -689,7 +710,7 @@
                     (talker-spawn-func (-> *talker-speech* 281) *entity-pool* (target-pos 0) (the-as region #f))))
                 (suspend-for (seconds 0.1))
                 (when (!= curr-lang (language-enum japanese)) ;; <ap:note> make sure to revert it back after :sob:
-                  (set-game-language! *pc-settings* curr-lang))))))
+                  (set-game-language! *pc-settings* curr-lang))))))    
         (('personal-bubble) ;; pacifism trap
           (process-spawn-function process
             (lambda :behavior process ()
@@ -841,8 +862,9 @@
     (set! (-> *ap-settings* oracle-cost-level1) (-> options oracle-cost-level1))
     (set! (-> *ap-settings* oracle-cost-level2) (-> options oracle-cost-level2))
     (set! (-> *ap-settings* oracle-cost-level3) (-> options oracle-cost-level3)))
-  (charp<-string (-> *ap-info-jak2* slot-name) (-> options slot-name))
-  (charp<-string (-> *ap-info-jak2* slot-seed) (-> options slot-seed))
+  ;; <ap:todo> do this later
+  ;; (charp<-string (-> *ap-info-jak2* slot-name) (-> options slot-name))
+  ;; (charp<-string (-> *ap-info-jak2* slot-seed) (-> options slot-seed))
   (ap-settings-update)
   #t)
 
@@ -850,15 +872,13 @@
   (set! (-> *ap-info-jak2* deathlink-enabled) (if (-> *ap-settings* deathlink?) 1 0))
   (set! (-> *ap-info-jak2* trap-duration) (-> *ap-settings* trap-duration))
   (set! (-> *ap-info-jak2* completion-goal-type) (the-as ap-completion-type (-> *ap-settings* completion-type)))
-  (set! (-> *ap-info-jak2* completion-goal-value)
+  (set! (-> *ap-info-jak2* completion-goal-value) 
     (if (= (-> *ap-settings* completion-type) 2)
       (-> *ap-settings* completion-mission-count)
-      (-> *ap-settings* completion-value)
-      )
-    )
+      (-> *ap-settings* completion-value)))
   ;; <ap:preserve-this> poll for individually-tracked item checks (used for dual-check mode)
   (ap-poll-item-checks!)
-  ;; <ap:preserve-this> autosave every 30 seconds to prevent progress loss on life resets
+  ;; <ap:preserve-this> autosave every 30 seconds to prevent progress loss on life resets  
   (when (and *game-info*
              *target*
              (not (movie?))

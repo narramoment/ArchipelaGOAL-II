@@ -2053,7 +2053,8 @@
          )
        )
       (('deathlink)
-       (go-virtual lose)
+        (go-virtual lose
+         )
        )
       )
     )

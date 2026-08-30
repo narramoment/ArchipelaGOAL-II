@@ -22,17 +22,17 @@
 ;; Holds what the user has chosen for their seed options.
 (deftype ap-seed-options (structure)
   (
-    (slot-name                       string)
-    (slot-seed                       string)
-    (trap-duration                   float)
-    (completion-type                 uint8)
-    (completion-value                uint8)
-    (completion-mission-count        uint8)
-    (randomize-oracle-cost           uint8)
-    (oracle-cost-level0              uint32)
-    (oracle-cost-level1              uint32)
-    (oracle-cost-level2              uint32)
-    (oracle-cost-level3              uint32)
+    (slot-name                string)
+    (slot-seed                string)
+    (trap-duration            float)
+    (completion-type          uint8)
+    (completion-value         uint8)
+    (completion-mission-count uint8)
+    (randomize-oracle-cost    uint8)
+    (oracle-cost-level0       uint32)
+    (oracle-cost-level1       uint32)
+    (oracle-cost-level2       uint32)
+    (oracle-cost-level3       uint32)
     ))
 
 (deftype ap-info-jak2 (structure)
@@ -48,7 +48,7 @@
 
     ;; Item Information
     (next-item-index                 uint)
-    (items-checked                   uint32 35) ;; not all 35 are used, but it's nice to have wiggle room
+    (items-checked                   uint32 35) ;; not everything will be used, just giving future me some wiggle room
 
     ;; Connection Status
     (connection-status               ap-connection-status)
@@ -87,6 +87,8 @@
 (define-extern ap-item-checked? (function symbol symbol))
 
 (define-extern ap-item-checked! (function uint uint))
+
+(define-extern ap-item-received! (function symbol symbol))
 
 (define-extern ap-deathlink-received! (function symbol symbol))
 

@@ -497,7 +497,7 @@
     (else
       (case arg2
         (('deathlink)
-          (go target-mech-death 'deathlink)
+         (go target-mech-death 'deathlink)
          )
         (('end-mode)
          enter-state

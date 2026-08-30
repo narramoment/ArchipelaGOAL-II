@@ -3736,7 +3736,7 @@
         (set! (-> *progress-state* qr-options-last-move) (current-time))
         (cond
           ((> (-> *progress-state* qr-options-item-selected) 0)
-           (+! (-> *progress-state* qr-options-item-selected) -1)
+           (+! (-> *progress-state* qr-options-item-selected) 1)
            (set! (-> arg0 selected-option) #f)
            (+! (-> arg0 option-index) 1)
            )

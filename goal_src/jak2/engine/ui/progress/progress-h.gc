@@ -338,7 +338,6 @@
    )
   )
 
-
 (deftype menu-sub-menu-qr-option (menu-qr-option)
   ((next-state  symbol)
    )

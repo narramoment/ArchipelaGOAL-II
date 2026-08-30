@@ -2920,7 +2920,7 @@
              (('death)
               (pickup-collectable! (-> self fact) (pickup-type health) -1000.0 (the-as handle #f))
               (when (zero? (-> arg1 deathlink-death))
-                (runs-on-jak-death 'death))
+                (runs-on-jak-death 'endlessfall))
               )
              (else
                (pickup-collectable! (-> self fact) (pickup-type health) (- (-> gp-0 damage)) (the-as handle #f))

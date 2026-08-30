@@ -5904,7 +5904,14 @@
             :info #f
             :borrow '()
             :open? #f
-            ;; <ap:note> changed to #f for simplification
+            ;; <ap:preserve-this> don't open any tasks, they'll reset the mission tree.
+            #|
+            :on-close '(begin
+              (task-open! "stadium-burning-bush-race-board-introduction")
+              (task-open! "stadium-burning-bush-race-class3-introduction")
+              (task-open! "stadium-burning-bush-race-class3-r-introduction")
+              )
+            |#
             :on-close #f
             )
           (new 'static 'game-task-node-info
@@ -7442,7 +7449,14 @@
             :info #f
             :borrow '()
             :open? #f
-            ;; <ap:note> changed to #f for simplification
+            ;; <ap:preserve-this> don't open any tasks, they'll reset the mission tree.
+            ;; :on-close '(begin
+            ;;    (task-open! "stadium-burning-bush-race-board-introduction")
+            ;;    (task-open! "stadium-burning-bush-race-class3-introduction")
+            ;;    (task-open! "stadium-burning-bush-race-class3-r-introduction")
+            ;;    (task-open! "stadium-burning-bush-race-class2-introduction")
+            ;;    (task-open! "stadium-burning-bush-race-class2-r-introduction")
+            ;;    )
             :on-close #f
             )
           (new 'static 'game-task-node-info
@@ -9854,14 +9868,7 @@
               :on-fail #f
               )
             :borrow '()
-            ;; <ap:preserve-this> added open? hook to check for gem rando and having dark jak
-            :open? (lambda ((arg0 game-task-node-info))
-              (and
-              (>= (-> *game-info* gem)
-                  (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
-                      (the float (-> *ap-settings* oracle-cost-level0))
-                  25.0))
-              (logtest? (-> *game-info* features) (game-feature darkjak))))
+            :open? (lambda ((arg0 game-task-node-info)) (>= (-> *game-info* gem) 25.0))
             :on-close #f
             ;; :add (game-task-node-command add-darkjak-0) ;; <ap:preserve-this> removed mission reward.
             :description (text-id progress-missions-go-to-oracle)
@@ -9947,14 +9954,7 @@
               :on-fail #f
               )
             :borrow '()
-            ;; <ap:preserve-this> added open hook to check for gem rando and for having dark jak
-            :open? (lambda ((arg0 game-task-node-info))
-              (and
-              (>= (-> *game-info* gem)
-                  (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
-                      (the float (-> *ap-settings* oracle-cost-level1))
-                  200.0))
-              (logtest? (-> *game-info* features) (game-feature darkjak))))
+            :open? (lambda ((arg0 game-task-node-info)) (>= (-> *game-info* gem) 200.0))
             :on-close #f
             ;; :add (game-task-node-command add-darkjak-1) ;; <ap:preserve-this> removed mission reward.
             :description (text-id progress-missions-go-to-oracle)
@@ -10040,14 +10040,7 @@
               :on-fail #f
               )
             :borrow '()
-            ;; <ap:preserve-this> added open? hook for gem rando and for having dark jak
-            :open? (lambda ((arg0 game-task-node-info))
-              (and
-              (>= (-> *game-info* gem)
-                  (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
-                      (the float (-> *ap-settings* oracle-cost-level2))
-                  200.0))
-              (logtest? (-> *game-info* features) (game-feature darkjak))))
+            :open? (lambda ((arg0 game-task-node-info)) (>= (-> *game-info* gem) 200.0))
             :on-close #f
             ;; :add (game-task-node-command add-darkjak-2) ;; <ap:preserve-this> removed mission reward.
             :description (text-id progress-missions-go-to-oracle)
@@ -10133,14 +10126,7 @@
               :on-fail #f
               )
             :borrow '()
-            ;; <ap:preserve-this> added open? hook to check for gem rando and having dark jak
-            :open? (lambda ((arg0 game-task-node-info))
-              (and
-              (>= (-> *game-info* gem)
-                  (if (and *ap-settings* (-> *ap-settings* randomize-oracle-cost))
-                      (the float (-> *ap-settings* oracle-cost-level3))
-                  100.0))
-              (logtest? (-> *game-info* features) (game-feature darkjak))))
+            :open? (lambda ((arg0 game-task-node-info)) (>= (-> *game-info* gem) 100.0))
             :on-close #f
             ;; :add (game-task-node-command add-darkjak-3) ;; <ap:preserve-this> removed mission reward.
             :description (text-id progress-missions-go-to-oracle)
@@ -12183,9 +12169,7 @@
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
-            :on-close #f ;; <ap:note> change this so it doesn't mess with the other side stadium missions
-            #|
-            '(begin
+            :on-close '(begin
                (when (task-closed? "stadium-race-class3-resolution")
                  (task-open! "stadium-burning-bush-race-class3-introduction")
                  (task-open! "stadium-burning-bush-race-class3-r-introduction")
@@ -12271,9 +12255,7 @@
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
-            :on-close #f ;; <ap:note> change this to not mess with the other stadium side missions
-            #|
-            '(begin
+            :on-close '(begin
                (when (task-closed? "stadium-board1-resolution")
                  (task-open! "stadium-burning-bush-race-board-introduction")
                  )
@@ -12354,9 +12336,7 @@
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
-            :on-close #f ;; <ap:note> change this to not mess with other stadium side missions
-            #|
-            '(begin
+            :on-close '(begin
                (when (task-closed? "stadium-board1-resolution")
                  (task-open! "stadium-burning-bush-race-board-introduction")
                  )
@@ -12437,9 +12417,7 @@
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
-            :on-close #f ;; <ap:note> change this to not mess with other stadium missions
-            #|
-            '(begin
+            :on-close '(begin
                (when (task-closed? "stadium-board1-resolution")
                  (task-open! "stadium-burning-bush-race-board-introduction")
                  )
@@ -12517,12 +12495,8 @@
             :on-open #f
             :info #f
             :borrow '()
-            ;; <ap:note> change this from a secret to being available when you gain access to the stadium
-            :open? (lambda ((arg0 game-task-node-info)) 
-              (ap-route-slums-to-stadium?))
-            :on-close #f ;; <ap:note> change this to not mess with other stadium side missions
-            #|
-            '(begin
+            :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
+            :on-close '(begin
                (task-open! "stadium-burning-bush-race-board-introduction")
                (task-open! "stadium-burning-bush-race-class2-introduction")
                (task-open! "stadium-burning-bush-race-class2-r-introduction")
@@ -12594,12 +12568,8 @@
             :on-open #f
             :info #f
             :borrow '()
-            ;; <ap:note> change this from being a secret to opening when you have access to the stadium
-            :open? (lambda ((arg0 game-task-node-info)) 
-              (ap-route-slums-to-stadium?))
-            :on-close #f ;; <ap:note> change this to not mess with stadium side missions
-            #|
-            '(begin
+            :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
+            :on-close '(begin
                (task-open! "stadium-burning-bush-race-board-introduction")
                (task-open! "stadium-burning-bush-race-class3-introduction")
                (task-open! "stadium-burning-bush-race-class3-r-introduction")
@@ -12671,12 +12641,8 @@
             :on-open #f
             :info #f
             :borrow '()
-            ;; <ap:note> change this from a secret to being able to access when you get access to stadium
-            :open? (lambda ((arg0 game-task-node-info)) 
-              (ap-route-slums-to-stadium?))
-            :on-close #f ;; <ap:note> change this to not mess with other stadium side missions
-            #|
-            '(begin
+            :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
+            :on-close '(begin
                (task-open! "stadium-burning-bush-race-board-introduction")
                (task-open! "stadium-burning-bush-race-class3-introduction")
                (task-open! "stadium-burning-bush-race-class3-r-introduction")

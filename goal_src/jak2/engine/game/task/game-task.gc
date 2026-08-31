@@ -12169,7 +12169,7 @@
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
-            :on-close '(begin
+            :on-close #f #| '(begin
                (when (task-closed? "stadium-race-class3-resolution")
                  (task-open! "stadium-burning-bush-race-class3-introduction")
                  (task-open! "stadium-burning-bush-race-class3-r-introduction")
@@ -12255,7 +12255,7 @@
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
-            :on-close '(begin
+            :on-close #f #|'(begin
                (when (task-closed? "stadium-board1-resolution")
                  (task-open! "stadium-burning-bush-race-board-introduction")
                  )
@@ -12336,7 +12336,7 @@
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
-            :on-close '(begin
+            :on-close #f #|'(begin
                (when (task-closed? "stadium-board1-resolution")
                  (task-open! "stadium-burning-bush-race-board-introduction")
                  )
@@ -12417,7 +12417,7 @@
             ;; <ap:preserve-this> added open hook to check for archipelago items.
             :open? (lambda ((arg0 game-task-node-info)) 
               (ap-route-slums-to-stadium?))
-            :on-close '(begin
+            :on-close #f #|'(begin
                (when (task-closed? "stadium-board1-resolution")
                  (task-open! "stadium-burning-bush-race-board-introduction")
                  )
@@ -12496,7 +12496,7 @@
             :info #f
             :borrow '()
             :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
-            :on-close '(begin
+            :on-close #f #|'(begin
                (task-open! "stadium-burning-bush-race-board-introduction")
                (task-open! "stadium-burning-bush-race-class2-introduction")
                (task-open! "stadium-burning-bush-race-class2-r-introduction")
@@ -12569,7 +12569,7 @@
             :info #f
             :borrow '()
             :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
-            :on-close '(begin
+            :on-close #f #|'(begin
                (task-open! "stadium-burning-bush-race-board-introduction")
                (task-open! "stadium-burning-bush-race-class3-introduction")
                (task-open! "stadium-burning-bush-race-class3-r-introduction")
@@ -12642,7 +12642,7 @@
             :info #f
             :borrow '()
             :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
-            :on-close '(begin
+            :on-close #f #|'(begin
                (task-open! "stadium-burning-bush-race-board-introduction")
                (task-open! "stadium-burning-bush-race-class3-introduction")
                (task-open! "stadium-burning-bush-race-class3-r-introduction")

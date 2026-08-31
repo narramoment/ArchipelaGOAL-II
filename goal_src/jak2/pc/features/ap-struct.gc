@@ -34,20 +34,6 @@
         (suspend-for (seconds 1))
         (false! *ap-auto-saving?*))))
   *ap-auto-saving?*)
-
-;; <ap:preserve-this> guard flag to prevent multiple simultaneous saves
-(define *ap-auto-saving?* #f)
-
-;; <ap:preserve-this> auto save function using the official save mechanism
-(defun ap-auto-save! ()
-  (when (not *ap-auto-saving?*)
-    (process-spawn-function process
-      (lambda :behavior process ()
-        (true! *ap-auto-saving?*)
-        (auto-save-command 'auto-save 0 0 *default-pool* #f)
-        (suspend-for (seconds 1))
-        (false! *ap-auto-saving?*))))
-  *ap-auto-saving?*)
   
 (defun ap-mission-checked! ((mission-id uint))
   (format 0 "~%~%*************************************************~%")

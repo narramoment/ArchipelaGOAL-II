@@ -1311,6 +1311,7 @@
           (if (and gp-1 (type? (-> self root) collide-shape))
               (update-transforms (the-as collide-shape (-> self root)))
               )
+          (logior! (-> self skel status) (joint-control-status sync-math))
           (return #f)
           )
         )

@@ -1010,7 +1010,7 @@
              (('lava 'melt)
               (pickup-collectable! (-> self fact) (pickup-type health) -1000.0 (the-as handle #f))
               (when (zero? (-> arg1 deathlink-death))
-                (runs-on-jak-death 'lava))
+                (runs-on-jak-death (-> sv-32 mode)))
               (part-tracker-spawn :to *entity-pool* :group group-lava-death :mat-joint (-> self control trans))
               (set! (-> sv-32 angle) 'lava)
               (set! (-> sv-32 shove-up) 20480.0)

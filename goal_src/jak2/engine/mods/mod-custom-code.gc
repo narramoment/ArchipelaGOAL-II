@@ -753,7 +753,7 @@
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 15))
             (+! (-> *ap-info-jak2* death-count) 1)
           )
-          (('shock) ;; does not kill
+          (('shock 'shockup 'shock-red 'shock-green ) ;; does not kill
             (set! (-> *ap-info-jak2* cause-of-death) (the-as uint 16))
             (+! (-> *ap-info-jak2* death-count) 1)
           )

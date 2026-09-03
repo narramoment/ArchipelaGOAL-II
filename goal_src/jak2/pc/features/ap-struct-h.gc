@@ -33,6 +33,7 @@
     (oracle-cost-level1       uint32)
     (oracle-cost-level2       uint32)
     (oracle-cost-level3       uint32)
+    (deathlink                uint8)
     ))
 
 (deftype ap-info-jak2 (structure)

@@ -842,6 +842,7 @@
   (set! (-> *ap-settings* completion-value) (-> options completion-value))
   (set! (-> *ap-settings* completion-mission-count) (-> options completion-mission-count))
   (set! (-> *ap-settings* trap-duration) (-> options trap-duration))
+  (set! (-> *ap-settings* deathlink?) (if (nonzero? (-> options deathlink)) #t #f))
   (set! (-> *ap-settings* randomize-oracle-cost) (if (nonzero? (-> options randomize-oracle-cost)) #t #f))
   (when (nonzero? (-> options randomize-oracle-cost))
     (set! (-> *ap-settings* oracle-cost-level0) (-> options oracle-cost-level0))

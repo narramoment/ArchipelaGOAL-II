@@ -970,79 +970,36 @@
             )
           )
         ;; og:preserve-this target-look-at-me! macro
-        (target-look-at-me!
-          :trans
-          (vector+!
-            (new 'stack-no-clear 'vector)
-            (the-as vector
-              (-> self root root-prim prim-core))
-            (new
-              'static
-              'vector
-              :y 2048.0
-              :w 1.0)))
-
+        (target-look-at-me! :trans (vector+! (new 'stack-no-clear 'vector) (the-as vector (-> self root root-prim prim-core)) (new 'static 'vector :y 2048.0 :w 1.0)))
         (base-turret-method-36 self)
-
         (suspend)
         )
       )
-
     #f
     )
-
   :post (behavior ()
     (cond
       ((-> self enable-controls)
-       (quaternion-slerp!
-         (-> self root quat)
-         (-> self root quat)
-         (-> self init-quat)
-         (* 3.0 (seconds-per-frame)))
-       (quaternion-copy!
-         (-> self target-quat)
-         (-> self root quat))
+       (quaternion-slerp! (-> self root quat) (-> self root quat) (-> self init-quat) (* 3.0 (seconds-per-frame)))
+       (quaternion-copy! (-> self target-quat) (-> self root quat))
        )
 
       (else
         (let ((s4-0 (new 'stack-no-clear 'matrix))
               (s5-0 (new 'stack-no-clear 'matrix))
-              (gp-0 (new 'stack-no-clear 'quaternion)))
-
-          (matrix-rotate-y!
-            s4-0
-            (-> self roty))
-
-          (matrix-rotate-x!
-            s5-0
-            (-> self rotx))
-
-          (matrix*!
-            s4-0
-            s5-0
-            s4-0)
-
-          (matrix->quaternion
-            gp-0
-            s4-0)
-
-          (quaternion-smooth-seek!
-            (-> self target-quat)
-            (-> self target-quat)
-            gp-0
-            0.33)
-
-          (let ((f0-4
-                  (update! (-> self smush-control))))
-            (quaternion-rotate-local-x!
-              (-> self root quat)
-              gp-0
-              (* -910.2222 f0-4))
+              (gp-0 (new 'stack-no-clear 'quaternion))
+              )
+          (matrix-rotate-y! s4-0 (-> self roty))
+          (matrix-rotate-x! s5-0 (-> self rotx))
+          (matrix*! s4-0 s5-0 s4-0)
+          (matrix->quaternion gp-0 s4-0)
+          (quaternion-smooth-seek! (-> self target-quat) (-> self target-quat) gp-0 0.33)
+          (let ((f0-4 (update! (-> self smush-control))))
+            (quaternion-rotate-local-x! (-> self root quat) gp-0 (* -910.2222 f0-4))
             )
           )
         )
       )
-
     (transform-post)
     )
   )

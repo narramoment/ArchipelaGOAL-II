@@ -76,7 +76,7 @@
     (static-warp-gate-menu-entry
       :level-name 'drillmid
       :continue-name "drill3-warp"
-      :text-id (text-id drill-name-1) ;"Drill Platform (Warp 3)"
+      :text-id (text-id drill-name-3) ;"Drill Platform (Warp 3)"
       :allow-when (lambda () (task-closed? "drill-mech-introduction"))  ;; third drill platform mission required
       :forbid-when #f
       :on-activate #f

@@ -371,9 +371,10 @@
   "10003": "Strip Mine",
   "10004": "Drill Platform (Warp 1)",
   "10005": "Drill Platform (Warp 2)",
-  "10006": "Power Station",
-  "10007": "Mountain Temple (Top)",
-  "10008": "Mountain Temple (Bottom)",
+  "10006": "Drill Platform (Warp 1, Mech)",
+  "10007": "Power Station",
+  "10008": "Mountain Temple (Top)",
+  "10009": "Mountain Temple (Bottom)",
 
   "100000": "Select Destination",
   "100001": "No Menu Data",

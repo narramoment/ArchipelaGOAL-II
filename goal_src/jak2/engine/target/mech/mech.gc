@@ -180,17 +180,8 @@
                          (cpad-pressed? 0 triangle)
                          (send-event *target* 'change-mode 'mech self (-> self shield-value)))
                 (go-virtual pickup (method-of-object self wait-for-return))))))
-        (target-look-at-me!
-          :trans
-          (vector+!
-            (new 'stack-no-clear 'vector)
-            (the-as vector
-              (-> self root root-prim prim-core))
-            (new 'static
-              'vector
-              :y 2048.0
-              :w 1.0)))
-
+        ;; og:preserve-this target-look-at-me! macro
+        (target-look-at-me! :trans (vector+! (new 'stack-no-clear 'vector) (the-as vector (-> self root root-prim prim-core)) (new 'static 'vector :y 2048.0 :w 1.0)))
         (mech-method-24 self)
         (suspend)
         )

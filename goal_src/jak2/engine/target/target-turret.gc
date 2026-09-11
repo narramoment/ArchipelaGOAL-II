@@ -922,62 +922,127 @@
                           )
                         )
                    )
-          (let ((gp-1
-                  (new 'stack 'font-context *font-default-matrix* 32 320 0.0 (font-color default) (font-flags shadow kerning))
-                  )
-                )
+          ;; <ap:note> check for which text is needed
+          (let ((gp-1 (new 'stack 'font-context *font-default-matrix* 32 320 0.0 (font-color default) (font-flags shadow kerning))))
             (set-width! gp-1 340)
             (set-height! gp-1 80)
             (set-scale! gp-1 0.9)
-            (set! (-> gp-1 flags) (font-flags shadow kerning large))
-            (print-game-text
-              (lookup-text! *common-text* (text-id press-triangle-to-use) #f)
-              gp-1
-              #f
-              44
-              (bucket-id progress)
-              )
+            (set! (-> gp-1 flags)
+                  (font-flags shadow kerning large))
+            ;; if you haven't already checked the gun turret, check it
+            (if (not (ap-item-already-checked? (the-as uint 39)))
+                (print-game-text
+                  (lookup-text!
+                    *common-text*
+                    (text-id ap-gun-turret-check)
+                    #f)
+                  gp-1
+                  #f
+                  44
+                  (bucket-id progress))
+                ;; if you have checked the location and you have the gun turret, show the text for entering the gun turret
+                (when (logtest? (-> *game-info* features) (game-feature gun-turret))
+                (print-game-text
+                  (lookup-text!
+                    *common-text*
+                    (text-id press-triangle-to-use)
+                    #f)
+                  gp-1
+                  #f
+                  44
+                  (bucket-id progress)))
             )
-          (when (and (cpad-pressed? 0 triangle) (send-event *target* 'change-mode 'turret self))
-            (set! (-> self rider) (process->handle *target*))
-            (let ((gp-2 (res-lump-struct (-> self entity) 'on-exit structure)))
-              (if (and gp-2 (not *scene-player*))
-                  (script-eval (the-as pair gp-2))
+            ;; <ap:note> actual logic for the gun turret, previous code is for the text logic
+            (if (not (ap-item-already-checked? (the-as uint 39)))
+                (when (cpad-pressed? 0 triangle) (ap-item-checked! (the-as uint 39)))
+                (when (and (logtest? (-> *game-info* features) (game-feature gun-turret))
+                           (cpad-pressed? 0 triangle)
+                           (send-event *target* 'change-mode 'turret self))
+                  (set! (-> self rider) (process->handle *target*))
+                  (let ((gp-2 (res-lump-struct (-> self entity) 'on-exit structure)))
+                    (if (and gp-2 (not *scene-player*))
+                        (script-eval (the-as pair gp-2))
+                        )
+                    )
+                  (go-virtual setup)
                   )
-              )
-            (go-virtual setup)
+                )
             )
           )
         ;; og:preserve-this target-look-at-me! macro
-        (target-look-at-me! :trans (vector+! (new 'stack-no-clear 'vector) (the-as vector (-> self root root-prim prim-core)) (new 'static 'vector :y 2048.0 :w 1.0)))
+        (target-look-at-me!
+          :trans
+          (vector+!
+            (new 'stack-no-clear 'vector)
+            (the-as vector
+              (-> self root root-prim prim-core))
+            (new
+              'static
+              'vector
+              :y 2048.0
+              :w 1.0)))
+
         (base-turret-method-36 self)
+
         (suspend)
         )
       )
+
     #f
     )
+
   :post (behavior ()
     (cond
       ((-> self enable-controls)
-       (quaternion-slerp! (-> self root quat) (-> self root quat) (-> self init-quat) (* 3.0 (seconds-per-frame)))
-       (quaternion-copy! (-> self target-quat) (-> self root quat))
+       (quaternion-slerp!
+         (-> self root quat)
+         (-> self root quat)
+         (-> self init-quat)
+         (* 3.0 (seconds-per-frame)))
+       (quaternion-copy!
+         (-> self target-quat)
+         (-> self root quat))
        )
+
       (else
         (let ((s4-0 (new 'stack-no-clear 'matrix))
               (s5-0 (new 'stack-no-clear 'matrix))
-              (gp-0 (new 'stack-no-clear 'quaternion))
-              )
-          (matrix-rotate-y! s4-0 (-> self roty))
-          (matrix-rotate-x! s5-0 (-> self rotx))
-          (matrix*! s4-0 s5-0 s4-0)
-          (matrix->quaternion gp-0 s4-0)
-          (quaternion-smooth-seek! (-> self target-quat) (-> self target-quat) gp-0 0.33)
-          (let ((f0-4 (update! (-> self smush-control))))
-            (quaternion-rotate-local-x! (-> self root quat) gp-0 (* -910.2222 f0-4))
+              (gp-0 (new 'stack-no-clear 'quaternion)))
+
+          (matrix-rotate-y!
+            s4-0
+            (-> self roty))
+
+          (matrix-rotate-x!
+            s5-0
+            (-> self rotx))
+
+          (matrix*!
+            s4-0
+            s5-0
+            s4-0)
+
+          (matrix->quaternion
+            gp-0
+            s4-0)
+
+          (quaternion-smooth-seek!
+            (-> self target-quat)
+            (-> self target-quat)
+            gp-0
+            0.33)
+
+          (let ((f0-4
+                  (update! (-> self smush-control))))
+            (quaternion-rotate-local-x!
+              (-> self root quat)
+              gp-0
+              (* -910.2222 f0-4))
             )
           )
         )
       )
+
     (transform-post)
     )
   )

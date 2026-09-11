@@ -960,7 +960,8 @@
   (progress-mission-dark-invincible #x2188)
   (progress-mission-dark-giant #x2189)
 
-  
+  (ap-titan-suit-check #x2190)
+  (ap-gun-turret-check #x2191)
   
   ;; destination names text
   (caspad-name #x10000)

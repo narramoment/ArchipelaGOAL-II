@@ -378,9 +378,7 @@
       (task-node-closed? (game-task-node mountain-shard-resolution))
       )
     (('gun-turret) ;; gunpod
-      (or (task-node-closed? (game-task-node drill-eggs-eggs-0))
-          (task-node-closed? (game-task-node drill-ship-resolution)))
-      )
+      #f)
     (('pass-yellow) ;; yellow security pass
       (task-node-closed? (game-task-node atoll-battle-resolution))
       )
@@ -419,10 +417,7 @@
       (task-node-closed? (game-task-node sewer-escort-get-gun))
       )
     (('titan-suit) ;; titan suit
-      (or (task-node-closed? (game-task-node ruins-mech-introduction))
-          (task-node-closed? (game-task-node drill-mech-introduction))
-          (task-node-closed? (game-task-node under-mech-introduction)))
-      )
+      #f)
     (('life-seed) ;; life seed
       (task-node-closed? (game-task-node ruins-mech-resolution))
       )

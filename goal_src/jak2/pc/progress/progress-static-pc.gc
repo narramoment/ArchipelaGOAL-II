@@ -836,7 +836,10 @@ This gives us more freedom to write code how we want.
     :name (text-id progress-menu-deathlink)
     :truthy-text (text-id progress-on)
     :falsey-text (text-id progress-off)
-    :get-value-fn (lambda () (-> *ap-settings* deathlink?))
+    :get-value-fn (lambda ()
+        (if (= (-> *ap-settings* deathlink?) 0)
+            #f
+            (-> *ap-settings* deathlink?)))
     :on-confirm (lambda ((val symbol))
       (set! (-> *ap-settings* deathlink?) val)
       (ap-settings-update)
@@ -930,7 +933,9 @@ This gives us more freedom to write code how we want.
 (defmacro archipelagoal-ii-completion-value ()
   '(new 'static 'menu-generic-slider-option
     :name (text-id progress-menu-completion-value)
-    :should-disable? (lambda () (= (-> *ap-settings* completion-type) 1))
+    :should-disable? (lambda ()
+      (or (= (-> *ap-settings* completion-type) 0)
+          (= (-> *ap-settings* completion-type) 1)))
     :min-value 0.0
     :max-value 97.0
     :step 1.0
@@ -944,7 +949,9 @@ This gives us more freedom to write code how we want.
 (defmacro archipelagoal-ii-completion-specific-mission ()
   '(new 'static 'menu-generic-carousel-option
     :name (text-id progress-menu-completion-specific-mission)
-    :should-disable? (lambda () (!= (-> *ap-settings* completion-type) 1))
+    :should-disable? (lambda ()
+      (and (!= (-> *ap-settings* completion-type) 0)
+          (!= (-> *ap-settings* completion-type) 1)))
     :items (new 'static 'boxed-array :type text-id
                 (text-id progress-menu-mission-palace-boss)
                 (text-id progress-menu-mission-unlock-tomb)

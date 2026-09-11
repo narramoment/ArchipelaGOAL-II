@@ -1377,7 +1377,7 @@
                      (2695 (fadeout (seconds (new 'static 'bfloat :data 0.166))))
                      (10000
                        ;; (unless (task-closed? "city-krew-delivery-resolution") (talker-spawn "miss011")) ;; <ap:preserve-this> removed talker spawn.
-                       ;; (task-close! "city-krew-delivery-resolution") ;; <ap:note> duplicate, we might not need this?
+                       (task-close! "city-red-gun-training-introduction")
                        )
                      )
                    :cut-list '(61 246 316 366 431 528 591 801 1166 1306 1421 1583 1788 1881 2077 2281 2350 2416 2601)

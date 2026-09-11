@@ -368,13 +368,13 @@
     (('gun-yellow) ;; blaster
       (task-node-closed? (game-task-node sewer-enemy-resolution))
       )
-    (('lens)
+    (('lens) ;; mountain lens
       (task-node-closed? (game-task-node mountain-lens-resolution))
       )
-    (('gear)
+    (('gear) ;; mountain gear
       (task-node-closed? (game-task-node mountain-gear-resolution))
       )
-    (('shard)
+    (('shard) ;; mountain shard
       (task-node-closed? (game-task-node mountain-shard-resolution))
       )
     (('gun-turret) ;; gunpod
@@ -424,7 +424,7 @@
     (('pass-purple) ;; purple security pass
       (task-node-closed? (game-task-node stadium-race-class1-resolution))
       )
-    (('pass-black)
+    (('pass-black) ;; black security pass
       (task-node-closed? (game-task-node palace-sneak-in-meeting))
       )
     (('gun-upgrade-damage) ;; damage upgrade

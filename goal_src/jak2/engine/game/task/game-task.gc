@@ -1141,7 +1141,7 @@
                 :scene "city-help-kid-intro"
                 )
               )
-            :flags (game-task-node-flag task-manager no-audio)
+            :flags (game-task-node-flag task-manager no-audio exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node fortress-escape-resolution)
               (game-task-node none)
@@ -1821,7 +1821,7 @@
                 :scene "city-krew-delivery-intro"
                 )
               )
-            :flags (game-task-node-flag task-retry task-manager)
+            :flags (game-task-node-flag task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-krew-delivery-introduction)
               (game-task-node none)
@@ -2384,7 +2384,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag save-on-life task-manager)
+            :flags (game-task-node-flag save-on-life task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node sewer-enemy-introduction)
               (game-task-node none)
@@ -3211,7 +3211,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag task-retry city-wait task-manager)
+            :flags (game-task-node-flag task-retry city-wait task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-keira-delivery-introduction)
               (game-task-node none)
@@ -3598,7 +3598,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag save-on-life task-retry city-wait task-manager)
+            :flags (game-task-node-flag save-on-life task-retry city-wait task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-krew-collection-introduction)
               (game-task-node none)
@@ -4021,7 +4021,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry city-wait task-manager)
+            :flags (game-task-node-flag close-task task-retry city-wait task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-power-vinroom)
               (game-task-node none)
@@ -4731,7 +4731,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag save-on-life task-manager)
+            :flags (game-task-node-flag save-on-life task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node forest-scouts-get-board)
               (game-task-node none)
@@ -4865,7 +4865,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task set-task-mask task-manager no-audio)
+            :flags (game-task-node-flag close-task set-task-mask task-manager no-audio exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-escort-kid-introduction)
               (game-task-node none)
@@ -5035,7 +5035,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag task-manager)
+            :flags (game-task-node-flag task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node strip-grenade-introduction)
               (game-task-node none)
@@ -5156,7 +5156,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-manager)
+            :flags (game-task-node-flag close-task task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node drill-ship-introduction)
               (game-task-node none)
@@ -5192,7 +5192,7 @@
             :task (game-task city-port-run)
             :name "city-port-run-introduction"
             :when-open #f
-            :flags (game-task-node-flag save-on-life save-on-try task-manager)
+            :flags (game-task-node-flag save-on-life save-on-try task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node forest-scouts-resolution)
               (game-task-node none)
@@ -5378,7 +5378,7 @@
                 :scene "city-meet-brutter-intro"
                 )
               )
-            :flags (game-task-node-flag task-retry city-wait task-manager)
+            :flags (game-task-node-flag task-retry city-wait task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-meet-brutter-introduction)
               (game-task-node none)
@@ -5810,7 +5810,7 @@
                 :scene "city-class-3-race-intro"
                 )
               )
-            :flags (game-task-node-flag save-on-life task-retry task-manager no-fail-on-death no-slow-down)
+            :flags (game-task-node-flag save-on-life task-retry task-manager no-fail-on-death no-slow-down exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node stadium-race-class3-introduction)
               (game-task-node none)
@@ -6049,7 +6049,7 @@
             :task (game-task city-protect-water-slums)
             :name "city-protect-water-slums-resolution"
             :when-open #f
-            :flags (game-task-node-flag close-task save-on-life task-manager)
+            :flags (game-task-node-flag close-task save-on-life task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-protect-water-slums-fight)
               (game-task-node city-protect-water-slums-get-seal)
@@ -6264,7 +6264,7 @@
                 :scene "city-destroy-guard-vehicles-intro"
                 )
               )
-            :flags (game-task-node-flag save-on-life task-retry task-manager)
+            :flags (game-task-node-flag save-on-life task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-destroy-guard-vehicles-introduction)
               (game-task-node none)
@@ -6434,7 +6434,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-manager)
+            :flags (game-task-node-flag close-task task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-play-onin-game-wait)
               (game-task-node none)
@@ -7215,7 +7215,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag save-on-life task-manager)
+            :flags (game-task-node-flag save-on-life task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node sewer-escort-resolution)
               (game-task-node none)
@@ -7354,7 +7354,7 @@
                 :scene "city-class-2-race-intro"
                 )
               )
-            :flags (game-task-node-flag save-on-life task-retry task-manager no-fail-on-death no-slow-down)
+            :flags (game-task-node-flag save-on-life task-retry task-manager no-fail-on-death no-slow-down exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node stadium-race-class2-introduction)
               (game-task-node none)
@@ -7517,7 +7517,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag save-on-life task-retry task-manager)
+            :flags (game-task-node-flag save-on-life task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-stop-bomb-bots-introduction)
               (game-task-node none)
@@ -7640,7 +7640,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag task-retry city-wait task-manager)
+            :flags (game-task-node-flag task-retry city-wait task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-errol-challenge-introduction)
               (game-task-node none)
@@ -8254,7 +8254,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag task-manager)
+            :flags (game-task-node-flag task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node drill-mech-introduction)
               (game-task-node none)
@@ -8400,7 +8400,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag task-retry task-manager)
+            :flags (game-task-node-flag task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-save-lurkers-introduction)
               (game-task-node none)
@@ -8548,7 +8548,7 @@
             :task (game-task stadium-race-class)
             :name "stadium-race-class1-resolution"
             :when-open #f
-            :flags (game-task-node-flag close-task save-on-life task-retry task-manager)
+            :flags (game-task-node-flag close-task save-on-life task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node stadium-race-class1-race)
               (game-task-node none)
@@ -8616,7 +8616,7 @@
             :name "palace-sneak-in-introduction"
             :when-open #f
             ;; <ap:preserve-this> removed auto-close flag.
-            :flags (game-task-node-flag save-on-life abs-task-mask intro-wait city-wait task-manager)
+            :flags (game-task-node-flag save-on-life abs-task-mask intro-wait city-wait task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node stadium-race-class1-resolution)
               (game-task-node none)
@@ -9052,7 +9052,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task set-task-mask task-manager)
+            :flags (game-task-node-flag close-task set-task-mask task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-whack-wait)
               (game-task-node none)
@@ -9319,7 +9319,7 @@
             :task (game-task city-defend-stadium)
             :name "city-defend-stadium-pre-intro"
             :when-open #f
-            :flags (game-task-node-flag save-on-life intro-wait city-wait task-manager)
+            :flags (game-task-node-flag save-on-life intro-wait city-wait task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node under-sig-resolution)
               (game-task-node none)
@@ -9419,7 +9419,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task abs-task-mask task-manager)
+            :flags (game-task-node-flag close-task abs-task-mask task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-defend-stadium-introduction)
               (game-task-node none)
@@ -9457,7 +9457,7 @@
             :task (game-task consite-find-baron)
             :name "consite-find-baron-introduction"
             :when-open #f
-            :flags (game-task-node-flag save-on-life intro-wait task-manager)
+            :flags (game-task-node-flag save-on-life intro-wait task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-defend-stadium-resolution)
               (game-task-node none)
@@ -12120,7 +12120,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task save-on-life task-retry city-wait task-manager)
+            :flags (game-task-node-flag close-task save-on-life task-retry city-wait task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-race-port-introduction)
               (game-task-node none)

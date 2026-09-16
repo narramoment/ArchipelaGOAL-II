@@ -64,6 +64,8 @@
   )
 
 (defun update-task-masks ((arg0 symbol))
+  ;; <ap:preserve-this> pull exclusive task node stuff from jak 3
+  (local-vars (a3-2 symbol))
   (if (= arg0 'none)
       (return 0)
       )
@@ -90,6 +92,41 @@
             )
         )
       (set! s5-0 (-> s5-0 next))
+      )
+    )
+  ;; <ap:preserve-this> pull exclusive task node stuff from jak 3
+  (let ((v1-43 (-> *game-info* task-node-exclusive)))
+    (set! (-> v1-43 length) 0)
+    (let ((a0-10 (-> *game-info* sub-task-list)))
+      (dotimes (a1-0 (-> a0-10 length))
+        (when (nonzero? a1-0)
+          (let ((a2-3 (-> a0-10 a1-0)))
+            (set! a3-2
+                  (and (logtest? (-> a2-3 flags) (game-task-node-flag exclusive))
+                       (not (logtest? (-> a2-3 flags) (game-task-node-flag closed)))
+                       (begin
+                         (dotimes (a3-5 4)
+                           (let ((t1-0 (-> a2-3 parent-node a3-5)))
+                             (when (and (nonzero? t1-0) (not (logtest? (-> a0-10 t1-0 flags) (game-task-node-flag closed))))
+                               (set! a3-2 #f)
+                               (goto cfg-38)
+                               )
+                             )
+                           )
+                         #t
+                         )
+                       )
+                  )
+            (label cfg-38)
+            (when a3-2
+              (when (< (-> v1-43 length) (-> v1-43 allocated-length))
+                (set! (-> v1-43 (-> v1-43 length)) (the-as uint (-> a2-3 task)))
+                (+! (-> v1-43 length) 1)
+                )
+              )
+            )
+          )
+        )
       )
     )
   ;; <ap:preserve-this> prioritize earlier missions over later ones. this means:
@@ -373,7 +410,7 @@
        '("ctyp-statue-wall-breakable.mb")
        ;; <ap:preserve-this> change this to check for tomb access.
        ;; (not (task-node-closed? (game-task-node canyon-insert-items-shard)))
-       (not (task-node-closed? (game-task-node canyon-insert-items-shard))) ;; <ap:note> allows access to tomb right after caynon-insert is complete, no mission until tomb access though
+       (task-node-open? (game-task-node tomb-poles-introduction)) ;; <ap:note> allows access to tomb right after caynon-insert is complete, no mission until tomb access though
        )
      (prototypes-game-visible-set!
        '("ctyp-statue-rubble-a.mb" "ctyp-statue-rubble-b.mb" "ctyp-statue-rubble-big-a.mb")

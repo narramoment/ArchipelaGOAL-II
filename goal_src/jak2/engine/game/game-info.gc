@@ -2106,6 +2106,12 @@
   (if (not (-> gp-0 last-continue))
       (set! (-> gp-0 last-continue) *default-continue*)
       )
+  ;; <ap:preserve-this> pull exclusive task node stuff from jak 3
+  (when (zero? (-> gp-0 task-node-exclusive))
+    (set! (-> gp-0 task-node-exclusive) (new 'global 'boxed-array uint16 32))
+    (set! (-> gp-0 task-node-exclusive length) 0)
+    0
+    )
   (set! (-> gp-0 want-auto-save) #f)
   (set! (-> gp-0 auto-save-proc) (the-as handle #f))
   (set! (-> gp-0 auto-save-status) (mc-status-code ok))

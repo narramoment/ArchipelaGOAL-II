@@ -290,6 +290,7 @@
    (play-list               (array game-task-info))
    (sub-task-list           (array game-task-node-info))
    (mission-list            (array game-task-node-info))
+   (task-node-exclusive     (array uint16)) ;; <ap:preserve-this> pull exclusive task node stuff from jak 3
    (task-counter            uint32)
    (unknown-pad6            (array uint16))
    (level-opened            uint8         32)

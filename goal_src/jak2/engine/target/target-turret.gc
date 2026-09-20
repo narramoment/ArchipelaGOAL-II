@@ -924,9 +924,9 @@
                    )
           ;; <ap:note> check for which text is needed
           (let ((gp-1 (new 'stack 'font-context *font-default-matrix* 32 320 0.0 (font-color default) (font-flags shadow kerning))))
-            (set-width! gp-1 340)
-            (set-height! gp-1 80)
-            (set-scale! gp-1 0.9)
+            (set-width! gp-1 425)
+            (set-height! gp-1 100)
+            (set-scale! gp-1 0.67)
             (set! (-> gp-1 flags)
                   (font-flags shadow kerning large))
             ;; if you haven't already checked the gun turret, check it

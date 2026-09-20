@@ -145,9 +145,9 @@
                    )
           ;; <ap:note> check for which text is needed
           (let ((gp-0 (new 'stack 'font-context *font-default-matrix* 32 320 0.0 (font-color default) (font-flags shadow kerning))))
-            (set! (-> gp-0 width) (the float 340))
-            (set! (-> gp-0 height) (the float 80))
-            (set! (-> gp-0 scale) 0.9)
+            (set! (-> gp-0 width) (the float 425))
+            (set! (-> gp-0 height) (the float 100))
+            (set! (-> gp-0 scale) 0.67)
             (set! (-> gp-0 flags)
                   (font-flags shadow kerning large))
             ;; if you haven't checked the titan suit, do the check

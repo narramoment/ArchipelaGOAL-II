@@ -3771,5 +3771,14 @@
       :neg #x1
       :on-close #f
     )
+    (new 'static 'talker-speech-class
+      :name "hint001"
+      :channel (gui-channel message)
+      :speech #x1e6
+      :text-message (text-id oracle-dark-hint)
+      :text-duration #x5dc
+      :neg #x1
+      :on-close #f  
+    )
   )
 )

@@ -248,11 +248,11 @@
         )
 
 
-      #|
+      
       (when *debug-segment*
         (orb-placer-maintenance)
         )
-      |#
+      
 
       (when (and *ap-settings*
            (-> *ap-settings* item-messages?)
@@ -369,12 +369,29 @@
 
       ;; oracle
       (let ((cty-ora-out-door (entity-by-name "oracle-door-3"))
-            (cty-ora-in-door (entity-by-name "oracle-door-1")))
+            (cty-ora-in-door (entity-by-name "oracle-door-1"))
+            (region-735 (region-lookup-by-id 735))
+            (gp-1 (new 'stack 'font-context *font-default-matrix* 45 300 0.0 (font-color default) (font-flags shadow kerning))))
+        (set-width! gp-1 450)
+        (set-height! gp-1 200)
+        (set-scale! gp-1 0.8)
+        (set! (-> gp-1 flags)
+              (font-flags shadow kerning large))
         (when cty-ora-out-door
           (set! (cdr (res-lump-struct cty-ora-out-door 'on-notice pair)) '(#t '(oracle)))
           )
         (when cty-ora-in-door
           (set! (cdr (res-lump-struct cty-ora-in-door 'on-notice pair)) '(#t '(ctyslumc ctywide)))
+          )
+        (when region-735
+          (when
+            (not (logtest? (-> *game-info* features) (game-feature darkjak)))
+            (print-game-text
+              (lookup-text! *common-text* (text-id oracle-dark-hint) #f)
+              gp-1
+              #f
+              44
+              (bucket-id progress)))
           )
         )
 

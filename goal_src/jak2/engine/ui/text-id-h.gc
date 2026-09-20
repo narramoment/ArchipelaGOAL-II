@@ -962,6 +962,8 @@
 
   (ap-titan-suit-check #x2190)
   (ap-gun-turret-check #x2191)
+
+  (oracle-dark-hint #x2192)
   
   ;; destination names text
   (caspad-name #x10000)

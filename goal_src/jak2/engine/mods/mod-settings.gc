@@ -46,7 +46,7 @@ if the result of rand-vu-int-range is 1, then DANCE! if it is not 1, then Don't 
 (define *show-input-display* #f)
 
 ;; Change #t to #f here to hide the test build info display by default
-(define *show-test-build-info* #t)
+(define *show-test-build-info* #f)
 
 ;; do NOT change %MODVERSIONPLACEHOLDER% below, otherwise the mod-bundling-tools
 ;;   will be unable to automatically add version info to the speedrun display

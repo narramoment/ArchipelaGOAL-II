@@ -27,10 +27,11 @@
     ;; AP Messenger Code (i copied and pasted because im lazy, sue me)
     (deftype ap-message (structure)
       ((verb        string)
-      (item-name   string)
-      (dir         string)
-      (player-name string)
-      (trap?       symbol)
+      (item-name    string)
+      (dir          string)
+      (player-name  string)
+      (trap?        symbol)
+      (filler?      symbol)
       ))
 
     (deftype ap-message-array (inline-array-class)
@@ -49,7 +50,7 @@
       (total-received  int)
       )
       (:methods
-        (append-messages (_type_ symbol string string) none)
+        (append-messages (_type_ symbol string string symbol) none)
         )
       (:states
         ap-messenger-show
@@ -68,7 +69,8 @@
         (set! (-> self both-messages messages i item-name) (new 'process 'string 32 (the string #f)))
         (set! (-> self both-messages messages i dir) (new 'process 'string 32 (the string #f)))
         (set! (-> self both-messages messages i player-name) (new 'process 'string 32 (the string #f)))
-        (set! (-> self both-messages messages i trap?) #f))
+        (set! (-> self both-messages messages i trap?) #f)
+        (set! (-> self both-messages messages i filler?) #f))
       (set! (-> self both-messages target-index) 0)
       (go ap-messenger-show))
 
@@ -89,11 +91,12 @@
           (set! (-> target-array messages i item-name) (-> target-array messages (+ i 1) item-name))
           (set! (-> target-array messages i dir) (-> target-array messages (+ i 1) dir))
           (set! (-> target-array messages i player-name) (-> target-array messages (+ i 1) player-name))
-          (set! (-> target-array messages i trap?) (-> target-array messages (+ i 1) trap?))))
+          (set! (-> target-array messages i trap?) (-> target-array messages (+ i 1) trap?))
+          (set! (-> target-array messages i filler?) (-> target-array messages (+ i 1) filler?))))
       (if (> (-> target-array target-index) show-size)
         (-! (-> target-array target-index) 1)))
 
-    (defmethod append-messages ((this ap-messenger) (direction symbol) (item-name string) (player-name string))
+    (defmethod append-messages ((this ap-messenger) (direction symbol) (item-name string) (player-name string) (is-filler symbol))
       (let* ((target-array (-> this both-messages))
             (verb (case direction
               (('sent) "SENT")
@@ -113,6 +116,7 @@
         (set! (-> target-array messages (-> target-array target-index) dir) dir)
         (set! (-> target-array messages (-> target-array target-index) player-name) player-name)
         (set! (-> target-array messages (-> target-array target-index) trap?) is-trap?)
+        (set! (-> target-array messages (-> target-array target-index) filler?) is-filler)
         (if (< (-> target-array target-index) (- (-> this max-size) 1))
           (+! (-> target-array target-index) 1))
         (+! (-> this total-received) 1))
@@ -134,13 +138,22 @@
                 (player (-> self both-messages messages i player-name))
                 (is-trap? (or (-> self both-messages messages i trap?)
                               (!= -1 (string-position "TRAP" item))))
+                (is-filler? (-> self both-messages messages i filler?))
                 (msg (if (string= dir "")
-                        (if is-trap?
-                          (string-format "~S ~3L~S~0L" verb item)
-                          (string-format "~S ~8L~S~0L" verb item))
-                        (if is-trap?
-                          (string-format "~S ~3L~S~0L ~S ~12L~S~0L" verb item dir player)
-                          (string-format "~S ~8L~S~0L ~S ~12L~S~0L" verb item dir player)))))
+                        (cond
+                          (is-trap?
+                            (string-format "~S ~3L~S~0L" verb item))
+                          (is-filler?
+                            (string-format "~S ~6L~S~0L" verb item))
+                          (else
+                            (string-format "~S ~8L~S~0L" verb item)))
+                        (cond
+                          (is-trap?
+                            (string-format "~S ~3L~S~0L ~S ~12L~S~0L" verb item dir player))
+                          (is-filler?
+                            (string-format "~S ~6L~S~0L ~S ~12L~S~0L" verb item dir player))
+                          (else
+                            (string-format "~S ~8L~S~0L ~S ~12L~S~0L" verb item dir player))))))
             (pc-encode-utf8-string msg *pc-encoded-temp-string*)
             (draw-message *pc-encoded-temp-string* bottom i)))))
 
@@ -201,10 +214,10 @@
 
     (define-perm *ap-messenger* (pointer ap-messenger) (the (pointer ap-messenger) #f))
 
-    (defun debug-messenger ((dir symbol) (item string) (player string))
+    (defun debug-messenger ((dir symbol) (item string) (player string) (filler symbol))
       (let ((messenger (the ap-messenger (process-by-name "ap-messenger" *active-pool*))))
         (when messenger
-          (append-messages messenger dir item player)))
+          (append-messages messenger dir item player filler)))
       (none))
 
     (defun ap-messenger-reset! ()
@@ -235,9 +248,11 @@
         )
 
 
+      #|
       (when *debug-segment*
         (orb-placer-maintenance)
         )
+      |#
 
       (when (and *ap-settings*
            (-> *ap-settings* item-messages?)

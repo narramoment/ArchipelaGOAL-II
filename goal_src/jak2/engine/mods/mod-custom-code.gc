@@ -335,10 +335,18 @@
 
       ;; prevent the player from leaving the prison while the game is compiling. 
       (if (= 'debug *cheat-mode*)
-        (let ((region-356 (region-lookup-by-id 356)))
+        (let ((region-356 (region-lookup-by-id 356))
+              (region-556 (region-lookup-by-id 556)))
           (when (and region-356 (point-in-region-debug! region-356 (target-pos 0)))
             (send-event *target* 'shove #f (static-attack-info ((id (new-attack-id)) (shove-back (meters 3)) (shove-up (meters 1)))))
             )
+          (when region-556
+            (let ((gp-0 (new 'stack 'font-context *font-default-matrix* 10 300 0.0 (font-color default) (font-flags shadow kerning))))
+              (let ((v1-12 gp-0)) (set! (-> v1-12 width) (the float 500)))
+              (let ((v1-13 gp-0)) (set! (-> v1-13 height) (the float 80)))
+              (set! (-> gp-0 flags) (font-flags shadow kerning middle middle-vert large))
+              (format (clear *temp-string*) "WELCOME TO ARCHIPELAGOAL II! PLEASE WAIT FOR THE TITLE SCREEN!~%")
+              (print-game-text *temp-string* gp-0 #f 44 (bucket-id progress))))
           )
         )
 

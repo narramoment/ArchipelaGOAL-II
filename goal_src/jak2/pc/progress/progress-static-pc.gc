@@ -523,7 +523,8 @@ This gives us more freedom to write code how we want.
                   (text-id progress-menu-tent)
                   (text-id progress-menu-stadium)
                   (text-id progress-menu-palace)
-                  (text-id progress-menu-weapons))
+                  (text-id progress-menu-landing)
+                  (text-id progress-menu-mountain))
       :get-item-index-fn (lambda ()
         (cond
           ((= (-> *game-info* current-continue)
@@ -547,6 +548,9 @@ This gives us more freedom to write code how we want.
           ((= (-> *game-info* current-continue)
               (get-continue-by-name *game-info* "caspad-face-castle"))
           6)
+          ((= (-> *game-info* current-continue)
+              (get-continue-by-name *game-info* "ctyfarma-start"))
+          7)
           (else
           0)))
       :on-confirm (lambda ((index int) (the-progress progress))
@@ -558,10 +562,7 @@ This gives us more freedom to write code how we want.
             (the-as game-save #f)
             "ctysluma-alley"))
           ((1)
-          (if (or (logtest? (-> *game-info* features)
-                            (game-feature pass-red))
-                  (logtesta? (-> *game-info* features)
-                              (game-feature pass-green pass-yellow)))
+          (if (ap-route-slums-to-port?)
             (begin
               (set! (-> *game-info* current-continue)
                 (get-continue-by-name *game-info* "ctyport-hiphog"))
@@ -608,6 +609,14 @@ This gives us more freedom to write code how we want.
               (initialize! *game-info* 'die
                 (the-as game-save #f)
                 "caspad-face-castle"))))
+          ((7)
+          (if (ap-route-slums-to-market?)
+            (begin
+              (set! (-> *game-info* current-continue)
+                (get-continue-by-name *game-info* "ctyfarma-start"))
+              (initialize! *game-info* 'die
+                (the-as game-save #f)
+                "ctyfarma-start"))))
           (else
           (set! (-> *game-info* current-continue)
             (get-continue-by-name *game-info* "ctysluma-alley"))

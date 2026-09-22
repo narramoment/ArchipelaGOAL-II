@@ -553,7 +553,7 @@ This gives us more freedom to write code how we want.
           7)
           (else
           0)))
-      :on-confirm (lambda ((index int) (the-progress progress))
+      :on-confirm (lambda ((index int))
         (case index
           ((0)
           (set! (-> *game-info* current-continue)

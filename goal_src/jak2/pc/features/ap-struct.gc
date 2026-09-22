@@ -756,12 +756,16 @@
         (('anger-issues) ;; forced dark jak trap
           (process-spawn-function process
             (lambda :behavior process ()
-              (send-event *target* 'change-mode 'darkjak #f (darkjak-stage force-on active))
-              (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
-              (while (logtest? (-> *target* control current-surface flags) (surface-flag air)) ;; if jak is in the air, wait until he lands
-                (suspend)
-              )
-              (send-event *target* 'change-mode 'normal))))
+              (stack-size-set! (-> self main-thread) 512)
+              (let ((curr-eco (-> *game-info* eco-pill-dark-total)))
+                    (send-event *target* 'change-mode 'darkjak #f (darkjak-stage force-on active))
+                    (suspend-for (seconds (-> *ap-info-jak2* trap-duration)))
+                    (while (logtest? (-> *target* control current-surface flags) (surface-flag air)) ;; if jak is in the air, wait until he lands
+                      (suspend)
+                    )
+                    (send-event *target* 'change-mode 'normal)
+                    (send-event *target* 'get-pickup (pickup-type eco-pill-dark) curr-eco))))
+                )
         (('hardcore) ;; hero mode trap :D
           (process-spawn-function process
             (lambda :behavior process ()

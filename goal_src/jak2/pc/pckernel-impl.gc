@@ -241,6 +241,7 @@
   (format 0 "Resetting archipelago settings~%")
   (set! (-> obj version) 0)
   (set! (-> obj deathlink?) #f)
+  (set! (-> obj item-messages?) #t)
   (set! (-> obj trap-duration) (the-as float 30))
   (set! (-> obj completion-type) 1)
   (set! (-> obj completion-value) 65)

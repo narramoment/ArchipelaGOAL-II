@@ -91,7 +91,11 @@
                 ((= game-score-idx 11) 16)  ;; stadium class1
                 ((= game-score-idx 12) 19)  ;; stadium class2
                 ((= game-score-idx 13) 22)  ;; stadium class3
-                ((= game-score-idx 15) 25)  ;; errol challenge
+                ((= game-score-idx 14) 25)  ;; city port bbush race
+                ((= game-score-idx 15) 28)  ;; errol challenge
+                ((= game-score-idx 16) 31)  ;; stadium class1 reverse
+                ((= game-score-idx 17) 34)  ;; stadium class2 reverse
+                ((= game-score-idx 18) 37)  ;; stadium class3 reverse
                 (else -1)
                 )
               )

@@ -57,6 +57,60 @@
   (set! (-> *ap-info-jak2* side-missions-checked (-> *ap-info-jak2* next-side-mission-index)) side-mission-id)
   (+! (-> *ap-info-jak2* next-side-mission-index) 1))
 
+(defun ap-medal-checked! ((medal-id uint))
+  (format 0 "~%~%*************************************************~%")
+  (format 0 "*** ARCHIPELAGO MEDAL CHECK DETECTED ***~%")
+  (format 0 "*************************************************~%")
+  (format 0 "Medal ID: ~D~%" medal-id)
+  (format 0 "*************************************************~%~%")
+  (set! (-> *ap-info-jak2* medals-checked (-> *ap-info-jak2* next-medal-index)) medal-id)
+  (+! (-> *ap-info-jak2* next-medal-index) 1)
+  (none)
+  )
+
+(defun ap-gungame-medal-id ((node game-task-node))
+  (cond
+    ((= node (game-task-node city-red-gun-training-bronze)) (the-as uint 1))
+    ((= node (game-task-node city-red-gun-training-silver)) (the-as uint 2))
+    ((= node (game-task-node city-red-gun-training-gold)) (the-as uint 3))
+    ((= node (game-task-node city-yellow-gun-training-bronze)) (the-as uint 4))
+    ((= node (game-task-node city-yellow-gun-training-silver)) (the-as uint 5))
+    ((= node (game-task-node city-yellow-gun-training-gold)) (the-as uint 6))
+    ((= node (game-task-node city-blue-gun-training-bronze)) (the-as uint 7))
+    ((= node (game-task-node city-blue-gun-training-silver)) (the-as uint 8))
+    ((= node (game-task-node city-blue-gun-training-gold)) (the-as uint 9))
+    ((= node (game-task-node city-dark-gun-training-bronze)) (the-as uint 10))
+    ((= node (game-task-node city-dark-gun-training-silver)) (the-as uint 11))
+    ((= node (game-task-node city-dark-gun-training-gold)) (the-as uint 12))
+    (else (the-as uint 0))
+    )
+  )
+
+(defun ap-race-medal-check! ((game-score-idx int) (old-rank int) (new-rank int))
+  (let ((base (cond
+                ((= game-score-idx 11) 16)  ;; stadium class1
+                ((= game-score-idx 12) 19)  ;; stadium class2
+                ((= game-score-idx 13) 22)  ;; stadium class3
+                ((= game-score-idx 15) 25)  ;; errol challenge
+                (else -1)
+                )
+              )
+        )
+    (when (>= base 0)
+      (when (and (>= new-rank 1) (< old-rank 1))
+        (ap-medal-checked! (the-as uint base))
+        )
+      (when (and (>= new-rank 2) (< old-rank 2))
+        (ap-medal-checked! (the-as uint (+ base 1)))
+        )
+      (when (and (>= new-rank 3) (< old-rank 3))
+        (ap-medal-checked! (the-as uint (+ base 2)))
+        )
+      )
+    )
+  (none)
+  )
+
 (defun ap-set-connection-status! ((status ap-connection-status))
   "Set the Archipelago connection status. Returns the status that was set."
   (set! (-> *ap-info-jak2* connection-status) status)

@@ -2601,6 +2601,7 @@
           (script-eval '(birth-pickup ("pecker-npc-1" "head") skill FACT_SUPER_SKILL_INC flags (suck-in)))
           )
       (task-node-close! (game-task-node city-play-onin-game-skill))
+      (ap-medal-checked! (the-as uint 28))
       )
     (let* ((s5-1 (if (zero? (rand-vu-int-count 2))
                      (talker-spawn-func (-> *talker-speech* 161) *entity-pool* (target-pos 0) (the-as region #f))

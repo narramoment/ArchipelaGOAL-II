@@ -1120,6 +1120,7 @@
     (let* ((v1-24 (get-rank s2-0 arg0))
            (s2-2 (max 0 (- v1-24 s3-0)))
            )
+      (ap-race-medal-check! (the-as int s5-0) s3-0 v1-24)
       (when (> (the-as uint s2-2) 0)
         (set! (-> this finish-sound-id) (the-as sound-id 1))
         (cond

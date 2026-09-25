@@ -733,7 +733,9 @@
 
     (defun runs-on-jak-spawn ()
       ;; Code here runs every time jak spawns (loading a file new game or death)   
+      
       (none)
+      
       )
 
     (defun runs-on-jak-death ((death-event symbol))

@@ -356,10 +356,19 @@
     (('game)
      (+! (-> this task-counter) 1)
      (reset! (-> *display* total-game-clock))
-     (set! (-> this features) (game-feature sidekick))
+     (if (!= (-> *ap-info-jak2* connection-status) (ap-connection-status default))
+      (begin
+        (set! (-> this features) (logior (game-feature sidekick) (-> this features)))
+        (set! (-> this secrets) (logior (game-secrets) (-> this secrets)))
+        (set! (-> this purchase-secrets) (logior (game-secrets) (-> this secrets)))
+        )
+      (begin
+        (set! (-> this features) (game-feature sidekick))
+        (set! (-> this secrets) (game-secrets))
+        (set! (-> this purchase-secrets) (game-secrets))
+        )
+      )
      (set! (-> this debug-features) (game-feature))
-     (set! (-> this secrets) (game-secrets))
-     (set! (-> this purchase-secrets) (game-secrets))
      (set-continue!
        this
        (cond

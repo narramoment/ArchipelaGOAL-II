@@ -1231,12 +1231,14 @@
         (((game-save-elt skill-total))
          (set! (-> this skill-total) (-> (the-as (inline-array game-save-tag) s4-0) 0 user-float0))
          )
+        #|
         (((game-save-elt gem))
          (set! (-> this gem) (-> (the-as (inline-array game-save-tag) s4-0) 0 user-float0))
          )
         (((game-save-elt gem-total))
          (set! (-> this gem-total) (-> (the-as (inline-array game-save-tag) s4-0) 0 user-float0))
          )
+        |#
         (((game-save-elt karma))
          (set! (-> this karma) (-> (the-as (inline-array game-save-tag) s4-0) 0 user-float0))
          )
@@ -1249,6 +1251,7 @@
         (((game-save-elt shield))
          (set! (-> this shield) (-> (the-as (inline-array game-save-tag) s4-0) 0 user-float0))
          )
+        #|
         (((game-save-elt features))
          (set! (-> this features) (the-as game-feature (-> (the-as (inline-array game-save-tag) s4-0) 0 user-uint64)))
          )
@@ -1260,6 +1263,7 @@
                (the-as game-secrets (-> (the-as (inline-array game-save-tag) s4-0) 0 user-uint64))
                )
          )
+        |#
         (((game-save-elt gun-type))
          (set! (-> this gun-type) (the-as pickup-type (-> (the-as (inline-array game-save-tag) s4-0) 0 user-uint64)))
          )

@@ -16,7 +16,7 @@
 ;; ****************************************************************************
 ;; **** This number must match expected_memory_version in MemoryReader.py! ****
 ;; ****************************************************************************
-(set! (-> *ap-info-jak2* version) 5)
+(set! (-> *ap-info-jak2* version) 6)
 
 ;; <ap:preserve-this> autosave timer for preventing progress loss on life resets
 (define *ap-autosave-timer* (the time-frame 0))

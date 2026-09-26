@@ -88,14 +88,14 @@
 
 (defun ap-race-medal-check! ((game-score-idx int) (old-rank int) (new-rank int))
   (let ((base (cond
-                ((= game-score-idx 11) 16)  ;; stadium class1
-                ((= game-score-idx 12) 19)  ;; stadium class2
-                ((= game-score-idx 13) 22)  ;; stadium class3
-                ((= game-score-idx 14) 25)  ;; city port bbush race
-                ((= game-score-idx 15) 28)  ;; errol challenge
-                ((= game-score-idx 16) 31)  ;; stadium class1 reverse
-                ((= game-score-idx 17) 34)  ;; stadium class2 reverse
-                ((= game-score-idx 18) 37)  ;; stadium class3 reverse
+                ((= game-score-idx 11) 23)  ;; bush-race-1 / class 1
+                ((= game-score-idx 12) 20)  ;; bush-race-2 / class 2
+                ((= game-score-idx 13) 17)  ;; bush-race-3 / class 3
+                ((= game-score-idx 14) 35)  ;; bush-port
+                ((= game-score-idx 15) 38)  ;; bush-errol
+                ((= game-score-idx 16) 32)  ;; reverse-race-1 / class 1 reverse
+                ((= game-score-idx 17) 29)  ;; reverse-race-2 / class 2 reverse
+                ((= game-score-idx 18) 26)  ;; reverse-race-3 / class 3 reverse
                 (else -1)
                 )
               )

@@ -845,10 +845,7 @@ This gives us more freedom to write code how we want.
     :name (text-id progress-menu-deathlink)
     :truthy-text (text-id progress-on)
     :falsey-text (text-id progress-off)
-    :get-value-fn (lambda ()
-        (if (= (-> *ap-settings* deathlink?) 0)
-            #f
-            (-> *ap-settings* deathlink?)))
+    :get-value-fn (lambda () (-> *ap-settings* deathlink?))
     :on-confirm (lambda ((val symbol))
       (set! (-> *ap-settings* deathlink?) val)
       (ap-settings-update)

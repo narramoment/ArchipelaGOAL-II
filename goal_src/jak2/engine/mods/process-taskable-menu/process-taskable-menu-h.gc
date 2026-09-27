@@ -369,13 +369,6 @@
       :allow-when (lambda () (task-node-open? (game-task-node forest-protect-introduction)))
       :forbid-when (lambda () (task-node-closed? (game-task-node forest-protect-resolution)))
       )
-    (static-taskable-menu-entry
-      :task-node (game-task-node city-play-onin-game-skill)
-      :event-idx 0
-      :continue "onintent-start"
-      :text-id (text-id progress-missions-onin-game)
-      :allow-when (lambda () (task-node-open? (game-task-node city-play-onin-game-skill)))
-      :forbid-when (lambda () (task-node-closed? (game-task-node city-play-onin-game-skill))))
     )
 )
 

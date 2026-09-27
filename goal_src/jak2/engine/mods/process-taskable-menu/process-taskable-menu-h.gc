@@ -374,10 +374,8 @@
       :event-idx 0
       :continue "onintent-start"
       :text-id (text-id progress-missions-onin-game)
-      :allow-when (lambda ()
-        (or (task-node-open? (game-task-node city-play-onin-game-skill))
-            (task-node-open? (game-task-node city-play-onin-game-post-game))))
-      :forbid-when (lambda () (task-node-closed? (game-task-node city-play-onin-game-post-game))))
+      :allow-when (lambda () (task-node-open? (game-task-node city-play-onin-game-skill)))
+      :forbid-when (lambda () (task-node-closed? (game-task-node city-play-onin-game-skill))))
     )
 )
 

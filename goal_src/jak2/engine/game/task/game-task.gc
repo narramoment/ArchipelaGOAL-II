@@ -12496,7 +12496,8 @@
             :on-open #f
             :info #f
             :borrow '()
-            :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
+            :open? (lambda ((arg0 game-task-node-info)) 
+              (ap-route-slums-to-stadium?))
             :on-close #f #|'(begin
                (task-open! "stadium-burning-bush-race-board-introduction")
                (task-open! "stadium-burning-bush-race-class2-introduction")
@@ -12569,7 +12570,8 @@
             :on-open #f
             :info #f
             :borrow '()
-            :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
+            :open? (lambda ((arg0 game-task-node-info)) 
+              (ap-route-slums-to-stadium?))
             :on-close #f #|'(begin
                (task-open! "stadium-burning-bush-race-board-introduction")
                (task-open! "stadium-burning-bush-race-class3-introduction")
@@ -12642,7 +12644,8 @@
             :on-open #f
             :info #f
             :borrow '()
-            :open? (lambda ((arg0 game-task-node-info)) (logtest? (-> *game-info* secrets) (game-secrets reverse-races)))
+            :open? (lambda ((arg0 game-task-node-info)) 
+              (ap-route-slums-to-stadium?))
             :on-close #f #|'(begin
                (task-open! "stadium-burning-bush-race-board-introduction")
                (task-open! "stadium-burning-bush-race-class3-introduction")

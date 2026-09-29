@@ -972,6 +972,8 @@
     (format file "  (completion-type ~D)~%" (-> obj completion-type))
     (format file "  (completion-value ~D)~%" (-> obj completion-value))
     (format file "  (completion-mission-count ~D)~%" (-> obj completion-mission-count))
+    (format file "  (orbs ~D)~%" (-> obj orbs))
+    (format file "  (orbsanity? ~D)~%" (-> obj orbsanity?))
       ;; slot info entry contents
     ;;  (format file "  (slot-info-~D-name ~A)~%" i (the-as string (-> obj slot-info i name)))
     ;;  (format file "  (slot-info-~D-seed ~A)~%" i (the-as string (-> obj slot-info i seed))))
@@ -1011,6 +1013,8 @@
               (("completion-type") (set! (-> obj completion-type) (the-as uint8 (file-stream-read-int file))))
               (("completion-value") (set! (-> obj completion-value) (the-as uint8 (file-stream-read-int file))))
               (("completion-mission-count") (set! (-> obj completion-mission-count) (the-as uint8 (file-stream-read-int file))))
+              (("orbs") (set! (-> obj orbs) (the-as uint8 (file-stream-read-int file))))
+              (("orbsanity?") (set! (-> obj orbsanity?) (file-stream-read-symbol file)))
               ))))))
     (inspect file)
     (file-stream-close file))

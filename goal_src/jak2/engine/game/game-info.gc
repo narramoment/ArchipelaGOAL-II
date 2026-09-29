@@ -12,6 +12,7 @@
 (define-extern *lightning-darkjak-pill* lightning-spec)
 (define-extern lightning-probe-callback (function lightning-tracker none))
 (define-extern process-drawable-shock-effect (function process-drawable lightning-spec (function lightning-tracker none) sparticle-launcher int int float object)) ;; guess
+(define-extern *ap-info-jak2* ap-info-jak2)
 
 ;; DECOMP BEGINS
 
@@ -398,8 +399,10 @@
      (set! (-> this eco-pill-dark-total) 0.0)
      (set! (-> this gem) 0.0)
      (set! (-> this gem-total) 0.0)
-     (set! (-> this skill) 0.0)
-     (set! (-> this skill-total) 0.0)
+     (if (= (-> *ap-info-jak2* connection-status) (ap-connection-status default))
+      (set! (-> this skill) 0.0)
+      (set! (-> this skill-total) 0.0)
+      )
      (set! (-> this karma) 0.0)
      (set! (-> this perm-list length) 0)
      (dotimes (v1-69 (-> this unknown-pad6 allocated-length))

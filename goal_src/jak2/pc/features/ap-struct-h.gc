@@ -34,6 +34,8 @@
     (oracle-cost-level2       uint32)
     (oracle-cost-level3       uint32)
     (deathlink                uint8)
+    (orbs                     uint8)
+    (orbsanity                uint8)
     ))
 
 (deftype ap-info-jak2 (structure)
@@ -74,6 +76,11 @@
     (next-medal-index                uint)
     (medals-checked                  uint32 50)
 
+    ;; Orb Information
+    (orbs-found                      uint32)
+    (next-orb-index                  uint)
+    (orbs-checked                    uint32 286)
+
     ;; End Marker
     (end-marker           uint8 4)))
 
@@ -82,6 +89,8 @@
 (define-extern ap-mission-checked! (function uint uint))
 
 (define-extern ap-side-mission-checked! (function uint uint))
+
+(define-extern ap-orb-checked! (function uint none))
 
 (define-extern ap-verify-game-completed! (function uint symbol))
 

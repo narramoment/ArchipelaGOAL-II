@@ -958,6 +958,8 @@
   (ap-gun-turret-check #x2186)
 
   (oracle-dark-hint #x2187)
+
+  (progress-menu-orbsanity #x2188)
   
   ;; destination names text
   (caspad-name #x10000)

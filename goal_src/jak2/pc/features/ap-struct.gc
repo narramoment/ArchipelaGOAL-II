@@ -115,6 +115,16 @@
   (none)
   )
 
+(defun ap-orb-checked! ((orb-id uint))
+  (format 0 "~%~%*************************************************~%")
+  (format 0 "*** ARCHIPELAGO ORB CHECK DETECTED ***~%")
+  (format 0 "*************************************************~%")
+  (format 0 "Orb Bundle ID: ~D~%" orb-id)
+  (format 0 "*************************************************~%~%")
+  (set! (-> *ap-info-jak2* orbs-checked (-> *ap-info-jak2* next-orb-index)) orb-id)
+  (+! (-> *ap-info-jak2* next-orb-index) 1)
+  (none))
+
 (defun ap-set-connection-status! ((status ap-connection-status))
   "Set the Archipelago connection status. Returns the status that was set."
   (set! (-> *ap-info-jak2* connection-status) status)
@@ -402,6 +412,9 @@
       (sound-play "ammo-pickup")
       (send-event *target* 'get-pickup (pickup-type ammo-dark) 1.0)
      )
+    (('orb)
+      (+! (-> *game-info* skill) (the float (-> *ap-settings* orbs)))
+      (+! (-> *game-info* skill-total) (the float (-> *ap-settings* orbs))))
     )
   (ap-auto-save!)
   #t
@@ -898,6 +911,8 @@
   (set! (-> *ap-settings* completion-mission-count) (-> options completion-mission-count))
   (set! (-> *ap-settings* trap-duration) (-> options trap-duration))
   (set! (-> *ap-settings* randomize-oracle-cost) (if (nonzero? (-> options randomize-oracle-cost)) #t #f))
+  (set! (-> *ap-settings* orbs) (-> options orbs))
+  (set! (-> *ap-settings* orbsanity?) (if (nonzero? (-> options orbsanity)) #t #f))
   (when (nonzero? (-> options randomize-oracle-cost))
     (set! (-> *ap-settings* oracle-cost-level0) (-> options oracle-cost-level0))
     (set! (-> *ap-settings* oracle-cost-level1) (-> options oracle-cost-level1))

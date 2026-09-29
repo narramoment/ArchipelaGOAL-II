@@ -497,6 +497,7 @@ This gives us more freedom to write code how we want.
 (defmacro archipelagoal-ii-seed-options ()
   '(progress-new-generic-link-to-scrolling-page (text-id progress-menu-seed-options)
     (archipelagoal-ii-oracle-options)
+    (archipelagoal-ii-orbsanity-option)
     (archipelagoal-ii-trap-duration)
     (archipelagoal-ii-completion-type)
     (archipelagoal-ii-completion-specific-mission)
@@ -915,6 +916,14 @@ This gives us more freedom to write code how we want.
       (set! (-> *ap-settings* trap-duration) val)
       (ap-settings-update)
       (ap-settings-save))))
+
+(defmacro archipelagoal-ii-orbsanity-option ()
+  '(new 'static 'menu-generic-boolean-option
+    :name (text-id progress-menu-orbsanity)
+    :truthy-text (text-id progress-on)
+    :falsey-text (text-id progress-off)
+    :get-value-fn (lambda () (-> *ap-settings* orbsanity?))
+    :should-disable? (lambda () #t)))
 
 (defmacro archipelagoal-ii-completion-type ()
   '(new 'static 'menu-generic-carousel-option

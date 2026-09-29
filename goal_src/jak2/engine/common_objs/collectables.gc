@@ -5,6 +5,8 @@
 ;; name in dgo: collectables
 ;; dgos: ENGINE, GAME
 
+(define-extern runs-on-orb-pickup (function process-tree int none))
+
 (defenum collectable-flag
   :type uint32
   :bitfield #t
@@ -1421,6 +1423,9 @@
   :virtual #t
   :code (behavior ((arg0 symbol) (arg1 handle))
     (process-entity-status! self (entity-perm-status dead) #t)
+    (if (= (-> self fact pickup-type) (pickup-type skill))
+      (runs-on-orb-pickup (ppointer->process (-> self parent)) (the int (-> self fact pickup-amount))) ;; trigger hook for mod base
+      )
     )
   :exit (behavior ()
     ;; refresh orb-placer list in debug mode

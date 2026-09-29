@@ -133,7 +133,10 @@
    (oracle-cost-level0       uint32)
    (oracle-cost-level1       uint32)
    (oracle-cost-level2       uint32)
-   (oracle-cost-level3       uint32))
+   (oracle-cost-level3       uint32)
+   (minigame-medal-checks?   symbol)
+   (orbs                     uint8)
+   (orbsanity?               symbol))
   (:methods
    (new (symbol type) _type_)
    (reset (_type_) none)
@@ -245,6 +248,8 @@
   (set! (-> obj trap-duration) (the-as float 30))
   (set! (-> obj completion-type) 1)
   (set! (-> obj completion-value) 65)
+  (set! (-> obj orbs) 1)
+  (set! (-> obj orbsanity?) #f)
   (none))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; other

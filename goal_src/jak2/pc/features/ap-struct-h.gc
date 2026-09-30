@@ -34,6 +34,7 @@
     (oracle-cost-level2       uint32)
     (oracle-cost-level3       uint32)
     (deathlink                uint8)
+    (minigame-medal-checks    uint8)
     (orbs                     uint8)
     (orbsanity                uint8)
     ))

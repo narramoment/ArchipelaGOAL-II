@@ -911,6 +911,7 @@
   (set! (-> *ap-settings* completion-mission-count) (-> options completion-mission-count))
   (set! (-> *ap-settings* trap-duration) (-> options trap-duration))
   (set! (-> *ap-settings* randomize-oracle-cost) (if (nonzero? (-> options randomize-oracle-cost)) #t #f))
+  (set! (-> *ap-settings* minigame-medal-checks?) (if (nonzero? (-> options minigame-medal-checks)) #t #f))
   (set! (-> *ap-settings* orbs) (-> options orbs))
   (set! (-> *ap-settings* orbsanity?) (if (nonzero? (-> options orbsanity)) #t #f))
   (when (nonzero? (-> options randomize-oracle-cost))

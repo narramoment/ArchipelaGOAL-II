@@ -1561,11 +1561,14 @@
           )
         ;; og:preserve-this give skill directly
         (#when PC_PORT
-          (send-event *target* 'get-pickup (pickup-type skill) (* (the float (-> self egg-count)) (-> *FACT-bank* super-skill-inc))))
-        (go-virtual end-course)
-        )
-      )
-    (cond
+          (let ((orb-count (the int (* (the float (-> self egg-count)) (-> *FACT-bank* super-skill-inc)))))
+            (if (and *ap-settings* (-> *ap-settings* orbsanity?))
+                (runs-on-orb-pickup (the-as process-tree #f) orb-count)
+                (send-event *target* 'get-pickup (pickup-type skill) (the float orb-count))
+                )
+            )
+          )
+        (cond
       ((and (not (-> self open-end?)) (let ((a1-43 (new 'stack-no-clear 'event-message-block)))
                                         (set! (-> a1-43 from) (process->ppointer self))
                                         (set! (-> a1-43 num-params) 0)
@@ -1598,7 +1601,8 @@
       )
     )
   )
-
+ )
+)
 (defstate end-course (training-manager)
   :virtual #t
   :event (behavior ((proc process) (argc int) (message symbol) (block event-message-block))

@@ -2597,7 +2597,12 @@
         )
       ;; og:preserve-this give skill directly
       (#if PC_PORT
-          (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc))
+          (let ((orb-count (the int (-> *FACT-bank* super-skill-inc))))
+            (if (and *ap-settings* (-> *ap-settings* orbsanity?))
+                (runs-on-orb-pickup (the-as process-tree #f) orb-count)
+                (send-event *target* 'get-pickup (pickup-type skill) (the float orb-count))
+                )
+            )
           (script-eval '(birth-pickup ("pecker-npc-1" "head") skill FACT_SUPER_SKILL_INC flags (suck-in)))
           )
       (task-node-close! (game-task-node city-play-onin-game-skill))

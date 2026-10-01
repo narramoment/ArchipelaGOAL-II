@@ -682,15 +682,13 @@
     
     (defun runs-on-orb-pickup ((parent process-tree) (orb-id int))
       ;; Code here runs on any precursor orb pickup
-      (when (and *ap-settings* (-> *ap-settings* orbsanity?) (> (-> *ap-settings* orbs) 0))
+      (when (and *ap-settings* (-> *ap-settings* orbsanity?))
         (-! (-> *game-info* skill) (the float orb-id))
         (-! (-> *game-info* skill-total) (the float orb-id))
-        
-        (+! (-> *ap-info-jak2* orbs-found) (the-as uint32 orb-id))
-        (let ((orbs-found-now (the int (-> *ap-info-jak2* orbs-found)))
-              (bundle-size (the int (-> *ap-settings* orbs))))
-          (when (and (> orbs-found-now 0) (zero? (mod orbs-found-now bundle-size)))
-            (ap-orb-checked! (the-as uint (/ orbs-found-now bundle-size))))
+
+        (dotimes (i orb-id)
+          (+! (-> *ap-info-jak2* orbs-found) 1)
+          (ap-orb-checked! (the-as uint (-> *ap-info-jak2* orbs-found)))
           )
         )
       (none)

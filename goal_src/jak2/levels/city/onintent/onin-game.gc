@@ -2599,7 +2599,7 @@
       (#if PC_PORT
           (let ((orb-count (the int (-> *FACT-bank* super-skill-inc))))
             (if (and *ap-settings* (-> *ap-settings* orbsanity?))
-                (runs-on-orb-pickup (the-as process-tree #f) orb-count)
+                (set! *ap-onin-orbs-given* (ap-synthetic-orbs-checked! 95 3 *ap-onin-orbs-given* orb-count))
                 (send-event *target* 'get-pickup (pickup-type skill) (the float orb-count))
                 )
             )

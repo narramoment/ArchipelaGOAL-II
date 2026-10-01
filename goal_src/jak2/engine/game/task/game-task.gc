@@ -4,7 +4,16 @@
 ;; name: game-task.gc
 ;; name in dgo: game-task
 ;; dgos: ENGINE, GAME
-(define-extern runs-on-orb-pickup (function process-tree int none))
+(define-extern ap-synthetic-orbs-checked! (function int int int int int))
+(define-extern *ap-task-bb01-orbs-given* int)
+(define-extern *ap-task-bb19-orbs-given* int)
+(define-extern *ap-task-bb14-orbs-given* int)
+(define-extern *ap-task-bb02-orbs-given* int)
+(define-extern *ap-task-bb07-orbs-given* int)
+(define-extern *ap-task-bb20-orbs-given* int)
+(define-extern *ap-task-bb03-orbs-given* int)
+(define-extern *ap-task-bb05-orbs-given* int)
+(define-extern *ap-task-bb04-orbs-given* int)
 ;; DECOMP BEGINS
 
 (kmemopen global "game-info")
@@ -10235,7 +10244,7 @@
               :event-hook #f
               :final-node (game-task-node city-burning-bush-ring-1-resolution)
               :index 1
-              :on-complete '(begin (talker-spawn "bb01win") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (runs-on-orb-pickup (the-as process-tree #f) (the int (-> *FACT-bank* super-skill-inc))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
+              :on-complete '(begin (talker-spawn "bb01win") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (set! *ap-task-bb01-orbs-given* (ap-synthetic-orbs-checked! 215 3 *ap-task-bb01-orbs-given* (the int (-> *FACT-bank* super-skill-inc)))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
               :on-fail #f
               )
             :borrow '((ctywide 0 lbbush display))
@@ -10611,7 +10620,7 @@
               :event-hook #f
               :final-node (game-task-node city-burning-bush-collection-1-resolution)
               :index 1
-              :on-complete '(begin (talker-spawn "bb19win") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (runs-on-orb-pickup (the-as process-tree #f) (the int (-> *FACT-bank* super-skill-inc))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
+              :on-complete '(begin (talker-spawn "bb01win") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (set! *ap-task-bb01-orbs-given* (ap-synthetic-orbs-checked! 215 3 *ap-task-bb01-orbs-given* (the int (-> *FACT-bank* super-skill-inc)))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
               :on-fail #f
               )
             :borrow '((ctywide 0 lbbush display))
@@ -10691,7 +10700,7 @@
               :fail-hook #f
               :event-hook #f
               :final-node (game-task-node city-burning-bush-racepoint-1-resolution)
-              :on-complete '(begin (talker-spawn "bb14win") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (runs-on-orb-pickup (the-as process-tree #f) (the int (-> *FACT-bank* super-skill-inc))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
+              :on-complete '(begin (talker-spawn "bb14win") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (set! *ap-task-bb14-orbs-given* (ap-synthetic-orbs-checked! 221 3 *ap-task-bb14-orbs-given* (the int (-> *FACT-bank* super-skill-inc)))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
               )
             :borrow '()
             :open? #f
@@ -10769,7 +10778,7 @@
               :event-hook #f
               :final-node (game-task-node city-burning-bush-ring-2-resolution)
               :index 2
-              :on-complete '(begin (talker-spawn "bb02win") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (runs-on-orb-pickup (the-as process-tree #f) (the int (-> *FACT-bank* super-skill-inc))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
+              :on-complete '(begin (talker-spawn "bb02win") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (set! *ap-task-bb02-orbs-given* (ap-synthetic-orbs-checked! 224 3 *ap-task-bb02-orbs-given* (the int (-> *FACT-bank* super-skill-inc)))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
               :on-fail #f
               )
             :borrow '((ctywide 0 lbbush display))
@@ -11002,7 +11011,7 @@
               :fail-hook #f
               :event-hook #f
               :final-node (game-task-node city-burning-bush-shuttle-1-resolution)
-              :on-complete '(begin (talker-spawn "bb07win") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (runs-on-orb-pickup (the-as process-tree #f) (the int (-> *FACT-bank* super-skill-inc))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
+              :on-complete '(begin (talker-spawn "bb07win") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (set! *ap-task-bb07-orbs-given* (ap-synthetic-orbs-checked! 227 3 *ap-task-bb07-orbs-given* (the int (-> *FACT-bank* super-skill-inc)))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
               :on-fail #f
               )
             :borrow '((ctywide 0 lshuttle display))
@@ -11305,7 +11314,7 @@
               :fail-hook #f
               :event-hook #f
               :final-node (game-task-node city-burning-bush-collection-2-resolution)
-              :on-complete '(begin (talker-spawn "bb20win") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (runs-on-orb-pickup (the-as process-tree #f) (the int (-> *FACT-bank* super-skill-inc))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
+              :on-complete '(begin (talker-spawn "bb20win") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (set! *ap-task-bb20-orbs-given* (ap-synthetic-orbs-checked! 230 3 *ap-task-bb20-orbs-given* (the int (-> *FACT-bank* super-skill-inc)))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
               :on-fail #f
               )
             :borrow '((ctywide 0 lbbush display))
@@ -11532,7 +11541,7 @@
               :fail-hook #f
               :event-hook #f
               :final-node (game-task-node city-burning-bush-ring-3-resolution)
-              :on-complete '(begin (talker-spawn "bb03win") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (runs-on-orb-pickup (the-as process-tree #f) (the int (-> *FACT-bank* super-skill-inc))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
+              :on-complete '(begin (talker-spawn "bb03win") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (set! *ap-task-bb03-orbs-given* (ap-synthetic-orbs-checked! 233 3 *ap-task-bb03-orbs-given* (the int (-> *FACT-bank* super-skill-inc)))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
               :on-fail #f
               )
             :borrow '((ctywide 0 lbbush display))
@@ -11685,7 +11694,7 @@
               :fail-hook #f
               :event-hook #f
               :final-node (game-task-node city-burning-bush-bombbot-1-resolution)
-              :on-complete '(begin (talker-spawn "bb05win") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (runs-on-orb-pickup (the-as process-tree #f) (the int (-> *FACT-bank* super-skill-inc))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
+              :on-complete '(begin (talker-spawn "bb05win") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (set! *ap-task-bb05-orbs-given* (ap-synthetic-orbs-checked! 236 3 *ap-task-bb05-orbs-given* (the int (-> *FACT-bank* super-skill-inc)))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
               :on-fail #f
               )
             :borrow '((ctywide 0 lbombbot display))
@@ -11989,8 +11998,7 @@
               :event-hook #f
               :final-node (game-task-node city-burning-bush-collection-3-resolution)
               :index 2
-              :on-complete '(begin (talker-spawn "cityv154") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (runs-on-orb-pickup (the-as process-tree #f) (the int (-> *FACT-bank* super-skill-inc))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
-              :on-fail #f
+              :on-complete '(begin (talker-spawn "cityv154") (apply ,(lambda () (if (and *ap-settings* (-> *ap-settings* orbsanity?)) (set! *ap-task-bb04-orbs-given* (ap-synthetic-orbs-checked! 239 3 *ap-task-bb04-orbs-given* (the int (-> *FACT-bank* super-skill-inc)))) (send-event *target* 'get-pickup (pickup-type skill) (-> *FACT-bank* super-skill-inc)))))) ;; og:preserve-this patched
               )
             :borrow '((ctywide 0 lbbush display))
             :open? #f

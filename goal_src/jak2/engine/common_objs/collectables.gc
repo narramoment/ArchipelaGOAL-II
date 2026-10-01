@@ -5,7 +5,7 @@
 ;; name in dgo: collectables
 ;; dgos: ENGINE, GAME
 
-(define-extern runs-on-orb-pickup (function process-tree int none))
+(define-extern runs-on-orb-pickup (function process-tree int string symbol none))
 
 (defenum collectable-flag
   :type uint32
@@ -1424,7 +1424,12 @@
   :code (behavior ((arg0 symbol) (arg1 handle))
     (process-entity-status! self (entity-perm-status dead) #t)
     (if (= (-> self fact pickup-type) (pickup-type skill))
-      (runs-on-orb-pickup (ppointer->process (-> self parent)) (the int (-> self fact pickup-amount))) ;; trigger hook for mod base
+      (runs-on-orb-pickup
+        (ppointer->process (-> self parent))
+        (the int (-> self fact pickup-amount))
+        (res-lump-struct (-> self entity) 'name string)
+        (-> self entity extra level name)
+        )
       )
     )
   :exit (behavior ()

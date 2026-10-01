@@ -498,6 +498,7 @@ This gives us more freedom to write code how we want.
   '(progress-new-generic-link-to-scrolling-page (text-id progress-menu-seed-options)
     (archipelagoal-ii-oracle-options)
     (archipelagoal-ii-orbsanity-option)
+    (archipelagoal-ii-medals-option)
     (archipelagoal-ii-trap-duration)
     (archipelagoal-ii-completion-type)
     (archipelagoal-ii-completion-specific-mission)
@@ -525,7 +526,8 @@ This gives us more freedom to write code how we want.
                   (text-id progress-menu-stadium)
                   (text-id progress-menu-palace)
                   (text-id progress-menu-landing)
-                  (text-id progress-menu-mountain))
+                  (text-id progress-menu-mountain)
+                  (text-id progress-menu-oracle))
       :get-item-index-fn (lambda ()
         (cond
           ((= (-> *game-info* current-continue)
@@ -552,6 +554,9 @@ This gives us more freedom to write code how we want.
           ((= (-> *game-info* current-continue)
               (get-continue-by-name *game-info* "ctyfarma-start"))
           7)
+          ((= (-> *game-info* current-continue)
+              (get-continue-by-name *game-info* "oracle-start"))
+          8)
           (else
           0)))
       :on-confirm (lambda ((index int))
@@ -618,6 +623,12 @@ This gives us more freedom to write code how we want.
               (initialize! *game-info* 'die
                 (the-as game-save #f)
                 "ctyfarma-start"))))
+          ((8)
+          (set! (-> *game-info* current-continue)
+            (get-continue-by-name *game-info* "oracle-start"))
+          (initialize! *game-info* 'die
+            (the-as game-save #f)
+            "oracle-start"))
           (else
           (set! (-> *game-info* current-continue)
             (get-continue-by-name *game-info* "ctysluma-alley"))
@@ -846,7 +857,7 @@ This gives us more freedom to write code how we want.
     :name (text-id progress-menu-deathlink)
     :truthy-text (text-id progress-on)
     :falsey-text (text-id progress-off)
-    :get-value-fn (lambda () (-> *ap-settings* deathlink?))
+    :get-value-fn (lambda () (if (= (-> *ap-settings* deathlink?) 0) #f (-> *ap-settings* deathlink?))) ;; <ap:note> if it's 0 (which it is by default), make it display as off. otherwise, pull from ap-settings
     :on-confirm (lambda ((val symbol))
       (set! (-> *ap-settings* deathlink?) val)
       (ap-settings-update)
@@ -922,7 +933,15 @@ This gives us more freedom to write code how we want.
     :name (text-id progress-menu-orbsanity)
     :truthy-text (text-id progress-on)
     :falsey-text (text-id progress-off)
-    :get-value-fn (lambda () (-> *ap-settings* orbsanity?))
+    :get-value-fn (lambda () (if (= (-> *ap-settings* orbsanity?) 0) #f (-> *ap-settings* orbsanity?))) ;; <ap:note> if it's 0 (which it is by default), make it display as off. otherwise, pull from ap-settings
+    :should-disable? (lambda () #t)))
+
+(defmacro archipelagoal-ii-medals-option ()
+  '(new 'static 'menu-generic-boolean-option
+    :name (text-id progress-menu-medals)
+    :truthy-text (text-id progress-on)
+    :falsey-text (text-id progress-off)
+    :get-value-fn (lambda () (if (= (-> *ap-settings* minigame-medal-checks?) 0) #f (-> *ap-settings* minigame-medal-checks?))) ;; <ap:note> if it's 0 (which it is by default), make it display as off. otherwise, pull from ap-settings
     :should-disable? (lambda () #t)))
 
 (defmacro archipelagoal-ii-completion-type ()

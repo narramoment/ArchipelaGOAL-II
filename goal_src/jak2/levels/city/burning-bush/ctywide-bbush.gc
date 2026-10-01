@@ -6,6 +6,8 @@
 ;; dgos: LBBUSH
 
 (declare-type city-race-ring-info structure)
+(define-extern *ap-orbsearch-orbs-given* (array int))
+(define-extern ap-synthetic-orbs-checked! (function int int int int int))
 
 ;; DECOMP BEGINS
 

@@ -682,6 +682,7 @@
 
 
 ;; used to track orbs for minigames.
+(define *ap-orbsearch-orbs-given* (new 'static 'array int32 15 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0))
 (define *ap-onin-orbs-given* 0)
 (define *ap-gungame-red-orbs-given* 0)
 (define *ap-gungame-yellow-orbs-given* 0)

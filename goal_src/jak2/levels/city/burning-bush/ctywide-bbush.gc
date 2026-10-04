@@ -2921,7 +2921,6 @@
     )
   )
 
-;; <ap:todo> fix the mappings of precursor orbs to these orb search missions in one way or another!
 (set-subtask-hook!
   *game-info*
   (game-task-node city-burning-bush-get-to-1-resolution)
@@ -2933,17 +2932,15 @@
        (case (-> arg3 param 0)
          (('pickup)
           (when (and *ap-settings* (-> *ap-settings* orbsanity?))
-            (let ((idx (-> self info index)))
-              (when (and (>= idx 0) (< idx 15))
-                (set! (-> *ap-orbsearch-orbs-given* idx)
-                      (ap-synthetic-orbs-checked!
-                        (+ 242 (* idx 3))
-                        3
-                        (-> *ap-orbsearch-orbs-given* idx)
-                        (the int (-> *FACT-bank* super-skill-inc))
-                        )
+            (let ((idx 0))
+              (set! (-> *ap-orbsearch-orbs-given* idx)
+                    (ap-synthetic-orbs-checked!
+                      (+ 242 (* idx 3))
+                      3
+                      (-> *ap-orbsearch-orbs-given* idx)
+                      (the int (-> *FACT-bank* super-skill-inc))
                       )
-                )
+                    )
               )
             )
           (go-virtual complete)
@@ -3026,6 +3023,483 @@
 (copy-hooks!
   (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-15-resolution))
   (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-1-resolution))
+  )
+
+;; <ap:preserve-this> added these to have the grab properly track the orbs being collected for each orb search side mission
+(set-subtask-hook!
+  *game-info*
+  (game-task-node city-burning-bush-get-to-2-resolution)
+  TASK_MANAGER_EVENT_HOOK
+  (lambda :behavior task-manager
+    ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+    (case arg2
+      (('notify)
+       (case (-> arg3 param 0)
+         (('pickup)
+          (when (and *ap-settings* (-> *ap-settings* orbsanity?))
+            (let ((idx 1))
+              (set! (-> *ap-orbsearch-orbs-given* idx)
+                    (ap-synthetic-orbs-checked!
+                      (+ 242 (* idx 3))
+                      3
+                      (-> *ap-orbsearch-orbs-given* idx)
+                      (the int (-> *FACT-bank* super-skill-inc))
+                      )
+                    )
+              )
+            )
+          (go-virtual complete)
+          )
+         (('die)
+          (go-virtual fail)
+          )
+         )
+       )
+      )
+    (none)
+    )
+  )
+
+(set-subtask-hook!
+  *game-info*
+  (game-task-node city-burning-bush-get-to-3-resolution)
+  TASK_MANAGER_EVENT_HOOK
+  (lambda :behavior task-manager
+    ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+    (case arg2
+      (('notify)
+       (case (-> arg3 param 0)
+         (('pickup)
+          (when (and *ap-settings* (-> *ap-settings* orbsanity?))
+            (let ((idx 2))
+              (set! (-> *ap-orbsearch-orbs-given* idx)
+                    (ap-synthetic-orbs-checked!
+                      (+ 242 (* idx 3))
+                      3
+                      (-> *ap-orbsearch-orbs-given* idx)
+                      (the int (-> *FACT-bank* super-skill-inc))
+                      )
+                    )
+              )
+            )
+          (go-virtual complete)
+          )
+         (('die)
+          (go-virtual fail)
+          )
+         )
+       )
+      )
+    (none)
+    )
+  )
+
+(set-subtask-hook!
+  *game-info*
+  (game-task-node city-burning-bush-get-to-4-resolution)
+  TASK_MANAGER_EVENT_HOOK
+  (lambda :behavior task-manager
+    ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+    (case arg2
+      (('notify)
+       (case (-> arg3 param 0)
+         (('pickup)
+          (when (and *ap-settings* (-> *ap-settings* orbsanity?))
+            (let ((idx 3))
+              (set! (-> *ap-orbsearch-orbs-given* idx)
+                    (ap-synthetic-orbs-checked!
+                      (+ 242 (* idx 3))
+                      3
+                      (-> *ap-orbsearch-orbs-given* idx)
+                      (the int (-> *FACT-bank* super-skill-inc))
+                      )
+                    )
+              )
+            )
+          (go-virtual complete)
+          )
+         (('die)
+          (go-virtual fail)
+          )
+         )
+       )
+      )
+    (none)
+    )
+  )
+
+(set-subtask-hook!
+  *game-info*
+  (game-task-node city-burning-bush-get-to-5-resolution)
+  TASK_MANAGER_EVENT_HOOK
+  (lambda :behavior task-manager
+    ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+    (case arg2
+      (('notify)
+       (case (-> arg3 param 0)
+         (('pickup)
+          (when (and *ap-settings* (-> *ap-settings* orbsanity?))
+            (let ((idx 4))
+              (set! (-> *ap-orbsearch-orbs-given* idx)
+                    (ap-synthetic-orbs-checked!
+                      (+ 242 (* idx 3))
+                      3
+                      (-> *ap-orbsearch-orbs-given* idx)
+                      (the int (-> *FACT-bank* super-skill-inc))
+                      )
+                    )
+              )
+            )
+          (go-virtual complete)
+          )
+         (('die)
+          (go-virtual fail)
+          )
+         )
+       )
+      )
+    (none)
+    )
+  )
+
+(set-subtask-hook!
+  *game-info*
+  (game-task-node city-burning-bush-get-to-6-resolution)
+  TASK_MANAGER_EVENT_HOOK
+  (lambda :behavior task-manager
+    ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+    (case arg2
+      (('notify)
+       (case (-> arg3 param 0)
+         (('pickup)
+          (when (and *ap-settings* (-> *ap-settings* orbsanity?))
+            (let ((idx 5))
+              (set! (-> *ap-orbsearch-orbs-given* idx)
+                    (ap-synthetic-orbs-checked!
+                      (+ 242 (* idx 3))
+                      3
+                      (-> *ap-orbsearch-orbs-given* idx)
+                      (the int (-> *FACT-bank* super-skill-inc))
+                      )
+                    )
+              )
+            )
+          (go-virtual complete)
+          )
+         (('die)
+          (go-virtual fail)
+          )
+         )
+       )
+      )
+    (none)
+    )
+  )
+
+(set-subtask-hook!
+  *game-info*
+  (game-task-node city-burning-bush-get-to-7-resolution)
+  TASK_MANAGER_EVENT_HOOK
+  (lambda :behavior task-manager
+    ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+    (case arg2
+      (('notify)
+       (case (-> arg3 param 0)
+         (('pickup)
+          (when (and *ap-settings* (-> *ap-settings* orbsanity?))
+            (let ((idx 6))
+              (set! (-> *ap-orbsearch-orbs-given* idx)
+                    (ap-synthetic-orbs-checked!
+                      (+ 242 (* idx 3))
+                      3
+                      (-> *ap-orbsearch-orbs-given* idx)
+                      (the int (-> *FACT-bank* super-skill-inc))
+                      )
+                    )
+              )
+            )
+          (go-virtual complete)
+          )
+         (('die)
+          (go-virtual fail)
+          )
+         )
+       )
+      )
+    (none)
+    )
+  )
+
+(set-subtask-hook!
+  *game-info*
+  (game-task-node city-burning-bush-get-to-8-resolution)
+  TASK_MANAGER_EVENT_HOOK
+  (lambda :behavior task-manager
+    ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+    (case arg2
+      (('notify)
+       (case (-> arg3 param 0)
+         (('pickup)
+          (when (and *ap-settings* (-> *ap-settings* orbsanity?))
+            (let ((idx 7))
+              (set! (-> *ap-orbsearch-orbs-given* idx)
+                    (ap-synthetic-orbs-checked!
+                      (+ 242 (* idx 3))
+                      3
+                      (-> *ap-orbsearch-orbs-given* idx)
+                      (the int (-> *FACT-bank* super-skill-inc))
+                      )
+                    )
+              )
+            )
+          (go-virtual complete)
+          )
+         (('die)
+          (go-virtual fail)
+          )
+         )
+       )
+      )
+    (none)
+    )
+  )
+
+(set-subtask-hook!
+  *game-info*
+  (game-task-node city-burning-bush-get-to-9-resolution)
+  TASK_MANAGER_EVENT_HOOK
+  (lambda :behavior task-manager
+    ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+    (case arg2
+      (('notify)
+       (case (-> arg3 param 0)
+         (('pickup)
+          (when (and *ap-settings* (-> *ap-settings* orbsanity?))
+            (let ((idx 8))
+              (set! (-> *ap-orbsearch-orbs-given* idx)
+                    (ap-synthetic-orbs-checked!
+                      (+ 242 (* idx 3))
+                      3
+                      (-> *ap-orbsearch-orbs-given* idx)
+                      (the int (-> *FACT-bank* super-skill-inc))
+                      )
+                    )
+              )
+            )
+          (go-virtual complete)
+          )
+         (('die)
+          (go-virtual fail)
+          )
+         )
+       )
+      )
+    (none)
+    )
+  )
+
+(set-subtask-hook!
+  *game-info*
+  (game-task-node city-burning-bush-get-to-10-resolution)
+  TASK_MANAGER_EVENT_HOOK
+  (lambda :behavior task-manager
+    ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+    (case arg2
+      (('notify)
+       (case (-> arg3 param 0)
+         (('pickup)
+          (when (and *ap-settings* (-> *ap-settings* orbsanity?))
+            (let ((idx 9))
+              (set! (-> *ap-orbsearch-orbs-given* idx)
+                    (ap-synthetic-orbs-checked!
+                      (+ 242 (* idx 3))
+                      3
+                      (-> *ap-orbsearch-orbs-given* idx)
+                      (the int (-> *FACT-bank* super-skill-inc))
+                      )
+                    )
+              )
+            )
+          (go-virtual complete)
+          )
+         (('die)
+          (go-virtual fail)
+          )
+         )
+       )
+      )
+    (none)
+    )
+  )
+
+(set-subtask-hook!
+  *game-info*
+  (game-task-node city-burning-bush-get-to-11-resolution)
+  TASK_MANAGER_EVENT_HOOK
+  (lambda :behavior task-manager
+    ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+    (case arg2
+      (('notify)
+       (case (-> arg3 param 0)
+         (('pickup)
+          (when (and *ap-settings* (-> *ap-settings* orbsanity?))
+            (let ((idx 10))
+              (set! (-> *ap-orbsearch-orbs-given* idx)
+                    (ap-synthetic-orbs-checked!
+                      (+ 242 (* idx 3))
+                      3
+                      (-> *ap-orbsearch-orbs-given* idx)
+                      (the int (-> *FACT-bank* super-skill-inc))
+                      )
+                    )
+              )
+            )
+          (go-virtual complete)
+          )
+         (('die)
+          (go-virtual fail)
+          )
+         )
+       )
+      )
+    (none)
+    )
+  )
+
+(set-subtask-hook!
+  *game-info*
+  (game-task-node city-burning-bush-get-to-12-resolution)
+  TASK_MANAGER_EVENT_HOOK
+  (lambda :behavior task-manager
+    ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+    (case arg2
+      (('notify)
+       (case (-> arg3 param 0)
+         (('pickup)
+          (when (and *ap-settings* (-> *ap-settings* orbsanity?))
+            (let ((idx 11))
+              (set! (-> *ap-orbsearch-orbs-given* idx)
+                    (ap-synthetic-orbs-checked!
+                      (+ 242 (* idx 3))
+                      3
+                      (-> *ap-orbsearch-orbs-given* idx)
+                      (the int (-> *FACT-bank* super-skill-inc))
+                      )
+                    )
+              )
+            )
+          (go-virtual complete)
+          )
+         (('die)
+          (go-virtual fail)
+          )
+         )
+       )
+      )
+    (none)
+    )
+  )
+
+(set-subtask-hook!
+  *game-info*
+  (game-task-node city-burning-bush-get-to-13-resolution)
+  TASK_MANAGER_EVENT_HOOK
+  (lambda :behavior task-manager
+    ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+    (case arg2
+      (('notify)
+       (case (-> arg3 param 0)
+         (('pickup)
+          (when (and *ap-settings* (-> *ap-settings* orbsanity?))
+            (let ((idx 12))
+              (set! (-> *ap-orbsearch-orbs-given* idx)
+                    (ap-synthetic-orbs-checked!
+                      (+ 242 (* idx 3))
+                      3
+                      (-> *ap-orbsearch-orbs-given* idx)
+                      (the int (-> *FACT-bank* super-skill-inc))
+                      )
+                    )
+              )
+            )
+          (go-virtual complete)
+          )
+         (('die)
+          (go-virtual fail)
+          )
+         )
+       )
+      )
+    (none)
+    )
+  )
+
+(set-subtask-hook!
+  *game-info*
+  (game-task-node city-burning-bush-get-to-14-resolution)
+  TASK_MANAGER_EVENT_HOOK
+  (lambda :behavior task-manager
+    ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+    (case arg2
+      (('notify)
+       (case (-> arg3 param 0)
+         (('pickup)
+          (when (and *ap-settings* (-> *ap-settings* orbsanity?))
+            (let ((idx 13))
+              (set! (-> *ap-orbsearch-orbs-given* idx)
+                    (ap-synthetic-orbs-checked!
+                      (+ 242 (* idx 3))
+                      3
+                      (-> *ap-orbsearch-orbs-given* idx)
+                      (the int (-> *FACT-bank* super-skill-inc))
+                      )
+                    )
+              )
+            )
+          (go-virtual complete)
+          )
+         (('die)
+          (go-virtual fail)
+          )
+         )
+       )
+      )
+    (none)
+    )
+  )
+
+(set-subtask-hook!
+  *game-info*
+  (game-task-node city-burning-bush-get-to-15-resolution)
+  TASK_MANAGER_EVENT_HOOK
+  (lambda :behavior task-manager
+    ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+    (case arg2
+      (('notify)
+       (case (-> arg3 param 0)
+         (('pickup)
+          (when (and *ap-settings* (-> *ap-settings* orbsanity?))
+            (let ((idx 14))
+              (set! (-> *ap-orbsearch-orbs-given* idx)
+                    (ap-synthetic-orbs-checked!
+                      (+ 242 (* idx 3))
+                      3
+                      (-> *ap-orbsearch-orbs-given* idx)
+                      (the int (-> *FACT-bank* super-skill-inc))
+                      )
+                    )
+              )
+            )
+          (go-virtual complete)
+          )
+         (('die)
+          (go-virtual fail)
+          )
+         )
+       )
+      )
+    (none)
+    )
   )
 
 (defmethod draw ((this hud-homing-beacon))

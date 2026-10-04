@@ -2921,6 +2921,7 @@
     )
   )
 
+;; <ap:todo> fix the mappings of precursor orbs to these orb search missions in one way or another!
 (set-subtask-hook!
   *game-info*
   (game-task-node city-burning-bush-get-to-1-resolution)

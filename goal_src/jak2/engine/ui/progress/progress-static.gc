@@ -592,6 +592,7 @@
                                                       :flag (game-secrets scene-player-1)
                                                       :avail-after (game-task-node ruins-enemy-resolution)
                                                       )
+                                                    #|
                                                     (new 'static 'secret-item-option
                                                       :name (text-id progress-highscores-gungame-blue)
                                                       :scale #t
@@ -600,6 +601,7 @@
                                                       :flag (game-secrets gungame-blue)
                                                       :avail-after (game-task-node ruins-enemy-resolution)
                                                       )
+                                                    |#
                                                     (new 'static 'secret-item-option
                                                       :name (text-id progress-main-secrets-sceneplayer-2)
                                                       :scale #t
@@ -608,6 +610,7 @@
                                                       :flag (game-secrets scene-player-2)
                                                       :avail-after (game-task-node tomb-boss-resolution)
                                                       )
+                                                    #|
                                                     (new 'static 'secret-item-option
                                                       :name (text-id progress-highscores-gungame-dark)
                                                       :scale #t
@@ -616,6 +619,7 @@
                                                       :flag (game-secrets gungame-dark)
                                                       :avail-after (game-task-node sewer-escort-get-gun)
                                                       )
+                                                    |#
                                                     (new 'static 'secret-item-option
                                                       :name (text-id progress-main-secrets-sceneplayer-3)
                                                       :scale #t
@@ -624,6 +628,7 @@
                                                       :flag (game-secrets scene-player-3)
                                                       :avail-after (game-task-node nest-boss-resolution)
                                                       )
+                                                    #|
                                                     (new 'static 'secret-item-option
                                                       :name (text-id progress-highscores-reverse-races)
                                                       :scale #t
@@ -632,6 +637,7 @@
                                                       :flag (game-secrets reverse-races)
                                                       :avail-after (game-task-node stadium-race-class1-resolution)
                                                       )
+                                                    |#
                                                     (new 'static 'secret-item-option
                                                       :name (text-id progress-main-secrets-levelselect)
                                                       :scale #t
@@ -744,6 +750,7 @@
                                                       :flag (game-secrets scene-player-1)
                                                       :avail-after (game-task-node ruins-enemy-resolution)
                                                       )
+                                                    #|
                                                     (new 'static 'secret-item-option
                                                       :name (text-id progress-highscores-gungame-blue)
                                                       :scale #t
@@ -752,6 +759,7 @@
                                                       :flag (game-secrets gungame-blue)
                                                       :avail-after (game-task-node ruins-enemy-resolution)
                                                       )
+                                                    |#
                                                     (new 'static 'secret-item-option
                                                       :name (text-id progress-main-secrets-sceneplayer-2)
                                                       :scale #t
@@ -760,6 +768,7 @@
                                                       :flag (game-secrets scene-player-2)
                                                       :avail-after (game-task-node tomb-boss-resolution)
                                                       )
+                                                    #|
                                                     (new 'static 'secret-item-option
                                                       :name (text-id progress-highscores-gungame-dark)
                                                       :scale #t
@@ -768,6 +777,7 @@
                                                       :flag (game-secrets gungame-dark)
                                                       :avail-after (game-task-node sewer-escort-get-gun)
                                                       )
+                                                    |#
                                                     (new 'static 'secret-item-option
                                                       :name (text-id progress-main-secrets-sceneplayer-3)
                                                       :scale #t

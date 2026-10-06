@@ -172,8 +172,8 @@
       (cond
         ((zero? index) (set! available? #t))
         ((= index 1) (set! available? (logtest? (-> *game-info* sub-task-list (game-task-node city-yellow-gun-training-introduction) flags) (game-task-node-flag closed))))
-        ((= index 2) (set! available? (logtest? (-> *game-info* secrets) (game-secrets gungame-blue))))
-        ((= index 3) (set! available? (logtest? (-> *game-info* secrets) (game-secrets gungame-dark))))
+        ((= index 2) (set! available? (and (ap-route-slums-to-port?) (logtest? (-> *game-info* features) (game-feature gun-blue)))))
+        ((= index 3) (set! available? (and (ap-route-slums-to-port?) (logtest? (-> *game-info* features) (game-feature gun-dark)))))
         ((= index 4) (set! available? (logtest? (-> *game-info* sub-task-list (game-task-node stadium-board1-introduction) flags) (game-task-node-flag closed))))
         ((= index 5) (set! available? (logtest? (-> *game-info* sub-task-list (game-task-node stadium-race-class3-introduction) flags) (game-task-node-flag closed))))
         ((= index 6) (set! available? (logtest? (-> *game-info* sub-task-list (game-task-node stadium-race-class2-introduction) flags) (game-task-node-flag closed))))

@@ -10220,7 +10220,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-ring-1-introduction)
               (game-task-node none)
@@ -10294,7 +10294,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-get-to-1-introduction)
               (game-task-node none)
@@ -10370,7 +10370,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-get-to-2-introduction)
               (game-task-node none)
@@ -10446,7 +10446,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-get-to-3-introduction)
               (game-task-node none)
@@ -10520,7 +10520,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-get-to-4-introduction)
               (game-task-node none)
@@ -10596,7 +10596,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-collection-1-introduction)
               (game-task-node none)
@@ -10677,7 +10677,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-racepoint-1-introduction)
               (game-task-node none)
@@ -10754,7 +10754,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-ring-2-introduction)
               (game-task-node none)
@@ -10830,7 +10830,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-get-to-5-introduction)
               (game-task-node none)
@@ -10906,7 +10906,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-get-to-6-introduction)
               (game-task-node none)
@@ -10988,7 +10988,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-shuttle-1-introduction)
               (game-task-node none)
@@ -11063,7 +11063,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-get-to-7-introduction)
               (game-task-node none)
@@ -11139,7 +11139,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-get-to-8-introduction)
               (game-task-node none)
@@ -11215,7 +11215,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-get-to-9-introduction)
               (game-task-node none)
@@ -11291,7 +11291,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-collection-2-introduction)
               (game-task-node none)
@@ -11366,7 +11366,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-get-to-10-introduction)
               (game-task-node none)
@@ -11442,7 +11442,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-get-to-11-introduction)
               (game-task-node none)
@@ -11518,7 +11518,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-ring-3-introduction)
               (game-task-node none)
@@ -11593,7 +11593,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-get-to-12-introduction)
               (game-task-node none)
@@ -11671,7 +11671,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-bombbot-1-introduction)
               (game-task-node none)
@@ -11746,7 +11746,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-get-to-13-introduction)
               (game-task-node none)
@@ -11822,7 +11822,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-get-to-14-introduction)
               (game-task-node none)
@@ -11898,7 +11898,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-get-to-15-introduction)
               (game-task-node none)
@@ -11974,7 +11974,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-collection-3-introduction)
               (game-task-node none)
@@ -12052,7 +12052,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task save-on-life task-retry city-wait task-manager)
+            :flags (game-task-node-flag close-task save-on-life task-retry city-wait task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-burning-bush-race-errol-introduction)
               (game-task-node none)
@@ -12212,7 +12212,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node stadium-burning-bush-race-board-introduction)
               (game-task-node none)
@@ -12373,7 +12373,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager no-slow-down)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive no-slow-down)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node stadium-burning-bush-race-class2-introduction)
               (game-task-node none)
@@ -12454,7 +12454,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager no-slow-down)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive no-slow-down)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node stadium-burning-bush-race-class1-introduction)
               (game-task-node none)
@@ -12528,7 +12528,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager no-slow-down)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive no-slow-down)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node stadium-burning-bush-race-class3-r-introduction)
               (game-task-node none)
@@ -12602,7 +12602,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager no-slow-down)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive no-slow-down)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node stadium-burning-bush-race-class2-r-introduction)
               (game-task-node none)
@@ -12676,7 +12676,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-retry task-manager no-slow-down)
+            :flags (game-task-node-flag close-task task-retry task-manager exclusive no-slow-down)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node stadium-burning-bush-race-class1-r-introduction)
               (game-task-node none)

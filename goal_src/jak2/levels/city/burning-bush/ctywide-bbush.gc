@@ -2955,6 +2955,76 @@
     )
   )
 
+(copy-hooks!
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-2-resolution))
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-1-resolution))
+  )
+
+(copy-hooks!
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-3-resolution))
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-1-resolution))
+  )
+
+(copy-hooks!
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-4-resolution))
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-1-resolution))
+  )
+
+(copy-hooks!
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-5-resolution))
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-1-resolution))
+  )
+
+(copy-hooks!
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-6-resolution))
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-1-resolution))
+  )
+
+(copy-hooks!
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-7-resolution))
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-1-resolution))
+  )
+
+(copy-hooks!
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-8-resolution))
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-1-resolution))
+  )
+
+(copy-hooks!
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-9-resolution))
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-1-resolution))
+  )
+
+(copy-hooks!
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-10-resolution))
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-1-resolution))
+  )
+
+(copy-hooks!
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-11-resolution))
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-1-resolution))
+  )
+
+(copy-hooks!
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-12-resolution))
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-1-resolution))
+  )
+
+(copy-hooks!
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-13-resolution))
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-1-resolution))
+  )
+
+(copy-hooks!
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-14-resolution))
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-1-resolution))
+  )
+
+(copy-hooks!
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-15-resolution))
+  (-> *game-info* sub-task-list (game-task-node city-burning-bush-get-to-1-resolution))
+  )
+
 ;; <ap:preserve-this> added these to have the grab properly track the orbs being collected for each orb search side mission
 (set-subtask-hook!
   *game-info*

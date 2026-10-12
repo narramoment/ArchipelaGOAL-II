@@ -1266,14 +1266,12 @@
          (set! (-> this skill-total) (-> (the-as (inline-array game-save-tag) s4-0) 0 user-float0))
           )
          )
-        #|
         (((game-save-elt gem))
          (set! (-> this gem) (-> (the-as (inline-array game-save-tag) s4-0) 0 user-float0))
          )
         (((game-save-elt gem-total))
          (set! (-> this gem-total) (-> (the-as (inline-array game-save-tag) s4-0) 0 user-float0))
          )
-        |#
         (((game-save-elt karma))
          (set! (-> this karma) (-> (the-as (inline-array game-save-tag) s4-0) 0 user-float0))
          )

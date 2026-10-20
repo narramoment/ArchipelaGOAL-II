@@ -763,7 +763,7 @@
     (strip    ("skill-108" . 34) ("skill-109" . 35) ("skill-110" . 36) ("skill-111" . 37) ("skill-112" . 38) ("skill-113" . 39) ("skill-114" . 40))
     (mountain ("skill-76" . 41) ("skill-77" . 42) ("skill-91" . 43) ("skill-92" . 44) ("skill-93" . 45) ("skill-94" . 46) ("skill-95" . 47) ("skill-96" . 48) ("skill-97" . 49) ("skill-98" . 50) ("skill-99" . 51) ("skill-100" . 52) ("skill-101" . 53) ("skill-102" . 54) ("skill-103" . 55) ("skill-104" . 56) ("skill-105" . 57))
     (forest   ("skill-115" . 58) ("skill-116" . 59) ("skill-117" . 60) ("skill-118" . 61) ("skill-119" . 62) ("skill-120" . 63) ("skill-121" . 64) ("skill-122" . 65) ("skill-123" . 66))
-    (drill    ("skill-53" . 67) ("skill-54" . 68) ("skill-55" . 69) ("skill-56" . 70) ("skill-57" . 71))
+    (drillmid    ("skill-53" . 67) ("skill-54" . 68) ("skill-55" . 69) ("skill-56" . 70) ("skill-57" . 71))
     (tomba    ("skill-65" . 72) ("skill-66" . 73) ("skill-67" . 74) ("skill-68" . 75))
     (tombb    ("skill-9" . 76))
     (dig3a    ("skill-14" . 77) ("skill-15" . 78) ("skill-16" . 79) ("skill-17" . 80) ("skill-18" . 81) ("skill-19" . 82) ("skill-20" . 83) ("skill-106" . 84))

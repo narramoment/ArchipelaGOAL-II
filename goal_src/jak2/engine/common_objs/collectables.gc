@@ -1424,11 +1424,23 @@
   :code (behavior ((arg0 symbol) (arg1 handle))
     (process-entity-status! self (entity-perm-status dead) #t)
     (if (= (-> self fact pickup-type) (pickup-type skill))
-      (runs-on-orb-pickup
-        (ppointer->process (-> self parent))
-        (the int (-> self fact pickup-amount))
-        (res-lump-struct (-> self entity) 'name string)
-        (-> self entity extra level name)
+      (if (string= (-> self name) "skill-sewesc-from-sewer")
+        (runs-on-orb-pickup
+          (ppointer->process (-> self parent))
+          (the int (-> self fact pickup-amount))
+          "skill-124"
+          'sewer
+          )
+        (let* ((orb-name (res-lump-struct (-> self entity) 'name string))
+               (orb-lvl (-> self entity extra level))
+               (orb-lvl-name (if (and orb-lvl (nonzero? (the-as int orb-lvl))) (-> orb-lvl name) #f)))
+              (runs-on-orb-pickup
+                (ppointer->process (-> self parent))
+                (the int (-> self fact pickup-amount))
+                orb-name
+                orb-lvl-name
+                )
+          )
         )
       )
     )

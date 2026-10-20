@@ -1677,7 +1677,7 @@
                              (-> *setting-control* user-current airlock)
                              )
                             (('exclusive-task)
-                             (* (-> *setting-control* user-current exclusive-task) 8)
+                             (* (-> *setting-control* user-current exclusive-task 0) 8)
                              )
                             )
                           )

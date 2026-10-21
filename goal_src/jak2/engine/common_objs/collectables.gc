@@ -1434,12 +1434,12 @@
         (let* ((orb-name (res-lump-struct (-> self entity) 'name string))
                (orb-lvl (-> self entity extra level))
                (orb-lvl-name (if (and orb-lvl (nonzero? (the-as int orb-lvl))) (-> orb-lvl name) #f)))
-          (runs-on-orb-pickup
-            (ppointer->process (-> self parent))
-            (the int (-> self fact pickup-amount))
-            orb-name
-            orb-lvl-name
-            )
+              (runs-on-orb-pickup
+                (ppointer->process (-> self parent))
+                (the int (-> self fact pickup-amount))
+                orb-name
+                orb-lvl-name
+                )
           )
         )
       )

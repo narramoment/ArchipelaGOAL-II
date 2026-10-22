@@ -104,6 +104,7 @@
             (set! a3-2
                   (and (logtest? (-> a2-3 flags) (game-task-node-flag exclusive))
                        (not (logtest? (-> a2-3 flags) (game-task-node-flag closed)))
+                       (or (not (-> a2-3 open?)) ((-> a2-3 open?) a2-3))
                        (begin
                          (dotimes (a3-5 4)
                            (let ((t1-0 (-> a2-3 parent-node a3-5)))

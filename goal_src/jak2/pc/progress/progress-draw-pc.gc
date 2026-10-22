@@ -2059,10 +2059,10 @@
               (set-scale! arg1 0.6)
               (set-color! arg1 (font-color progress))
               (set-flags! arg1 (font-flags kerning middle large))
-              (set! (-> arg1 origin x) (the float (- (+ sv-40 sv-56) 110)))
+              (set! (-> arg1 origin x) 218.0)
               (set! (-> arg1 origin y) 240.0)
               (set-width! arg1 220)
-              (format (clear *temp-string*) "~G"
+              (format (clear *temp-string*) "Name: ~G"
                       (-> *ap-slot-peek* slots arg2 slot-name))
               (print-game-text *temp-string* arg1 #f 44 (bucket-id progress))
               (set! (-> arg1 origin y) 265.0)

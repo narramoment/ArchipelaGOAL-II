@@ -2059,8 +2059,9 @@
               (set-scale! arg1 0.6)
               (set-color! arg1 (font-color progress))
               (set-flags! arg1 (font-flags kerning middle large))
-              (set! (-> arg1 origin x) 265.0)
+              (set! (-> arg1 origin x) 218.0)
               (set! (-> arg1 origin y) 240.0)
+              (set-width! arg1 220)
               (format (clear *temp-string*) "Name: ~G"
                       (-> *ap-slot-peek* slots arg2 slot-name))
               (print-game-text *temp-string* arg1 #f 44 (bucket-id progress))
@@ -2068,6 +2069,11 @@
               (format (clear *temp-string*) "Seed: ~G"
                       (-> *ap-slot-peek* slots arg2 slot-seed))
               (print-game-text *temp-string* arg1 #f 44 (bucket-id progress))
+              (set! (-> arg1 origin x) 265.0)
+              (set! (-> arg1 origin y) 265.0)
+              (set! (-> arg1 width) 170.0)
+              (when (not (-> *pc-settings* use-vis?))
+                (*! (-> arg1 width) (-> *pc-settings* aspect-ratio-reciprocal)))
               (set! (-> obj sprites 0 tex) (lookup-texture-by-id (new 'static 'texture-id :index #x5 :page #xc93)))
               (set-hud-piece-position! (-> obj sprites 0) (adjust-x-if-needed 368) 289)
               (with-dma-buffer-add-bucket ((s1-12 (-> *display* frames (-> *display* on-screen) global-buf))

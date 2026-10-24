@@ -415,7 +415,8 @@
        )
      (prototypes-game-visible-set!
        '("ctyp-statue-rubble-a.mb" "ctyp-statue-rubble-b.mb" "ctyp-statue-rubble-big-a.mb")
-       (task-node-closed? (game-task-node canyon-insert-items-shard))
+       ;; (task-node-closed? (game-task-node canyon-insert-items-shard))
+       (and (ap-route-slums-to-market?) (logtesta? (-> *game-info* features) (game-feature lens gear shard)))
        )
      )
      ;; <ap:preserve-this> separate sewer and sewesc. 

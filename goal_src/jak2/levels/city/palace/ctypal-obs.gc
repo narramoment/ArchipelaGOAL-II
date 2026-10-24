@@ -148,13 +148,18 @@ This commonly includes things such as:
     ;; <ap:preserve-this> check for the opening of the tomb instead.
     ;; (when (task-node-closed? (game-task-node canyon-insert-items-resolution))
     ;;   (format 0 "~A canyon-insert-items-resolution done~%" (-> self name))
-    (when (task-node-closed? (game-task-node tomb-poles-introduction))
-      (format 0 "~A tomb-poles-introduction done~%" (-> self name))
+     (when (and (ap-route-slums-to-market?)
+               (logtesta? (-> *game-info* features) (game-feature lens gear shard)))
+      (format 0 "~A tomb access unlocked~%" (-> self name))
       (process-drawable-from-entity! self (the-as entity-actor (-> self ent)))
       (go-virtual done)
       )
     )
-  :code sleep-code
+  :code (behavior ()
+          (until #f
+            (suspend)
+            )
+          )
   :post (behavior ()
     (transform-post)
     )

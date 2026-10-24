@@ -368,6 +368,13 @@
           )
         )
 
+      ;; tomb
+      (let ((cty-airlock-out (entity-by-name "com-airlock-outer-22")))
+        (when cty-airlock-out
+          (set! (cdr (res-lump-struct cty-airlock-out 'on-notice pair)) '(#t '(ctypal)))
+        )
+      )
+
       ;; hideout
       (let ((cty-ho-out-door (entity-by-name "hide-door-a-3")))
         (when cty-ho-out-door

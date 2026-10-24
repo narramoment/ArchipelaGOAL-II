@@ -155,11 +155,7 @@ This commonly includes things such as:
       (go-virtual done)
       )
     )
-  :code (behavior ()
-          (until #f
-            (suspend)
-            )
-          )
+  :code sleep-code
   :post (behavior ()
     (transform-post)
     )

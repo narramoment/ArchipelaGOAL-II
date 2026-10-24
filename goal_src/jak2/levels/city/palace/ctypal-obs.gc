@@ -151,11 +151,15 @@ This commonly includes things such as:
      (when (and (ap-route-slums-to-market?)
                (logtesta? (-> *game-info* features) (game-feature lens gear shard)))
       (format 0 "~A tomb access unlocked~%" (-> self name))
-      (process-drawable-from-entity! self (the-as entity-actor (-> self ent)))
+      (logclear! (-> self draw status) (draw-control-status no-draw))
       (go-virtual done)
       )
     )
-  :code sleep-code
+  :code (behavior ()
+    (until #f
+      (suspend)
+      )
+    )
   :post (behavior ()
     (transform-post)
     )
@@ -195,11 +199,13 @@ This commonly includes things such as:
       )
     (set! (-> this root) s4-0)
     )
+  (process-drawable-from-entity! this arg0)
   (initialize-skeleton
     this
     (the-as skeleton-group (art-group-get-by-name *level* "skel-ctypal-broke-wall" (the-as (pointer uint32) #f)))
     (the-as pair 0)
     )
+  (logior! (-> this draw status) (draw-control-status no-draw))
   (let ((v1-10 (-> this root)))
     (format
       0

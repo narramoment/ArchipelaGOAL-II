@@ -3038,11 +3038,7 @@
 (defstate waiting (trans-plat)
   :virtual #t
   :enter (behavior ()
-    (when (not (or (not (task-node-closed? (game-task-node forest-scouts-introduction)))
-                   (task-node-closed? (game-task-node forest-scouts-pegasus))
-                   (!= (-> self path-pos) 0.0)
-                   )
-               )
+    (when (= (-> self path-pos) 0.0)
       (let ((gp-0 (new 'stack-no-clear 'task-arrow-params)))
         (set! (-> gp-0 pos quad) (-> self root trans quad))
         (quaternion-identity! (-> gp-0 quat))
@@ -3068,22 +3064,10 @@
       )
     )
   :trans (behavior ()
-    (cond
-      ((task-node-closed? (game-task-node forest-scouts-introduction))
-       (logclear! (-> self draw status) (draw-control-status no-draw))
-       (let ((v1-3 (-> self root root-prim)))
-         (set! (-> v1-3 prim-core collide-as) (-> self root backup-collide-as))
-         (set! (-> v1-3 prim-core collide-with) (-> self root backup-collide-with))
-         )
-       )
-      (else
-        (logior! (-> self draw status) (draw-control-status no-draw))
-        (let ((v1-8 (-> self root root-prim)))
-          (set! (-> v1-8 prim-core collide-as) (collide-spec))
-          (set! (-> v1-8 prim-core collide-with) (collide-spec))
-          )
-        0
-        )
+    (logclear! (-> self draw status) (draw-control-status no-draw))
+      (let ((v1-3 (-> self root root-prim)))
+        (set! (-> v1-3 prim-core collide-as) (-> self root backup-collide-as))
+        (set! (-> v1-3 prim-core collide-with) (-> self root backup-collide-with))
       )
     (let ((t9-2 (-> (the-as state (find-parent-state)) trans)))
       (if t9-2
@@ -3119,7 +3103,19 @@
 
 ;; WARN: Return type mismatch object vs none.
 (defmethod mtn-plat-return-method-37 ((this trans-plat))
-  (go (method-of-object this rising))
+  (when
+    (or
+      (task-node-closed? (game-task-node forest-scouts-introduction))
+      (task-node-closed? (game-task-node forest-hunt-introduction))
+      (task-node-closed? (game-task-node forest-protect-introduction))
+      (and
+        (task-node-closed? (game-task-node forest-scouts-resolution))
+        (task-node-closed? (game-task-node forest-hunt-resolution))
+        (task-node-closed? (game-task-node forest-protect-resolution))
+        )
+      )
+    (go (method-of-object this rising))
+    )
   (none)
   )
 

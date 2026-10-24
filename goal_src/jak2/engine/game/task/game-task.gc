@@ -1088,7 +1088,7 @@
             :task (game-task fortress-escape)
             :name "fortress-escape-introduction"
             :when-open #f
-            :flags (game-task-node-flag save-on-life task-manager)
+            :flags (game-task-node-flag save-on-life task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node fortress-escape-start)
               (game-task-node none)
@@ -1444,7 +1444,7 @@
             :task (game-task ruins-tower)
             :name "ruins-tower-exit"
             :when-open #f
-            :flags (game-task-node-flag save-on-life task-manager)
+            :flags (game-task-node-flag save-on-life task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node ruins-tower-resolution)
               (game-task-node none)
@@ -1626,7 +1626,7 @@
             :task (game-task atoll-water)
             :name "atoll-water-exit"
             :when-open #f
-            :flags (game-task-node-flag save-on-life task-manager)
+            :flags (game-task-node-flag save-on-life task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node atoll-water-resolution)
               (game-task-node none)
@@ -2469,7 +2469,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-manager)
+            :flags (game-task-node-flag close-task task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node sewer-enemy-talk-to-krew)
               (game-task-node none)
@@ -2557,7 +2557,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag task-manager)
+            :flags (game-task-node-flag task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node strip-rescue-introduction)
               (game-task-node none)
@@ -3337,7 +3337,7 @@
                 :scene "city-keira-hover-challenge-intro"
                 )
               )
-            :flags (game-task-node-flag task-manager)
+            :flags (game-task-node-flag task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node stadium-board1-introduction)
               (game-task-node none)
@@ -3393,7 +3393,7 @@
             :task (game-task stadium-board1)
             :name "stadium-board1-training-judge"
             :when-open #f
-            :flags (game-task-node-flag save-on-life task-manager)
+            :flags (game-task-node-flag save-on-life task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node stadium-board1-training)
               (game-task-node none)
@@ -3464,7 +3464,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-manager)
+            :flags (game-task-node-flag close-task task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node stadium-board1-done)
               (game-task-node none)
@@ -4448,7 +4448,7 @@
             :task (game-task ruins-enemy)
             :name "ruins-enemy-exit"
             :when-open #f
-            :flags (game-task-node-flag save-on-life task-manager)
+            :flags (game-task-node-flag save-on-life task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node ruins-enemy-resolution)
               (game-task-node none)
@@ -6570,7 +6570,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag save-on-life task-manager)
+            :flags (game-task-node-flag save-on-life task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node canyon-insert-items-introduction)
               (game-task-node none)
@@ -7018,7 +7018,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task abs-task-mask task-manager)
+            :flags (game-task-node-flag close-task abs-task-mask task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node fortress-save-friends-introduction)
               (game-task-node none)
@@ -7797,7 +7797,7 @@
             :task (game-task ruins-mech)
             :name "ruins-mech-introduction"
             :when-open #f
-            :flags (game-task-node-flag save-on-life abs-task-mask intro-wait city-wait task-manager)
+            :flags (game-task-node-flag save-on-life abs-task-mask intro-wait city-wait task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-errol-challenge-resolution)
               (game-task-node none)
@@ -7851,7 +7851,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag save-on-life task-manager)
+            :flags (game-task-node-flag save-on-life task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node ruins-mech-introduction)
               (game-task-node none)
@@ -7900,7 +7900,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag save-on-life task-manager)
+            :flags (game-task-node-flag save-on-life task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node ruins-mech-break-wall-1)
               (game-task-node none)
@@ -7949,7 +7949,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag save-on-life task-manager)
+            :flags (game-task-node-flag save-on-life task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node ruins-mech-move-block-1)
               (game-task-node none)
@@ -8134,7 +8134,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task abs-task-mask task-manager)
+            :flags (game-task-node-flag close-task abs-task-mask task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node forest-protect-meeting)
               (game-task-node none)
@@ -9385,7 +9385,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag abs-task-mask task-manager)
+            :flags (game-task-node-flag abs-task-mask task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-defend-stadium-pre-intro)
               (game-task-node none)
@@ -9467,7 +9467,7 @@
             :task (game-task consite-find-baron)
             :name "consite-find-baron-introduction"
             :when-open #f
-            :flags (game-task-node-flag save-on-life intro-wait task-manager exclusive)
+            :flags (game-task-node-flag save-on-life intro-wait task-manager)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node city-defend-stadium-resolution)
               (game-task-node none)
@@ -9549,7 +9549,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag save-on-life intro-wait city-wait task-manager)
+            :flags (game-task-node-flag save-on-life intro-wait city-wait task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node consite-find-baron-resolution)
               (game-task-node none)
@@ -9712,7 +9712,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task task-manager)
+            :flags (game-task-node-flag close-task task-manager exclusive)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node nest-boss-introduction)
               (game-task-node none)

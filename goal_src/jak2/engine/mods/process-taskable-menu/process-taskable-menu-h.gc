@@ -593,7 +593,7 @@
       :forbid-when (lambda () (task-node-closed? (game-task-node tomb-boss-resolution)))
       )
     (static-taskable-menu-entry
-      :task-node (game-task-node forest-scouts-pre-intro)
+      :task-node (game-task-node forest-scouts-introduction)
       :event-idx 0
       :continue "hideout-start"
       :text-id (text-id progress-missions-forest-scouts)

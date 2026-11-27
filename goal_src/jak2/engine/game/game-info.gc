@@ -399,7 +399,7 @@
      (set! (-> this eco-pill-dark-total) 0.0)
      (set! (-> this gem) 0.0)
      (set! (-> this gem-total) 0.0)
-     (if (= (-> *ap-info-jak2* connection-status) (ap-connection-status default))
+     (when (= (-> *ap-info-jak2* connection-status) (ap-connection-status default))
       (set! (-> this skill) 0.0)
       (set! (-> this skill-total) 0.0)
       )

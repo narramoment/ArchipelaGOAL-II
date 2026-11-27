@@ -962,6 +962,9 @@
 
   (progress-menu-orbsanity #x2189)
   (progress-menu-medals #x2190)
+
+  (gungame-prompt-purple #x2191)
+  (gungame-prompt-blue #x2192)
   
   ;; destination names text
   (caspad-name #x10000)
